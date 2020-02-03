@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -93,7 +93,6 @@
 				D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */,
 				48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -504,6 +503,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
+				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
 				INFOPLIST_FILE = GSDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -523,6 +523,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
+				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
 				INFOPLIST_FILE = GSDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
