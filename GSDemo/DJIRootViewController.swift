@@ -8,53 +8,55 @@
 
 import DJISDK
 import MapKit
+import UIKit
 
-class DJIRootViewController: MKMapViewDelegate{
-    func isEqual(_ object: Any?) -> Bool {
-        return false
+class DJIRootViewController: UIViewController, MKMapViewDelegate, DJISDKManagerDelegate{
+    
+    //MARK: Vars
+    var mapController: DJIMapControler?
+    var tapGesture: UITapGestureRecognizer?
+    
+    //MARK: Outlets
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var editBtn: UIButton!
+    
+    
+    //MARK: View Controller functions
+    /*func viewWillAppear(_ animated: Bool){
+        viewWillAppear(animated)
+        //startUpdateLocation()
     }
     
-    var hash: Int = 0
+    func viewWillDisappear(_ animated: Bool){
+        viewWillDisappear(animated)
+    }*/
     
-    var superclass: AnyClass?
-    
-    func `self`() -> Self {
-        return self
+    override func viewDidLoad(){
+        super.viewDidLoad()
+        self.registerApp()
+        
+        //self.initUI
+        //self.initData
     }
     
-    func perform(_ aSelector: Selector!) -> Unmanaged<AnyObject>! {
-        return nil
+    
+    //MARK: DJI Functions
+    func registerApp(){
+        DJISDKManager.registerApp(with: self)
     }
     
-    func perform(_ aSelector: Selector!, with object: Any!) -> Unmanaged<AnyObject>! {
-        return nil
+    func appRegisteredWithError(_ error: Error?) {
+               
+        NSLog("App registrada!")
+        DJISDKManager.startConnectionToProduct()
+        DJISDKManager.appActivationManager().delegate = self as? DJIAppActivationManagerDelegate
+
     }
     
-    func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! {
-        return nil
+    func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
+        // vacio
     }
     
-    func isProxy() -> Bool {
-        return false
-    }
     
-    func isKind(of aClass: AnyClass) -> Bool {
-        return false
-    }
-    
-    func isMember(of aClass: AnyClass) -> Bool {
-        return false
-    }
-    
-    func conforms(to aProtocol: Protocol) -> Bool {
-        return false
-    }
-    
-    func responds(to aSelector: Selector!) -> Bool {
-        return false
-    }
-    
-    var description: String = ""
-    
-    
+    //MARK: Fix Functions
 }
