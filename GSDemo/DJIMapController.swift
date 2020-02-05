@@ -18,9 +18,6 @@ class DJIMapControler: NSObject {
     
     
     
-    
-    
-    
     //MARK: Functions
     
     // Init a DJIMapController instance and create editPoints array

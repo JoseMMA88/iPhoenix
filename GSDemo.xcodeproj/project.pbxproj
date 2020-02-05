@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8DA28CF6C58FDF4B4A0F9BAF /* Pods_GSDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA6D2FCD85D1F014015F4D93 /* Pods_GSDemo.framework */; };
 		C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429550323E82C8600A7988B /* DJIRootViewController.swift */; };
 		C429F43A23E9629D006950A8 /* DJIMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429F43923E9629D006950A8 /* DJIMapController.swift */; };
 		C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */; };
@@ -16,6 +15,7 @@
 		C47BB56923E481E000D80BE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C47BB56723E481E000D80BE6 /* LaunchScreen.storyboard */; };
 		C47BB57423E481E000D80BE6 /* GSDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB57323E481E000D80BE6 /* GSDemoTests.swift */; };
 		C47BB57F23E481E000D80BE6 /* GSDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB57E23E481E000D80BE6 /* GSDemoUITests.swift */; };
+		DE01EDEE8A31E082C744C4A6 /* libPods-GSDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AD37F058FAD758A6DBDE8 /* libPods-GSDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.release.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.release.xcconfig"; sourceTree = "<group>"; };
+		803AD37F058FAD758A6DBDE8 /* libPods-GSDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GSDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C429550323E82C8600A7988B /* DJIRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIRootViewController.swift; sourceTree = "<group>"; };
 		C429F43923E9629D006950A8 /* DJIMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIMapController.swift; sourceTree = "<group>"; };
 		C47BB55B23E481DF00D80BE6 /* GSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,7 +53,6 @@
 		C47BB57E23E481E000D80BE6 /* GSDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSDemoUITests.swift; sourceTree = "<group>"; };
 		C47BB58023E481E000D80BE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.debug.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		EA6D2FCD85D1F014015F4D93 /* Pods_GSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DA28CF6C58FDF4B4A0F9BAF /* Pods_GSDemo.framework in Frameworks */,
+				DE01EDEE8A31E082C744C4A6 /* libPods-GSDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +84,7 @@
 		0E1E60391C19617D00B2B666 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EA6D2FCD85D1F014015F4D93 /* Pods_GSDemo.framework */,
+				803AD37F058FAD758A6DBDE8 /* libPods-GSDemo.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -222,13 +222,16 @@
 				TargetAttributes = {
 					C47BB55A23E481DF00D80BE6 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1120;
 					};
 					C47BB56E23E481E000D80BE6 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1120;
 						TestTargetID = C47BB55A23E481DF00D80BE6;
 					};
 					C47BB57923E481E000D80BE6 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1120;
 						TestTargetID = C47BB55A23E481DF00D80BE6;
 					};
 				};
@@ -504,6 +507,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
@@ -515,7 +519,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -524,6 +528,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
@@ -535,7 +540,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -555,7 +560,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GSDemo.app/GSDemo";
 			};
@@ -576,7 +581,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GSDemo.app/GSDemo";
 			};
@@ -596,7 +601,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = GSDemo;
 			};
@@ -616,7 +621,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = GSDemo;
 			};

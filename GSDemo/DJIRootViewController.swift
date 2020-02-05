@@ -14,10 +14,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, DJISDKManagerD
     
     //MARK: Vars
     var mapController: DJIMapControler?
-    var tapGesture: UITapGestureRecognizer?
+    var isEditingPoints: Bool = false
+    
     
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet var tapGesture: UITapGestureRecognizer!
     @IBOutlet weak var editBtn: UIButton!
     
     
@@ -35,8 +37,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, DJISDKManagerD
         super.viewDidLoad()
         self.registerApp()
         
-        //self.initUI
-        //self.initData
+        mapController = DJIMapControler()
+        tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(addWaypoints(tapGesture:)))
+        mapView.addGestureRecognizer(tapGesture)
+        
+        //TODO: self.initUI
+        //TODO: self.initData
     }
     
     
@@ -58,5 +64,47 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, DJISDKManagerD
     }
     
     
-    //MARK: Fix Functions
+    //MARK:Buttons Functions
+    @IBAction func editBtnAction(_ sender: Any) {
+        if isEditingPoints {
+            mapController?.cleanAllPointsWithMapView(with: mapView)
+            editBtn.setTitle("Edit", for: .normal)
+        }
+        else{
+            editBtn.setTitle("Reset", for: .normal)
+        }
+        
+        isEditingPoints = !isEditingPoints
+    }
+    
+    
+    
+    
+    //MARK: Custom Functions
+    @objc func addWaypoints(tapGesture: UITapGestureRecognizer?){
+        let point = tapGesture?.location(in: self.mapView)
+        
+        if (tapGesture?.state == .ended){
+            
+            if isEditingPoints {
+                mapController?.addPoint(point!, with: mapView)
+            }
+        }
+    }
+    
+    
+    //MARK: MKMapViewDelegate Method
+    func viewForAnnotation(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKPinAnnotationView? {
+        
+        if annotation.isKind(of: MKPointAnnotation.self){
+            let pinView = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: "Pin_Annotation")
+            pinView.pinTintColor = .purple
+            
+            return pinView
+        }
+        
+        return nil
+        
+    }
+    
 }
