@@ -16,10 +16,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vW-PS-c2A">
-                                <rect key="frame" x="173" y="697" width="69" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vW-PS-c2A">
+                                <rect key="frame" x="78" y="697" width="39" height="48"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="ZPi-Zo-bDN"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Edit">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -28,10 +30,23 @@
                                     <action selector="editBtnAction:" destination="ot5-9z-CeC" eventType="touchUpInside" id="bDq-ex-fEq"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Fwa-61-M7v">
-                                <rect key="frame" x="26" y="82" width="362" height="581"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Na-So-6GD">
+                                <rect key="frame" x="165" y="697" width="84" height="48"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Focus Map">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="focusMapAction:" destination="ot5-9z-CeC" eventType="touchUpInside" id="DuA-b2-Zn4"/>
+                                </connections>
+                            </button>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Fwa-61-M7v">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="574"/>
                                 <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="574" id="RLx-8c-jP8"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="9Jd-ZX-Oro" id="KZB-0C-oHO"/>
                                     <outletCollection property="gestureRecognizers" destination="hfH-YD-WBg" appends="YES" id="hjJ-bN-Krw"/>
@@ -39,6 +54,17 @@
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" id="707-I9-SfI"/>
+                            <constraint firstItem="7vW-PS-c2A" firstAttribute="top" secondItem="9Na-So-6GD" secondAttribute="top" id="CoS-Ls-yCF"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="centerX" secondItem="9Jd-ZX-Oro" secondAttribute="centerX" id="Nv1-fZ-LiS"/>
+                            <constraint firstItem="gZI-14-WoV" firstAttribute="bottom" secondItem="7vW-PS-c2A" secondAttribute="bottom" constant="117" id="WkK-Ir-cOK"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="centerX" secondItem="9Na-So-6GD" secondAttribute="centerX" id="Ynq-e1-hMn"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="top" secondItem="gZI-14-WoV" secondAttribute="top" constant="-44" id="aTd-Ey-d4H"/>
+                            <constraint firstItem="7vW-PS-c2A" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" constant="78" id="k9n-oC-PJm"/>
+                            <constraint firstItem="9Na-So-6GD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="7vW-PS-c2A" secondAttribute="trailing" constant="8" symbolic="YES" id="maI-9r-why"/>
+                            <constraint firstItem="7vW-PS-c2A" firstAttribute="bottom" secondItem="9Na-So-6GD" secondAttribute="bottom" id="sSo-ch-dV4"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="gZI-14-WoV"/>
                     </view>
                     <connections>
