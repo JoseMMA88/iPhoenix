@@ -53,6 +53,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         locationManager?.stopUpdatingLocation()
     }
     
+
+    
     func prefersStatusBarHidden()-> Bool{
         return false
     }
@@ -66,9 +68,18 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func appRegisteredWithError(_ error: Error?) {
-        NSLog("App registrada!")
-        DJISDKManager.startConnectionToProduct()
-        DJISDKManager.appActivationManager().delegate = self as? DJIAppActivationManagerDelegate
+        var message = "App registrada"
+        
+        if (error != nil){
+            message = "Error al registrar la App"
+        }
+        else{
+            NSLog("App registrada!")
+            DJISDKManager.startConnectionToProduct()
+            DJISDKManager.appActivationManager().delegate = self as? DJIAppActivationManagerDelegate
+        }
+        
+        //self.showAlertViewWithTittle(title: "Registro de App", WithMessage: message)
 
     }
     
@@ -134,6 +145,14 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             self.present(alert, animated: true, completion: nil)
             
         }
+    }
+    
+    func showAlertViewWithTittle(title: String, WithMessage message: String){
+        let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction.init(title: "OK", style: .default, handler: nil)
+        
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
     
     

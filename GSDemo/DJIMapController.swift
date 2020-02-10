@@ -15,6 +15,7 @@ class DJIMapControler: NSObject {
     
     //MARK: VARs
     var editPoints: [AnyHashable]?
+    var aircraftAnnotation: DJIAircraftAnnotation?
     
     
     
@@ -46,8 +47,8 @@ class DJIMapControler: NSObject {
         let annos: NSArray = NSArray.init(array: mapView!.annotations)
         for i in 0..<annos.count{
             weak var ann = annos[i] as? MKAnnotation
-            if let ann = ann {
-                mapView?.removeAnnotation(ann)
+            if (!(ann!.isEqual(self.aircraftAnnotation))){
+                mapView?.removeAnnotation(ann!)
             }
         }
     }
@@ -56,6 +57,18 @@ class DJIMapControler: NSObject {
     func wayPoints()->NSArray?{
         return self.editPoints as NSArray?
     }
+    
+    
+    // Update Aircraft´s location in Map View
+    func updateAircraftLocation(location: CLLocationCoordinate2D, withMapView mapView: MKMapView?){
+        if(self.aircraftAnnotation == nil){
+            self.aircraftAnnotation = DJIAircraftAnnotation.init(coordinate: location)
+            mapView?.addAnnotation(self.aircraftAnnotation!)
+        }
+        self.aircraftAnnotation?.setCoordinate(location)
+    }
+    
+    
     
     
 }
