@@ -68,6 +68,12 @@ class DJIMapControler: NSObject {
         self.aircraftAnnotation?.setCoordinate(location)
     }
     
+    func updateAicraftHeading(heading: Float){
+        if(aircraftAnnotation != nil){
+            aircraftAnnotation?.updateHeading(heading: heading)
+        }
+        
+    }
     
     
     

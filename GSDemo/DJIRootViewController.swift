@@ -18,29 +18,28 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var isEditingPoints: Bool = false
     var locationManager: CLLocationManager?
     var userLocation: CLLocationCoordinate2D!
+    var droneLocation: CLLocationCoordinate2D!
     
     
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tapGesture: UITapGestureRecognizer!
     @IBOutlet weak var editBtn: UIButton!
+    @IBOutlet weak var modeLabel: UILabel!
+    @IBOutlet weak var gpsLabel: UILabel!
+    @IBOutlet weak var hsLabel: UILabel!
+    @IBOutlet weak var vsLabel: UILabel!
+    @IBOutlet weak var altitudeLabel: UILabel!
     
     
     //MARK: View Controller functions
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        
         self.registerApp()
-        
-        userLocation = kCLLocationCoordinate2DInvalid
-        
-        mapController = DJIMapControler()
-        tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(addWaypoints(tapGesture:)))
-        mapView.addGestureRecognizer(tapGesture)
-        
-        
-        //TODO: self.initUI
-        //TODO: self.initData
+        self.initUI()
+        self.initData()
     }
     
     override func viewWillAppear(_ animated: Bool){
@@ -80,7 +79,18 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
         
         //self.showAlertViewWithTittle(title: "Registro de App", WithMessage: message)
-
+    }
+    
+    func productConnected(_ product: DJIBaseProduct?) {
+        if (product != nil) {
+            let flightControler: DJIFlightController? = DemoUtility.fetchFlightController()
+            if(flightControler != nil){
+                flightControler?.delegate = self as? DJIFlightControllerDelegate
+            }
+        }
+        else{
+            ShowMessage("Product disconnected", nil, nil, "OK")
+        }
     }
     
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
@@ -102,9 +112,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     @IBAction func focusMapAction(_ sender: Any) {
-        if CLLocationCoordinate2DIsValid(userLocation){
+        if CLLocationCoordinate2DIsValid(droneLocation){
             var region: MKCoordinateRegion = MKCoordinateRegion.init()
-            region.center = userLocation
+            region.center = droneLocation
             region.span.latitudeDelta = 0.001
             region.span.longitudeDelta = 0.001
             
@@ -155,19 +165,62 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         present(alert, animated: true, completion: nil)
     }
     
+    // Initialize labels upmap
+    func initUI(){
+        self.modeLabel.text     = "N/A"
+        self.gpsLabel.text      = "0"
+        self.vsLabel.text       = "0.0 M/S"
+        self.hsLabel.text       = "0.0 M/S"
+        self.altitudeLabel.text = "0 M"
+    }
+    
+    // Initialize
+    func initData(){
+        userLocation = kCLLocationCoordinate2DInvalid
+        droneLocation = kCLLocationCoordinate2DInvalid
+        
+        mapController = DJIMapControler()
+        tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(addWaypoints(tapGesture:)))
+        mapView.addGestureRecognizer(tapGesture)
+        
+    }
     
     //MARK: MKMapViewDelegate Method
-    func viewForAnnotation(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKPinAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKAnnotationView? {
         
         if annotation.isKind(of: MKPointAnnotation.self){
             let pinView = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: "Pin_Annotation")
-            pinView.pinTintColor = .purple
-            
+            NSLog("Add new pin")
+            pinView.pinTintColor = .green
             return pinView
+        }
+        else if(annotation.isKind(of: DJIAircraftAnnotation.self)){
+            let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
+            (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
+            
+            return annoView
+            
         }
         
         return nil
         
+    }
+    
+    
+    //MARK: DJIFlightControllerDelegate
+    func flightController(_ fc: DJIFlightController?,didUpdateState state: DJIFlightControllerState?){
+        droneLocation = state?.aircraftLocation?.coordinate
+        
+        modeLabel.text = state?.flightModeString
+        gpsLabel.text = String.init(format: "%lu", state!.satelliteCount)
+        vsLabel.text = String.init(format: "%0.1f M/S", state!.velocityZ)
+        hsLabel.text = String.init(format: "%0.1f M/S", (sqrtf(state!.velocityX*state!.velocityX + state!.velocityY*state!.velocityY)))
+        altitudeLabel.text = String.init(format: "0.1f M", state!.altitude)
+        
+        mapController?.updateAircraftLocation(location: self.droneLocation, withMapView: self.mapView)
+                                        //degrees to radians
+        let radianYaw: Double = (state!.attitude.yaw) * .pi / 180
+        mapController?.updateAicraftHeading(heading: Float(radianYaw))
     }
     
     

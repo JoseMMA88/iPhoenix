@@ -17,6 +17,7 @@
 		C47BB57F23E481E000D80BE6 /* GSDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB57E23E481E000D80BE6 /* GSDemoUITests.swift */; };
 		C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */; };
 		C4D3EC5123F1647E0041D025 /* DJIAircraftAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */; };
+		C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5223F17FC00041D025 /* DemoUtility.swift */; };
 		DE01EDEE8A31E082C744C4A6 /* libPods-GSDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AD37F058FAD758A6DBDE8 /* libPods-GSDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 		C47BB58023E481E000D80BE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotationView.swift; sourceTree = "<group>"; };
 		C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotation.swift; sourceTree = "<group>"; };
+		C4D3EC5223F17FC00041D025 /* DemoUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUtility.swift; sourceTree = "<group>"; };
 		D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.debug.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +134,7 @@
 				C429F43923E9629D006950A8 /* DJIMapController.swift */,
 				C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */,
 				C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */,
+				C4D3EC5223F17FC00041D025 /* DemoUtility.swift */,
 				C47BB56223E481DF00D80BE6 /* Main.storyboard */,
 				C47BB56523E481E000D80BE6 /* Assets.xcassets */,
 				C47BB56723E481E000D80BE6 /* LaunchScreen.storyboard */,
@@ -341,6 +344,7 @@
 				C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */,
 				C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */,
 				C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */,
+				C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
