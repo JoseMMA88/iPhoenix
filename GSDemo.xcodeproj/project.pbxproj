@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		62D1D5D640213549BE93AB70 /* Pods_GSDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C89988C8A4AA65D8954734FF /* Pods_GSDemo.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429550323E82C8600A7988B /* DJIRootViewController.swift */; };
 		C429F43A23E9629D006950A8 /* DJIMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429F43923E9629D006950A8 /* DJIMapController.swift */; };
 		C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */; };
@@ -18,7 +19,6 @@
 		C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */; };
 		C4D3EC5123F1647E0041D025 /* DJIAircraftAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */; };
 		C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5223F17FC00041D025 /* DemoUtility.swift */; };
-		DE01EDEE8A31E082C744C4A6 /* libPods-GSDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AD37F058FAD758A6DBDE8 /* libPods-GSDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +40,6 @@
 
 /* Begin PBXFileReference section */
 		48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.release.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.release.xcconfig"; sourceTree = "<group>"; };
-		803AD37F058FAD758A6DBDE8 /* libPods-GSDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GSDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C429550323E82C8600A7988B /* DJIRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIRootViewController.swift; sourceTree = "<group>"; };
 		C429F43923E9629D006950A8 /* DJIMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIMapController.swift; sourceTree = "<group>"; };
 		C47BB55B23E481DF00D80BE6 /* GSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +57,7 @@
 		C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotationView.swift; sourceTree = "<group>"; };
 		C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotation.swift; sourceTree = "<group>"; };
 		C4D3EC5223F17FC00041D025 /* DemoUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUtility.swift; sourceTree = "<group>"; };
+		C89988C8A4AA65D8954734FF /* Pods_GSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.debug.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE01EDEE8A31E082C744C4A6 /* libPods-GSDemo.a in Frameworks */,
+				62D1D5D640213549BE93AB70 /* Pods_GSDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +90,7 @@
 		0E1E60391C19617D00B2B666 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				803AD37F058FAD758A6DBDE8 /* libPods-GSDemo.a */,
+				C89988C8A4AA65D8954734FF /* Pods_GSDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -525,7 +525,7 @@
 				DEVELOPMENT_TEAM = LW9DHQ8252;
 				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
 				INFOPLIST_FILE = GSDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -547,7 +547,7 @@
 				DEVELOPMENT_TEAM = LW9DHQ8252;
 				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
 				INFOPLIST_FILE = GSDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
