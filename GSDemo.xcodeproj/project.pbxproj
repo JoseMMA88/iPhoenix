@@ -525,6 +525,7 @@
 				DEVELOPMENT_TEAM = LW9DHQ8252;
 				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
 				INFOPLIST_FILE = GSDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -546,6 +547,7 @@
 				DEVELOPMENT_TEAM = LW9DHQ8252;
 				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
 				INFOPLIST_FILE = GSDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

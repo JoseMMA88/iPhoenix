@@ -112,10 +112,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Fwa-61-M7v" firstAttribute="top" secondItem="lTq-Xg-7Yb" secondAttribute="bottom" constant="8" id="052-UX-gAN"/>
                             <constraint firstItem="llE-50-jul" firstAttribute="leading" secondItem="OT3-B1-6bI" secondAttribute="trailing" constant="16" id="13E-wU-cIv"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="baseline" secondItem="EgQ-Ng-B13" secondAttribute="baseline" id="2v6-Bc-a6i"/>
                             <constraint firstItem="EgQ-Ng-B13" firstAttribute="leading" secondItem="Hu1-Dv-Onn" secondAttribute="trailing" constant="21" id="2yE-1e-EBp"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" id="491-l2-fv4"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="baseline" secondItem="OT3-B1-6bI" secondAttribute="baseline" id="7T6-NK-nVB"/>
                             <constraint firstItem="q9L-6X-Qe9" firstAttribute="leading" secondItem="aHy-eE-MQm" secondAttribute="trailing" constant="16" id="8Ld-cd-5GH"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="top" secondItem="gZI-14-WoV" secondAttribute="top" id="9Da-f4-9ss"/>
@@ -123,17 +123,20 @@
                             <constraint firstItem="P27-2F-Bz8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="q9L-6X-Qe9" secondAttribute="trailing" constant="-1" id="BSp-Ku-nLe"/>
                             <constraint firstItem="Fwa-61-M7v" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" id="CEu-tw-GPi"/>
                             <constraint firstItem="7vW-PS-c2A" firstAttribute="top" secondItem="9Na-So-6GD" secondAttribute="top" constant="-3" id="CoS-Ls-yCF"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="trailing" secondItem="gZI-14-WoV" secondAttribute="trailing" id="DOl-Zp-mlZ"/>
                             <constraint firstItem="Fwa-61-M7v" firstAttribute="trailing" secondItem="gZI-14-WoV" secondAttribute="trailing" id="E52-wC-zEV"/>
+                            <constraint firstItem="gZI-14-WoV" firstAttribute="trailing" secondItem="9Na-So-6GD" secondAttribute="trailing" constant="56" id="H2p-zZ-bag"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="trailing" secondItem="9Jd-ZX-Oro" secondAttribute="trailingMargin" id="JBE-59-hEl"/>
                             <constraint firstItem="Hu1-Dv-Onn" firstAttribute="leading" secondItem="ecG-bD-uxm" secondAttribute="trailing" constant="2" id="Ksn-TX-H2X"/>
                             <constraint firstItem="lTq-Xg-7Yb" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" constant="7" id="M4P-a8-Ohw"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="leading" secondItem="EgQ-Ng-B13" secondAttribute="trailing" constant="8" id="MtX-iA-bcq"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="baseline" secondItem="lTq-Xg-7Yb" secondAttribute="baseline" id="NKz-Nt-E9a"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="top" secondItem="lTq-Xg-7Yb" secondAttribute="bottom" constant="8" id="OqX-BO-5nS"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="baseline" secondItem="ecG-bD-uxm" secondAttribute="baseline" id="QRT-Hn-uo2"/>
+                            <constraint firstItem="7vW-PS-c2A" firstAttribute="top" secondItem="Fwa-61-M7v" secondAttribute="bottom" constant="24" id="U27-eD-bKx"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="baseline" secondItem="aHy-eE-MQm" secondAttribute="baseline" id="X0e-c2-EXu"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="baseline" secondItem="P27-2F-Bz8" secondAttribute="baseline" id="XHs-Vi-3o5"/>
-                            <constraint firstItem="7vW-PS-c2A" firstAttribute="top" secondItem="Fwa-61-M7v" secondAttribute="bottom" constant="24" id="YIp-Rh-sno"/>
-                            <constraint firstItem="Fwa-61-M7v" firstAttribute="centerX" secondItem="9Na-So-6GD" secondAttribute="centerX" constant="-109" id="Ynq-e1-hMn"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" id="agc-W3-tkg"/>
                             <constraint firstItem="OT3-B1-6bI" firstAttribute="leading" secondItem="lTq-Xg-7Yb" secondAttribute="trailing" constant="3" id="cVG-Jc-uEr"/>
                             <constraint firstItem="aHy-eE-MQm" firstAttribute="leading" secondItem="llE-50-jul" secondAttribute="trailing" constant="2" id="gss-rr-JNK"/>
                             <constraint firstItem="ecG-bD-uxm" firstAttribute="leading" secondItem="P27-2F-Bz8" secondAttribute="trailing" constant="20" id="hAk-Ix-10i"/>
@@ -142,9 +145,11 @@
                             <constraint firstItem="7vW-PS-c2A" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" constant="77" id="k9n-oC-PJm"/>
                             <constraint firstItem="9Na-So-6GD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="7vW-PS-c2A" secondAttribute="trailing" constant="8" symbolic="YES" id="maI-9r-why"/>
                             <constraint firstItem="mwE-B7-a9o" firstAttribute="baseline" secondItem="llE-50-jul" secondAttribute="baseline" id="pvr-lA-k0M"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="trailing" secondItem="gZI-14-WoV" secondAttribute="trailing" id="s8s-Ad-EGi"/>
                             <constraint firstItem="7vW-PS-c2A" firstAttribute="bottom" secondItem="9Na-So-6GD" secondAttribute="bottom" id="sSo-ch-dV4"/>
                             <constraint firstItem="Fwa-61-M7v" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" id="u4I-FK-7Qy"/>
                             <constraint firstItem="gZI-14-WoV" firstAttribute="trailing" secondItem="Fwa-61-M7v" secondAttribute="trailing" id="yVn-kw-Kmi"/>
+                            <constraint firstItem="9Na-So-6GD" firstAttribute="leading" secondItem="7vW-PS-c2A" secondAttribute="trailing" constant="158" id="zMd-Eh-vCO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gZI-14-WoV"/>
                     </view>
