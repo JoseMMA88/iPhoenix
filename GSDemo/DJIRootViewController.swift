@@ -11,7 +11,7 @@ import MapKit
 import UIKit
 import CoreLocation
 
-class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate{
+class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate{
     
     //MARK: Vars
     var mapController: DJIMapControler?
@@ -37,9 +37,21 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     override func viewDidLoad(){
         super.viewDidLoad()
         
-        self.registerApp()
+        //self.registerApp()
         self.initUI()
         self.initData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        /*super.viewDidAppear(animated)
+        
+        let alert = UIAlertController.init(title: "prueba", message: "message", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction.init(title: "OK", style: .default, handler: nil)
+              
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)*/
+        
+        self.registerApp()
     }
     
     override func viewWillAppear(_ animated: Bool){
@@ -73,24 +85,33 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             message = "Error al registrar la App"
         }
         else{
-            NSLog("App registrada!")
+            NSLog("App registrada!\n")
             DJISDKManager.startConnectionToProduct()
-            DJISDKManager.appActivationManager().delegate = self as? DJIAppActivationManagerDelegate
+            //DJISDKManager.appActivationManager().delegate = self as? DJIAppActivationManagerDelegate
         }
         
-        //self.showAlertViewWithTittle(title: "Registro de App", WithMessage: message)
+        self.showAlertViewWithTittle(title: "Registro de App", WithMessage: message)
     }
     
     func productConnected(_ product: DJIBaseProduct?) {
-        if (product != nil) {
-            let flightControler: DJIFlightController? = DemoUtility.fetchFlightController()
+         self.showAlertViewWithTittle(title: "Conectando con el producto", WithMessage: "en proceso")
+        if (product != nil){
+            //self.showAlertViewWithTittle(title: "Conectandoo con el producto", WithMessage: "producto conectado")
+            NSLog("Producto conectado \n")
+            let flightControler = DemoUtility.fetchFlightController()
             if(flightControler != nil){
-                flightControler?.delegate = self as? DJIFlightControllerDelegate
+                NSLog("flightContriler delegated! \n")
+                flightControler!.delegate = self
+                NSLog("flightContriler deleg111ated! \n")
             }
         }
         else{
-            ShowMessage("Product disconnected", nil, nil, "OK")
+            //self.showAlertViewWithTittle(title: "Conectandooo con el producto", WithMessage: "error al conectar el producto")
+            //ShowMessage("Product disconnected", nil, nil, "OK")
+            NSLog("Producto desconectado \n")
         }
+        //self.showAlertViewWithTittle(title: "Conectandooooo con el producto", WithMessage: "se acabó el proceso")
+        NSLog("se acabó el procreso \n")
     }
     
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
@@ -117,9 +138,20 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             region.center = droneLocation
             region.span.latitudeDelta = 0.001
             region.span.longitudeDelta = 0.001
+            NSLog("Localizacion del dron:\n")
             
+           /* let c:String = String(format:"%.1f", droneLocation.latitude)
+            print("Latitud: \(c)")
+            
+            
+            let c1:String = String(format:"%.1f", droneLocation.longitude)
+            print("Longitud: \(c1)")*/
             mapView.setRegion(region, animated: true)
         }
+        else{
+            NSLog("No tengo la localizacion del dron!!\n")
+        }
+        
     }
     
     
@@ -148,12 +180,11 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                     locationManager?.requestAlwaysAuthorization()
                 }
                 locationManager?.startUpdatingLocation()
+                self.showAlertViewWithTittle(title: "Actualizando Localizacion", WithMessage: "")
             }
         }
         else{
-            let alert = UIAlertController.init(title: "Location Services is not available", message: "", preferredStyle: .alert)
-            self.present(alert, animated: true, completion: nil)
-            
+            self.showAlertViewWithTittle(title: "Location Services is not avaible", WithMessage: "")
         }
     }
     
@@ -208,18 +239,18 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     
     //MARK: DJIFlightControllerDelegate
-    func flightController(_ fc: DJIFlightController?,didUpdateState state: DJIFlightControllerState?){
-        droneLocation = state?.aircraftLocation?.coordinate
+    func flightController(_ fc: DJIFlightController,didUpdate state: DJIFlightControllerState){
+        droneLocation = state.aircraftLocation?.coordinate
         
-        modeLabel.text = state?.flightModeString
-        gpsLabel.text = String.init(format: "%lu", state!.satelliteCount)
-        vsLabel.text = String.init(format: "%0.1f M/S", state!.velocityZ)
-        hsLabel.text = String.init(format: "%0.1f M/S", (sqrtf(state!.velocityX*state!.velocityX + state!.velocityY*state!.velocityY)))
-        altitudeLabel.text = String.init(format: "0.1f M", state!.altitude)
+        modeLabel.text = state.flightModeString
+        gpsLabel.text = String.init(format: "%lu", state.satelliteCount)
+        vsLabel.text = String.init(format: "%0.1f M/S", state.velocityZ)
+        hsLabel.text = String.init(format: "%0.1f M/S", (sqrtf(state.velocityX*state.velocityX + state.velocityY*state.velocityY)))
+        altitudeLabel.text = String.init(format: "0.1f M", state.altitude)
         
         mapController?.updateAircraftLocation(location: self.droneLocation, withMapView: self.mapView)
                                         //degrees to radians
-        let radianYaw: Double = (state!.attitude.yaw) * .pi / 180
+        let radianYaw: Double = (state.attitude.yaw) * .pi / 180
         mapController?.updateAicraftHeading(heading: Float(radianYaw))
     }
     
@@ -232,6 +263,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         if let coordinate = location?.coordinate{
             userLocation = coordinate
         }
+        
+        //self.showAlertViewWithTittle(title: "Location Manager Delegate", WithMessage: "")
     }
     
     

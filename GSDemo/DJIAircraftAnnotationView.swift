@@ -28,7 +28,10 @@ class DJIAircraftAnnotationView: MKAnnotationView{
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         self.isEnabled = false
         self.isDraggable = false
-        self.image = UIImage(contentsOfFile: "aircraft.png")
+        //self.image = UIImage(contentsOfFile: "aircraft.png")
+        NSLog("PILLO la IMAGEN??")
+        self.image = UIImage.init(named: "aircraft.png")
+        
         
     }
     
