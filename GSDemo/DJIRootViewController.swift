@@ -94,15 +94,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func productConnected(_ product: DJIBaseProduct?) {
-         self.showAlertViewWithTittle(title: "Conectando con el producto", WithMessage: "en proceso")
         if (product != nil){
-            //self.showAlertViewWithTittle(title: "Conectandoo con el producto", WithMessage: "producto conectado")
+            self.showAlertViewWithTittle(title: "Dron connected!", WithMessage: "")
             NSLog("Producto conectado \n")
             let flightControler = DemoUtility.fetchFlightController()
             if(flightControler != nil){
-                NSLog("flightContriler delegated! \n")
                 flightControler!.delegate = self
-                NSLog("flightContriler deleg111ated! \n")
             }
         }
         else{
@@ -133,22 +130,18 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     @IBAction func focusMapAction(_ sender: Any) {
-        if CLLocationCoordinate2DIsValid(droneLocation){
-            var region: MKCoordinateRegion = MKCoordinateRegion.init()
-            region.center = droneLocation
-            region.span.latitudeDelta = 0.001
-            region.span.longitudeDelta = 0.001
-            NSLog("Localizacion del dron:\n")
+        if(droneLocation != nil){
+            if CLLocationCoordinate2DIsValid(droneLocation){
+                var region: MKCoordinateRegion = MKCoordinateRegion.init()
+                region.center = droneLocation
+                region.span.latitudeDelta = 0.001
+                region.span.longitudeDelta = 0.001
             
-           /* let c:String = String(format:"%.1f", droneLocation.latitude)
-            print("Latitud: \(c)")
-            
-            
-            let c1:String = String(format:"%.1f", droneLocation.longitude)
-            print("Longitud: \(c1)")*/
-            mapView.setRegion(region, animated: true)
+                mapView.setRegion(region, animated: true)
+            }
         }
         else{
+            self.showAlertViewWithTittle(title: "Location Services is not avaible", WithMessage: "")
             NSLog("No tengo la localizacion del dron!!\n")
         }
         
@@ -248,10 +241,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         hsLabel.text = String.init(format: "%0.1f M/S", (sqrtf(state.velocityX*state.velocityX + state.velocityY*state.velocityY)))
         altitudeLabel.text = String.init(format: "0.1f M", state.altitude)
         
-        mapController?.updateAircraftLocation(location: self.droneLocation, withMapView: self.mapView)
+        if(droneLocation != nil){
+            mapController?.updateAircraftLocation(location: self.droneLocation, withMapView: self.mapView)
                                         //degrees to radians
-        let radianYaw: Double = (state.attitude.yaw) * .pi / 180
-        mapController?.updateAicraftHeading(heading: Float(radianYaw))
+            let radianYaw: Double = (state.attitude.yaw) * .pi / 180
+            mapController?.updateAicraftHeading(heading: Float(radianYaw))
+        }
     }
     
     
