@@ -19,6 +19,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var locationManager: CLLocationManager?
     var userLocation: CLLocationCoordinate2D!
     var droneLocation: CLLocationCoordinate2D!
+    var waypointMission: DJIMutableWaypointMission?
     
     
     //MARK: Outlets
@@ -44,12 +45,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     override func viewDidAppear(_ animated: Bool) {
         /*super.viewDidAppear(animated)
-        
-        let alert = UIAlertController.init(title: "prueba", message: "message", preferredStyle: UIAlertController.Style.alert)
-        let okAction = UIAlertAction.init(title: "OK", style: .default, handler: nil)
-              
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)*/
+        */
         
         self.registerApp()
     }
@@ -87,7 +83,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         else{
             NSLog("App registrada!\n")
             DJISDKManager.startConnectionToProduct()
-            //DJISDKManager.appActivationManager().delegate = self as? DJIAppActivationManagerDelegate
         }
         
         self.showAlertViewWithTittle(title: "Registro de App", WithMessage: message)
@@ -103,11 +98,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             }
         }
         else{
-            //self.showAlertViewWithTittle(title: "Conectandooo con el producto", WithMessage: "error al conectar el producto")
-            //ShowMessage("Product disconnected", nil, nil, "OK")
             NSLog("Producto desconectado \n")
         }
-        //self.showAlertViewWithTittle(title: "Conectandooooo con el producto", WithMessage: "se acabó el proceso")
         NSLog("se acabó el procreso \n")
     }
     
@@ -119,14 +111,41 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     //MARK:Buttons Functions
     @IBAction func editBtnAction(_ sender: Any) {
         if isEditingPoints {
-            mapController?.cleanAllPointsWithMapView(with: mapView)
-            editBtn.setTitle("Edit", for: .normal)
+            isEditing = false
+            finishBtnAction()
+            //mapController?.cleanAllPointsWithMapView(with: mapView)
+            editBtn.setTitle("Add", for: .normal)
         }
         else{
-            editBtn.setTitle("Reset", for: .normal)
+            isEditing = true
+            /* -----------------  FOCUS MAP  ------------------------*/
+            if(droneLocation != nil){
+                if CLLocationCoordinate2DIsValid(droneLocation){
+                    var region: MKCoordinateRegion = MKCoordinateRegion.init()
+                    region.center = droneLocation
+                    region.span.latitudeDelta = 0.001
+                    region.span.longitudeDelta = 0.001
+                       
+                    mapView.setRegion(region, animated: true)
+                }
+            }
+            /*-----------------------------------------------------*/
+            editBtn.setTitle("Finished", for: .normal)
         }
         
         isEditingPoints = !isEditingPoints
+    }
+    
+    
+    @IBAction func startBtnAction(_ sender: Any) {
+        missionOperator()?.startMission(completion: { error in
+            if (error != nil){
+                self.showAlertViewWithTittle(title: "Start Mission Failed!", WithMessage: error!.localizedDescription)
+            }
+            else{
+                self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
+            }
+        })
     }
     
     @IBAction func focusMapAction(_ sender: Any) {
@@ -147,6 +166,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
     }
     
+    @IBAction func cleanWaypoints(_ sender: Any) {
+        mapController?.cleanAllPointsWithMapView(with: mapView)
+    }
     
     
     //MARK: Custom Functions
@@ -239,7 +261,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         gpsLabel.text = String.init(format: "%lu", state.satelliteCount)
         vsLabel.text = String.init(format: "%0.1f M/S", state.velocityZ)
         hsLabel.text = String.init(format: "%0.1f M/S", (sqrtf(state.velocityX*state.velocityX + state.velocityY*state.velocityY)))
-        altitudeLabel.text = String.init(format: "0.1f M", state.altitude)
+        altitudeLabel.text = String.init(format: "%0.1f M", state.altitude)
         
         if(droneLocation != nil){
             mapController?.updateAircraftLocation(location: self.droneLocation, withMapView: self.mapView)
@@ -259,8 +281,83 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             userLocation = coordinate
         }
         
-        //self.showAlertViewWithTittle(title: "Location Manager Delegate", WithMessage: "")
     }
+    
+    
+    //MARK: Action Functions
+    func missionOperator() -> DJIWaypointMissionOperator? {
+        return DJISDKManager.missionControl()?.waypointMissionOperator()
+    }
+    
+    func finishBtnAction() {
+        
+        let wayPoints = self.mapController?.wayPoints()
+        
+        if(wayPoints == nil || wayPoints!.count < 2){
+            showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
+        }
+        
+        if(self.waypointMission != nil){
+            self.waypointMission?.removeAllWaypoints()
+        }
+        else{
+            self.waypointMission = DJIMutableWaypointMission()
+        }
+        
+        for i in 0..<wayPoints!.count{
+            let location = wayPoints![i] as? CLLocation
+            if let coordinate = location?.coordinate{
+                if CLLocationCoordinate2DIsValid(coordinate){
+                    let waypoint = DJIWaypoint(coordinate: location!.coordinate)
+                    waypointMission!.add(waypoint)
+                }
+            }
+        }
+        
+        
+        if(waypointMission != nil){
+            for i in 0..<waypointMission!.waypointCount{
+                let waypoint = waypointMission?.waypoint(at: i)
+                waypoint?.altitude = 20  //MARK: ALTITUD DE WAYPOINT
+            }
+        
+            waypointMission?.maxFlightSpeed = 10 //MARK: VELOCIDAD MAXIMA
+            waypointMission?.autoFlightSpeed = 8 //MARK: VELOCIDAD AUTOMATICA
+            waypointMission?.headingMode = DJIWaypointMissionHeadingMode.auto //MARK: HEADING AUTO
+            waypointMission?.finishedAction = DJIWaypointMissionFinishedAction.goHome //MARK: ACCION AL FINAL
+        
+            missionOperator()?.load(waypointMission!)
+        
+            missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
+                if(error != nil){
+                    if let descripcion = error?.localizedDescription {
+                        self.showAlertViewWithTittle(title: "MISION EXECUTION FAILED", WithMessage: descripcion)
+                    }
+                }
+                else{
+                    self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
+                }
+            })
+        
+            missionOperator()?.uploadMission(completion: { error in
+                if(error != nil){
+                    self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
+                }
+                else{
+                    self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
+                }
+            })
+        
+            
+            
+            
+            
+        }
+    }
+    
+    
+    
+    
     
     
     
