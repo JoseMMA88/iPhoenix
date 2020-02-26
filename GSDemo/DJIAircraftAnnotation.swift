@@ -23,6 +23,7 @@ class DJIAircraftAnnotation: NSObject, MKAnnotation{
     
     //set new coordinate
     func setCoordinate(_ newCoordinate: CLLocationCoordinate2D){
+        NSLog("ENTRO????")
         coordinate = newCoordinate
     }
     

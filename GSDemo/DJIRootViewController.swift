@@ -41,6 +41,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         //self.registerApp()
         self.initUI()
         self.initData()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -100,7 +101,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         else{
             NSLog("Producto desconectado \n")
         }
-        NSLog("se acabó el procreso \n")
     }
     
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
@@ -183,6 +183,19 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }
     
+    @IBAction func stopBtnAction(_ sender: Any) {
+        missionOperator()?.stopMission(completion: { error in
+            if(error != nil){
+                self.showAlertViewWithTittle(title: "Stop Mission Failed: ", WithMessage: error!.localizedDescription)
+            }
+            else{
+                self.showAlertViewWithTittle(title: "Stop Mission", WithMessage: "")
+            }
+        })
+    }
+    
+    
+    
     func startUpdateLocation(){
         if CLLocationManager.locationServicesEnabled(){
             if locationManager == nil {
@@ -264,7 +277,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         altitudeLabel.text = String.init(format: "%0.1f M", state.altitude)
         
         if(droneLocation != nil){
-            mapController?.updateAircraftLocation(location: self.droneLocation, withMapView: self.mapView)
+            mapController?.updateAircraftLocation(location: droneLocation, withMapView: mapView)
                                         //degrees to radians
             let radianYaw: Double = (state.attitude.yaw) * .pi / 180
             mapController?.updateAicraftHeading(heading: Float(radianYaw))
@@ -322,7 +335,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             }
         
             waypointMission?.maxFlightSpeed = 10 //MARK: VELOCIDAD MAXIMA
-            waypointMission?.autoFlightSpeed = 8 //MARK: VELOCIDAD AUTOMATICA
+            waypointMission?.autoFlightSpeed = 10 //MARK: VELOCIDAD AUTOMATICA
             waypointMission?.headingMode = DJIWaypointMissionHeadingMode.auto //MARK: HEADING AUTO
             waypointMission?.finishedAction = DJIWaypointMissionFinishedAction.goHome //MARK: ACCION AL FINAL
         
