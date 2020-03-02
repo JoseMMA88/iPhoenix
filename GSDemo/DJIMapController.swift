@@ -63,7 +63,12 @@ class DJIMapControler: NSObject {
     func updateAircraftLocation(location: CLLocationCoordinate2D, withMapView mapView: MKMapView?){
         //let locatione = location as? CLLocation
         
-        if(self.aircraftAnnotation == nil){
+        if(aircraftAnnotation != nil){
+            aircraftAnnotation!.setCoordinate(location)
+            /*NSLog(String(location.latitude))
+            NSLog("\n")*/
+        }
+        else{
             self.aircraftAnnotation = DJIAircraftAnnotation.init(coordinate: location)
             mapView?.addAnnotation(self.aircraftAnnotation!)
         }
@@ -75,12 +80,11 @@ class DJIMapControler: NSObject {
         NSLog(String(location.longitude))
         NSLog("\n")*/
         
-        self.aircraftAnnotation?.setCoordinate(location)
     }
     
     func updateAicraftHeading(heading: Float){
         if(aircraftAnnotation != nil){
-            aircraftAnnotation?.updateHeading(heading: heading)
+            aircraftAnnotation!.updateHeading(heading: heading)
         }
         
     }

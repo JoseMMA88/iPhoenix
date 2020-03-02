@@ -26,8 +26,8 @@ class DJIAircraftAnnotationView: MKAnnotationView{
     //Initializes MKAnnotationView object and variables
     override init(annotation: MKAnnotation?, reuseIdentifier: String?){
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        self.isEnabled = false
-        self.isDraggable = false
+        /*self.isEnabled = false
+        self.isDraggable = false*/
         self.image = UIImage.init(named: "aircraft.png")
         
         
