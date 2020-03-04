@@ -34,13 +34,14 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     
     //MARK: View Controller functions
-    
     override func viewDidLoad(){
         super.viewDidLoad()
         
         //self.registerApp()
         self.initUI()
         self.initData()
+        
+        //mapView.isUserInteractionEnabled = false // the map wont be dragged
         
     }
     
@@ -66,6 +67,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func prefersStatusBarHidden()-> Bool{
         return false
     }
+    
+    
+    
+    
+    //------------------------------------------------------ DJI --------------------------------------------------------------------------------------------
+    
     
     
     //MARK: DJI Functions
@@ -106,6 +113,14 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
         // vacio
     }
+    
+    
+    
+    
+    
+    
+// ---------------------------------------------------------- BUTTONS ----------------------------------------------------------------------------
+    
     
     
     //MARK:Buttons Functions
@@ -171,7 +186,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     
-    //MARK: Custom Functions
     @objc func addWaypoints(tapGesture: UITapGestureRecognizer?){
         let point = tapGesture?.location(in: self.mapView)
         
@@ -194,7 +208,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         })
     }
     
-    
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+       
+       
+       
+       
+       //MARK: Custom Functions
     
     func startUpdateLocation(){
         if CLLocationManager.locationServicesEnabled(){
@@ -216,6 +235,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }
     
+    
+    
+    // Funcion para mostrar una alerta en la pantalla del dispositivo
     func showAlertViewWithTittle(title: String, WithMessage message: String){
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction.init(title: "OK", style: .default, handler: nil)
@@ -224,7 +246,10 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         present(alert, animated: true, completion: nil)
     }
     
-    // Initialize labels upmap
+    
+    
+    
+    // Inicializamos los labels del UI
     func initUI(){
         self.modeLabel.text     = "N/A"
         self.gpsLabel.text      = "0"
@@ -233,7 +258,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         self.altitudeLabel.text = "0 M"
     }
     
-    // Initialize
+    // Inicializamos los objetos
     func initData(){
         userLocation = kCLLocationCoordinate2DInvalid
         droneLocation = kCLLocationCoordinate2DInvalid
@@ -244,29 +269,69 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
     }
     
+    
+    
+//------------------------------------------------------------ MAP VIEW -----------------------------------------------------------------------------------------------
+    
     //MARK: MKMapViewDelegate Method
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKAnnotationView? {
-        
-        if annotation.isKind(of: MKPointAnnotation.self){
-            let pinView = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: "Pin_Annotation")
-            NSLog("Add new pin")
-            pinView.pinTintColor = .green
-            return pinView
+    
+    
+    // Funcion delegate de MKMapView
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKPolyline {
+            let polylineRenderer = MKPolygonRenderer.init(overlay: overlay)
+            polylineRenderer.strokeColor = .orange
+            polylineRenderer.lineWidth = 4
         }
-        else if(annotation.isKind(of: DJIAircraftAnnotation.self)){
-            let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
-            (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
-            
-            return annoView
-            
+        else if overlay is MKPolygon {
+            let polygonView = MKPolygonRenderer.init(overlay: overlay)
+            polygonView.fillColor = .green
+            return polygonView
         }
-        
-        return nil
-        
+        return MKPolygonRenderer(overlay: overlay)
     }
     
     
+    
+    // Cuando el usario empieza a dibujar en la pantalla,
+    // vamos guardondo los touchpoints en la array de coordenadas de mapController
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        mapView.removeOverlays(mapView.overlays)
+        
+        if let touch = touches.first {
+            mapController?.addPoint(touch.location(in: mapView), with: mapView)
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if let touch = touches.first{
+            mapController?.addPoint(touch.location(in: mapView), with: mapView)
+            
+            let polyline = MKPolyline(coordinates: (mapController?.auxwayPoints())!, count: (mapController?.auxwayPoints()!.count)!)
+            mapView.addOverlay(polyline)
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let polygon = MKPolygon(coordinates: (mapController?.auxwayPoints())!, count: (mapController?.auxwayPoints()!.count)!)
+        mapView.addOverlay(polygon)
+        
+        mapController?.cleanAllPointsWithMapView(with: mapView)
+    }
+    
+    
+    
+    
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        
+        
+    
+    
     //MARK: DJIFlightControllerDelegate
+    
+    //Funcion de Delegate de DJIFlightController
     func flightController(_ fc: DJIFlightController,didUpdate state: DJIFlightControllerState){
         droneLocation = state.aircraftLocation?.coordinate
         
@@ -283,6 +348,10 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             mapController?.updateAicraftHeading(heading: Float(radianYaw))
         }
     }
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
     
     
     //MARK: Location Manager Delegate
@@ -297,13 +366,22 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    
     //MARK: Action Functions
+    
+    // Clase que se encarga de dar las ordenes de vuelo
     func missionOperator() -> DJIWaypointMissionOperator? {
         return DJISDKManager.missionControl()?.waypointMissionOperator()
     }
     
+    
+    
+    // Funcion que se invoca en el boton de "Finished"
+    // pasamos el array de coordenadas de mapController a la cola de vuelo de MissionOperator
+    // y seteamos los parametros de vuelo
     func finishBtnAction() {
-        
         let wayPoints = self.mapController?.wayPoints()
         
         if(wayPoints == nil || wayPoints!.count < 2){
@@ -370,7 +448,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     
     
-    
+ //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     
     
