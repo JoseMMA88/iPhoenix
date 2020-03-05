@@ -134,16 +134,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         else{
             isEditing = true
             /* -----------------  FOCUS MAP  ------------------------*/
-            if(droneLocation != nil){
-                if CLLocationCoordinate2DIsValid(droneLocation){
-                    var region: MKCoordinateRegion = MKCoordinateRegion.init()
-                    region.center = droneLocation
-                    region.span.latitudeDelta = 0.001
-                    region.span.longitudeDelta = 0.001
-                       
-                    mapView.setRegion(region, animated: true)
-                }
-            }
+            focusMap()
             /*-----------------------------------------------------*/
             editBtn.setTitle("Finished", for: .normal)
         }
@@ -164,20 +155,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     @IBAction func focusMapAction(_ sender: Any) {
-        if(droneLocation != nil){
-            if CLLocationCoordinate2DIsValid(droneLocation){
-                var region: MKCoordinateRegion = MKCoordinateRegion.init()
-                region.center = droneLocation
-                region.span.latitudeDelta = 0.001
-                region.span.longitudeDelta = 0.001
-            
-                mapView.setRegion(region, animated: true)
-            }
-        }
-        else{
-            self.showAlertViewWithTittle(title: "Location Services is not avaible", WithMessage: "")
-            NSLog("No tengo la localizacion del dron!!\n")
-        }
+        focusMap()
         
     }
     
@@ -269,6 +247,26 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
     }
     
+    func focusMap(){
+        let regionRadius: CLLocationDistance = 200//[m]
+        if(droneLocation != nil && CLLocationCoordinate2DIsValid(droneLocation)){
+            let region: MKCoordinateRegion = MKCoordinateRegion.init(center: droneLocation, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+            
+            mapView.setRegion(region, animated: true)
+        }
+        else{
+            if(userLocation != nil && CLLocationCoordinate2DIsValid(userLocation)){
+                let region: MKCoordinateRegion = MKCoordinateRegion.init(center: userLocation, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+                
+                mapView.setRegion(region, animated: true)
+            }
+            else{
+                self.showAlertViewWithTittle(title: "Location Services is not avaible", WithMessage: "")
+                NSLog("No tengo la localizacion del dron!!\n")
+            }
+        }
+    }
+    
     
     
 //------------------------------------------------------------ MAP VIEW -----------------------------------------------------------------------------------------------
@@ -295,7 +293,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     // Cuando el usario empieza a dibujar en la pantalla,
     // vamos guardondo los touchpoints en la array de coordenadas de mapController
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+   /* override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         mapView.removeOverlays(mapView.overlays)
         
         if let touch = touches.first {
@@ -318,7 +316,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         mapView.addOverlay(polygon)
         
         mapController?.cleanAllPointsWithMapView(with: mapView)
-    }
+    }*/
     
     
     
@@ -356,7 +354,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     //MARK: Location Manager Delegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        
         let location = locations.last
         
         if let coordinate = location?.coordinate{
