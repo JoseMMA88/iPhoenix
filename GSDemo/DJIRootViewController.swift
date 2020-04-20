@@ -173,6 +173,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     
+    //-----------------------------------------------------------------------------------------------------//
+    
+    
     
     func startUpdateLocation(){
         if CLLocationManager.locationServicesEnabled(){
@@ -285,7 +288,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     //MARK: Location Manager Delegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
-        
+
         let location = locations.last
         
         if let coordinate = location?.coordinate{
@@ -293,6 +296,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
         
     }
+
     
     
     //MARK: Action Functions
