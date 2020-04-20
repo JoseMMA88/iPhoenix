@@ -15,6 +15,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     //MARK: Vars
     var mapController: DJIMapControler?
+    var pathController: FlyPathController?
     var isEditingPoints: Bool = false
     var locationManager: CLLocationManager?
     var userLocation: CLLocationCoordinate2D!
@@ -39,6 +40,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         super.viewDidLoad()
         
         //self.registerApp()
+        pathController = FlyPathController(mapView: mapView!, droneLocation: droneLocation)
         self.initUI()
         self.initData()
         
@@ -139,10 +141,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         })
     }
     
+    
     @IBAction func focusMapAction(_ sender: Any) {
         focusMap()
         
     }
+    
     
     @IBAction func cleanWaypoints(_ sender: Any) {
         mapController?.cleanAllPointsWithMapView(with: mapView)
@@ -161,6 +165,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }
     
+    
     @IBAction func stopBtnAction(_ sender: Any) {
         missionOperator()?.stopMission(completion: { error in
             if(error != nil){
@@ -173,7 +178,79 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     
-    //-----------------------------------------------------------------------------------------------------//
+    @IBAction func addPointBtnAction(_ sender: Any) {
+        if(pathController!.points.count == 0){
+            let point = MKPointAnnotation()
+            pathController!.points.append(point)
+            point.coordinate = CLLocation(latitude: droneLocation.latitude + pathController!.d, longitude: droneLocation.longitude + pathController!.d).coordinate
+            mapView.addAnnotation(point)
+            
+            pathController!.updatePolygon()
+        }
+        else{
+            let point = MKPointAnnotation()
+            pathController!.points.append(point)
+            let lat = pathController!.points[0].coordinate.latitude
+            let long = pathController!.points[0].coordinate.longitude
+            point.coordinate = CLLocation(latitude: lat + pathController!.d, longitude: long + pathController!.d).coordinate
+            
+            mapView.addAnnotation(point)
+            pathController!.updatePolygon()
+        }
+    }
+    
+    
+    @IBAction func removeLastPointsBtnAction(_ sender: Any) {
+        let annos: NSArray = NSArray.init(array: mapView!.annotations)
+        var borrlat: Double = 0
+        var borrlong: Double = 0
+               
+        // Borramos en la array points
+        for i in 0..<pathController!.points.count{
+            if(i == (pathController!.points.count-1)){
+            //if (!(ann!.isEqual(self.aircraftAnnotation)))
+                borrlat = pathController!.points[i].coordinate.latitude
+                borrlong = pathController!.points[i].coordinate.longitude
+                        
+                pathController!.points.remove(at: i)
+            }
+        }
+        
+        // Borramos en la array de Annotations
+        for n in 0..<annos.count{
+            weak var ann = annos[n] as? MKAnnotation
+                if((borrlat == ann!.coordinate.latitude) && (borrlong == ann!.coordinate.longitude)){
+                    // Borramos annotation
+                    mapView?.removeAnnotation(ann!)
+                }
+        }
+        pathController!.updatePolygon()
+    }
+    
+    
+    @IBAction func btnActionDebug(_ sender: Any) {
+        mapView.removeAnnotations(pathController!.points)
+        for i in 0..<pathController!.fly_points.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points[i]
+            ano.title = String(i)
+            mapView.addAnnotation(ano)
+            
+            if(i < pathController!.fly_points.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points[i], pathController!.fly_points[i+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }
+        
+    }
+    
+    
+    
+//-----------------------------------------------------------------------------------------------------//
     
     
     
@@ -197,6 +274,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }
     
+    
     func showAlertViewWithTittle(title: String, WithMessage message: String){
         let alert = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction.init(title: "OK", style: .default, handler: nil)
@@ -204,6 +282,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
+    
     
     // Initialize labels upmap
     func initUI(){
@@ -213,6 +292,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         self.hsLabel.text       = "0.0 M/S"
         self.altitudeLabel.text = "0 M"
     }
+    
     
     // Initialize
     func initData(){
@@ -224,6 +304,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         mapView.addGestureRecognizer(tapGesture)
         
     }
+    
     
     //MARK: MKMapViewDelegate Method
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKAnnotationView? {
@@ -243,7 +324,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
         
         return nil
-        
     }
     
     
@@ -266,6 +346,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
              }
          }
      }
+    
     
     //MARK: DJIFlightControllerDelegate
     func flightController(_ fc: DJIFlightController,didUpdate state: DJIFlightControllerState){
@@ -298,14 +379,13 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
 
     
-    
     //MARK: Action Functions
     func missionOperator() -> DJIWaypointMissionOperator? {
         return DJISDKManager.missionControl()?.waypointMissionOperator()
     }
     
+    
     func finishBtnAction() {
-        
         let wayPoints = self.mapController?.wayPoints()
         
         if(wayPoints == nil || wayPoints!.count < 2){
@@ -362,11 +442,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                     self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
                 }
             })
-        
-            
-            
-            
-            
         }
     }
     
