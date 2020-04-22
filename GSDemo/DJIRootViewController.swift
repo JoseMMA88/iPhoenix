@@ -13,16 +13,6 @@ import CoreLocation
 
 class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate{
     
-    //MARK: Vars
-    var mapController: DJIMapControler?
-    var pathController: FlyPathController?
-    var isEditingPoints: Bool = false
-    var locationManager: CLLocationManager?
-    var userLocation: CLLocationCoordinate2D!
-    var droneLocation: CLLocationCoordinate2D!
-    var waypointMission: DJIMutableWaypointMission?
-    
-    
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tapGesture: UITapGestureRecognizer!
@@ -33,17 +23,28 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     @IBOutlet weak var vsLabel: UILabel!
     @IBOutlet weak var altitudeLabel: UILabel!
     
+    //MARK: Vars
+    var mapController: DJIMapController?
+    var pathController: FlyPathController?
+    var isEditingPoints: Bool = false
+    var locationManager: CLLocationManager?
+    var userLocation: CLLocationCoordinate2D!
+    var droneLocation: CLLocationCoordinate2D!
+    var waypointMission: DJIMutableWaypointMission?
+    
     
     //MARK: View Controller functions
     
     override func viewDidLoad(){
         super.viewDidLoad()
+        mapView.delegate = self
         
         //self.registerApp()
-        pathController = FlyPathController(mapView: mapView!, droneLocation: droneLocation)
         self.initUI()
         self.initData()
-        
+        pathController = FlyPathController(mapView: mapView!)
+        pathController!.updatePolygon()
+        mapView.mapType = .satellite
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,10 +59,10 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         startUpdateLocation()
     }
     
-    override func viewWillDisappear(_ animated: Bool){
+   /* override func viewWillDisappear(_ animated: Bool){
         //viewWillDisappear(animated)
         locationManager?.stopUpdatingLocation()
-    }
+    }*/
     
 
     
@@ -149,12 +150,13 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     
     @IBAction func cleanWaypoints(_ sender: Any) {
-        mapController?.cleanAllPointsWithMapView(with: mapView)
+        //mapController?.cleanAllPointsWithMapView(with: mapView)
+        pathController?.cleanAllPoints(aircraft: mapController?.getAircraftAnno())
     }
     
     
     //MARK: Custom Functions
-    @objc func addWaypoints(tapGesture: UITapGestureRecognizer?){
+    /*@objc func addWaypoints(tapGesture: UITapGestureRecognizer?){
         let point = tapGesture?.location(in: self.mapView)
         
         if (tapGesture?.state == .ended){
@@ -163,7 +165,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 mapController?.addPoint(point!, with: mapView)
             }
         }
-    }
+    }*/
     
     
     @IBAction func stopBtnAction(_ sender: Any) {
@@ -179,23 +181,26 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     
     @IBAction func addPointBtnAction(_ sender: Any) {
-        if(pathController!.points.count == 0){
-            let point = MKPointAnnotation()
-            pathController!.points.append(point)
-            point.coordinate = CLLocation(latitude: droneLocation.latitude + pathController!.d, longitude: droneLocation.longitude + pathController!.d).coordinate
-            mapView.addAnnotation(point)
+        if isEditingPoints {
+            //NSLog("points count: " + String(pathController!.points.count))
+            if(pathController!.points.count == 0){
+                let point = MKPointAnnotation()
+                pathController!.points.append(point)
+                point.coordinate = CLLocation(latitude: droneLocation.latitude + pathController!.d, longitude: droneLocation.longitude + pathController!.d).coordinate
+                
+                mapView.addAnnotation(point)
+                pathController!.updatePolygon()
+            }
+            else{
+                let point = MKPointAnnotation()
+                pathController!.points.append(point)
+                let lat = pathController!.points[0].coordinate.latitude
+                let long = pathController!.points[0].coordinate.longitude
+                point.coordinate = CLLocation(latitude: lat + pathController!.d, longitude: long + pathController!.d).coordinate
             
-            pathController!.updatePolygon()
-        }
-        else{
-            let point = MKPointAnnotation()
-            pathController!.points.append(point)
-            let lat = pathController!.points[0].coordinate.latitude
-            let long = pathController!.points[0].coordinate.longitude
-            point.coordinate = CLLocation(latitude: lat + pathController!.d, longitude: long + pathController!.d).coordinate
-            
-            mapView.addAnnotation(point)
-            pathController!.updatePolygon()
+                mapView.addAnnotation(point)
+                pathController!.updatePolygon()
+            }
         }
     }
     
@@ -252,6 +257,80 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
 //-----------------------------------------------------------------------------------------------------//
     
+    //MARK: MKMapViewDelegate Method
+     
+     
+    // Se llama al principio de la ejecucion y cuando movemos un annotation
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        NSLog("MAPVIEW 1")
+           if overlay is MKPolygon {
+             NSLog("MKPOLYGON")
+             pathController!.polygonView! = MKPolygonRenderer(overlay: overlay)
+             pathController!.polygonView!.strokeColor = .green
+             pathController!.polygonView!.lineWidth = 1.0
+             pathController!.polygonView!.fillColor = UIColor.green.withAlphaComponent(0.25)
+             return pathController!.polygonView!
+           }
+           else if overlay is MKCircle {
+             NSLog("MKPOLYGON")
+             pathController!.circleView! = MKCircleRenderer(overlay: overlay)
+             pathController!.circleView!.strokeColor = .red
+             pathController!.circleView!.lineWidth = 2.0
+             pathController!.circleView!.fillColor = UIColor.red.withAlphaComponent(0.25)
+             return pathController!.circleView!
+         }
+           else if overlay is MKPolyline {
+             NSLog("MKPOLYGON")
+             pathController!.routeLineView! = MKPolylineRenderer(overlay: overlay)
+             pathController!.routeLineView!.strokeColor = UIColor.blue.withAlphaComponent(0.2)
+             pathController!.routeLineView!.fillColor = UIColor.blue.withAlphaComponent(0.2)
+             pathController!.routeLineView!.lineWidth = 45
+             return pathController!.routeLineView!
+         }
+           return MKOverlayRenderer()
+    }
+    
+    
+    /*func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        NSLog("MAPVIEW 2")
+        if(annotation.isKind(of: DJIAircraftAnnotation.self)){
+            let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
+            (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
+            
+            return annoView
+            
+        }
+        
+        guard let annotation = annotation as? MKPointAnnotation else { return nil }
+        var view = mapView.dequeueReusableAnnotationView(withIdentifier: "marker")
+        
+        if (view == nil){
+            view = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: "marker")
+            view?.canShowCallout = false
+            view?.isDraggable = false
+            
+            // Sobreescribimos la logica de drag con la nuestra propia
+            let drag = UILongPressGestureRecognizer(target: self, action: #selector(handleDrag(gesture:)))
+            
+            drag.minimumPressDuration = 0 // instant bru
+            drag.allowableMovement = .greatestFiniteMagnitude
+            view?.addGestureRecognizer(drag)
+        }
+        else{
+            view?.annotation = annotation
+        }
+        return view
+    }
+     
+     
+     // Se llama a esta funcion cuando se arrastra un Annotation
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationView.DragState, fromOldState oldState: MKAnnotationView.DragState) {
+        NSLog("MAPVIEW 3")
+        pathController!.updatePolygon()
+    }*/
+
+     
+    // -------------------------------------------------------------------------------------------------------- //
     
     
     func startUpdateLocation(){
@@ -299,31 +378,42 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         userLocation = kCLLocationCoordinate2DInvalid
         droneLocation = kCLLocationCoordinate2DInvalid
         
-        mapController = DJIMapControler()
-        tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(addWaypoints(tapGesture:)))
-        mapView.addGestureRecognizer(tapGesture)
+        mapController = DJIMapController()
+        //tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(addWaypoints(tapGesture:)))
+        //mapView.addGestureRecognizer(tapGesture)
         
     }
     
     
-    //MARK: MKMapViewDelegate Method
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKAnnotationView? {
+ 
+    
+    //MARK: TOUCH HANDLING
+    //Handle drag custom
+    @objc func handleDrag(gesture: UILongPressGestureRecognizer){
+        let annotationView = gesture.view as! MKAnnotationView
+        annotationView.setSelected(false, animated: false)
         
-        if annotation.isKind(of: MKPointAnnotation.self){
-            let pinView = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: "Pin_Annotation")
-            NSLog("Add new pin")
-            pinView.pinTintColor = .green
-            return pinView
-        }
-        else if(annotation.isKind(of: DJIAircraftAnnotation.self)){
-            let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
-            (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
-            
-            return annoView
-            
-        }
+        let location = gesture.location(in: mapView)
         
-        return nil
+        if(gesture.state == .began){
+            pathController!.startLocation = location
+        }
+        else if (gesture.state == .changed){
+            gesture.view?.transform = CGAffineTransform.init(translationX: location.x - pathController!.startLocation!.x, y: location.y - pathController!.startLocation!.y)
+        }
+        else if (gesture.state == .ended || gesture.state == .cancelled){
+            let annotation = annotationView.annotation as! MKPointAnnotation
+            let translate = CGPoint.init(x: location.x - pathController!.startLocation!.x , y: location.y - pathController!.startLocation!.y)
+            let originalLocaton = mapView.convert(annotation.coordinate, toPointTo: mapView)
+            let updatedLocation = CGPoint.init(x: originalLocaton.x + translate.x, y: originalLocaton.y + translate.y)
+            
+            annotationView.transform = CGAffineTransform.identity
+            annotation.coordinate = mapView.convert(updatedLocation, toCoordinateFrom: mapView)
+            
+            //Actualizamos el poligono cuando acaba el gesto
+            pathController!.updatePolygon()
+            
+        }
     }
     
     
@@ -331,13 +421,13 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
          let regionRadius: CLLocationDistance = 200//[m]
          if(droneLocation != nil && CLLocationCoordinate2DIsValid(droneLocation)){
              let region: MKCoordinateRegion = MKCoordinateRegion.init(center: droneLocation, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-             
+             pathController?.getDroneLocation(droneLocation: droneLocation)
              mapView.setRegion(region, animated: true)
          }
          else{
              if(userLocation != nil && CLLocationCoordinate2DIsValid(userLocation)){
                  let region: MKCoordinateRegion = MKCoordinateRegion.init(center: userLocation, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-                 
+                 pathController?.getDroneLocation(droneLocation: userLocation)
                  mapView.setRegion(region, animated: true)
              }
              else{
@@ -386,8 +476,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     
     func finishBtnAction() {
-        let wayPoints = self.mapController?.wayPoints()
-        
+        //let wayPoints = self.mapController?.wayPoints()
+        let wayPoints = self.pathController?.fly_points
         if(wayPoints == nil || wayPoints!.count < 2){
             showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
         }
@@ -400,12 +490,11 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
         
         for i in 0..<wayPoints!.count{
-            let location = wayPoints![i] as? CLLocation
-            if let coordinate = location?.coordinate{
-                if CLLocationCoordinate2DIsValid(coordinate){
-                    let waypoint = DJIWaypoint(coordinate: location!.coordinate)
+            let location = CLLocation(latitude: wayPoints![i].latitude,longitude: wayPoints![i].longitude)
+            let coordinate = location.coordinate
+            if CLLocationCoordinate2DIsValid(coordinate){
+                    let waypoint = DJIWaypoint(coordinate: location.coordinate)
                     waypointMission!.add(waypoint)
-                }
             }
         }
         

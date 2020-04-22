@@ -9,12 +9,12 @@
 import UIKit
 import MapKit
 
-class DJIMapControler: NSObject {
+class DJIMapController: NSObject {
     
     
     
     //MARK: VARs
-    var editPoints: [AnyHashable]?
+    //var editPoints: [AnyHashable]?
     var aircraftAnnotation: DJIAircraftAnnotation?
     
     
@@ -24,11 +24,11 @@ class DJIMapControler: NSObject {
     // Init a DJIMapController instance and create editPoints array
     override init() {
         super.init()
-        editPoints = [AnyHashable]()
+        //editPoints = [AnyHashable]()
     }
     
     // Ad waypoints in Map
-    func addPoint(_ point: CGPoint, with mapView: MKMapView?){
+    /*func addPoint(_ point: CGPoint, with mapView: MKMapView?){
         let coodinate: CLLocationCoordinate2D = ((mapView?.convert(point, toCoordinateFrom: mapView) ?? nil)!)
         let location: CLLocation = CLLocation(latitude: coodinate.latitude, longitude: coodinate.longitude)
         
@@ -38,12 +38,12 @@ class DJIMapControler: NSObject {
         annotation.coordinate = location.coordinate
         mapView?.addAnnotation(annotation)
         
-    }
+    }*/
     
     
     // Clean all waypoints in Map
-    func cleanAllPointsWithMapView(with mapView: MKMapView?){
-        editPoints?.removeAll()
+    /*func cleanAllPointsWithMapView(with mapView: MKMapView?){
+        //editPoints?.removeAll()
         let annos: NSArray = NSArray.init(array: mapView!.annotations)
         for i in 0..<annos.count{
             weak var ann = annos[i] as? MKAnnotation
@@ -51,12 +51,12 @@ class DJIMapControler: NSObject {
                 mapView?.removeAnnotation(ann!)
             }
         }
-    }
+    }*/
     
     // Return NSArray contains multiple CCLocation objects
-    func wayPoints()->NSArray?{
+    /*func wayPoints()->NSArray?{
         return self.editPoints as NSArray?
-    }
+    }*/
     
     
     // Update Aircraft´s location in Map View
@@ -87,6 +87,10 @@ class DJIMapControler: NSObject {
             aircraftAnnotation!.updateHeading(heading: heading)
         }
         
+    }
+    
+    func getAircraftAnno()-> DJIAircraftAnnotation?{
+        return aircraftAnnotation
     }
     
     

@@ -51,15 +51,18 @@ class FlyPathController: NSObject{
     //Variables dron
     var kradio: Int = 15
     
-    // Init a DJIMapController instance and create editPoints array
-    init(mapView: MKMapView?, droneLocation: CLLocationCoordinate2D!) {
+    // Init a FlyPathController instance
+    init(mapView: MKMapView?) {
         super.init()
         self.mapView = mapView!
+    }
+    
+    func getDroneLocation(droneLocation: CLLocationCoordinate2D){
         self.droneLocation = droneLocation
     }
     
-    
     func updatePolygon(){
+        NSLog("UpdatePolygon")
         // Si hay polygon lo borramos
         if (polygon != nil){
             mapView!.removeOverlay(polygon!)
@@ -311,17 +314,19 @@ class FlyPathController: NSObject{
 
             }
             
-            let mapPoint = MKMapPoint(point)
-            let cgpoint = polygonView!.point(for: mapPoint)
+            if(polygonView != nil){
+                let mapPoint = MKMapPoint(point)
+                let cgpoint = polygonView!.point(for: mapPoint)
             
-            if(distancia == true && polygonView!.path.contains(cgpoint)){
-                let center2 = MKCircle.init(center: point, radius: 5)
-                mapView!.addOverlay(center2)
+                if(distancia == true && polygonView!.path.contains(cgpoint)){
+                    let center2 = MKCircle.init(center: point, radius: 5)
+                    mapView!.addOverlay(center2)
                 
-                // Añadimos los puntos medios al path
-                arr_circle_auxs2.append(center2)
-                path_coord.append(point)
-                distancia = false
+                    // Añadimos los puntos medios al path
+                    arr_circle_auxs2.append(center2)
+                    path_coord.append(point)
+                    distancia = false
+                }
             }
         }
     }
@@ -380,7 +385,7 @@ class FlyPathController: NSObject{
         //updatePeriPoints(cent: coord, rad: rad)
         mapView.addOverlay(circlee!)*/
         
-        NSLog(String(ori))
+        //NSLog("Ori: " + String(ori))
         
         
         let tam = aux_coords.count
@@ -544,6 +549,34 @@ class FlyPathController: NSObject{
             return 2
         }
         return 0
+    }
+    
+    
+    func cleanAllPoints(aircraft: DJIAircraftAnnotation?){
+        fly_points.removeAll()
+        points.removeAll()
+        peripoints.removeAll()
+        arr_circle_auxs.removeAll()
+        
+        // Path
+        triangles.removeAll()
+        triangles2.removeAll()
+        triangles3.removeAll()
+        triangles4.removeAll()
+        triangles5.removeAll()
+        path_coord.removeAll()
+        arr_circle_auxs2.removeAll()
+        
+        // Debug visual
+        annotations.removeAll()
+        
+        let annos: NSArray = NSArray.init(array: mapView!.annotations)
+        for i in 0..<annos.count{
+            weak var ann = annos[i] as? MKAnnotation
+            if (!(ann!.isEqual(aircraft))){
+                mapView?.removeAnnotation(ann!)
+            }
+        }
     }
     
     
