@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C1C4B0B063F2C4A77C719DBD /* Pods_GSDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */; };
+		C411567B245344BB0011F583 /* FlyPathController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411567A245344BB0011F583 /* FlyPathController.swift */; };
 		C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429550323E82C8600A7988B /* DJIRootViewController.swift */; };
 		C429F43A23E9629D006950A8 /* DJIMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429F43923E9629D006950A8 /* DJIMapController.swift */; };
 		C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.release.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.release.xcconfig"; sourceTree = "<group>"; };
 		94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C411567A245344BB0011F583 /* FlyPathController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyPathController.swift; sourceTree = "<group>"; };
 		C429550323E82C8600A7988B /* DJIRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIRootViewController.swift; sourceTree = "<group>"; };
 		C429F43923E9629D006950A8 /* DJIMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIMapController.swift; sourceTree = "<group>"; };
 		C47BB55B23E481DF00D80BE6 /* GSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +137,7 @@
 				C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */,
 				C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */,
 				C4D3EC5223F17FC00041D025 /* DemoUtility.swift */,
+				C411567A245344BB0011F583 /* FlyPathController.swift */,
 				C47BB56223E481DF00D80BE6 /* Main.storyboard */,
 				C47BB56523E481E000D80BE6 /* Assets.xcassets */,
 				C47BB56723E481E000D80BE6 /* LaunchScreen.storyboard */,
@@ -343,6 +346,7 @@
 				C429F43A23E9629D006950A8 /* DJIMapController.swift in Sources */,
 				C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */,
 				C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */,
+				C411567B245344BB0011F583 /* FlyPathController.swift in Sources */,
 				C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */,
 				C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */,
 			);

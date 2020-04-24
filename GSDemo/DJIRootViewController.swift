@@ -13,15 +13,6 @@ import CoreLocation
 
 class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate{
     
-    //MARK: Vars
-    var mapController: DJIMapControler?
-    var isEditingPoints: Bool = false
-    var locationManager: CLLocationManager?
-    var userLocation: CLLocationCoordinate2D!
-    var droneLocation: CLLocationCoordinate2D!
-    var waypointMission: DJIMutableWaypointMission?
-    
-    
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tapGesture: UITapGestureRecognizer!
@@ -32,6 +23,15 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     @IBOutlet weak var vsLabel: UILabel!
     @IBOutlet weak var altitudeLabel: UILabel!
     
+    //MARK: Vars
+    var pathController: FlyPathController?
+    var mapController: DJIMapControler?
+    var isEditingPoints: Bool = false
+    var locationManager: CLLocationManager?
+    var userLocation: CLLocationCoordinate2D!
+    var droneLocation: CLLocationCoordinate2D!
+    var waypointMission: DJIMutableWaypointMission?
+    
     
     //MARK: View Controller functions
     
@@ -41,6 +41,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         //self.registerApp()
         self.initUI()
         self.initData()
+        pathController = FlyPathController(mapView: mapView!)
+        pathController!.updatePolygon()
+        mapView.mapType = .satellite
         
     }
     
@@ -226,12 +229,42 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     //MARK: MKMapViewDelegate Method
+    // Se llama al principio de la ejecucion y cuando movemos un annotation
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        NSLog("MAPVIEW 1")
+           if overlay is MKPolygon {
+             NSLog("MKPOLYGON")
+             pathController!.polygonView! = MKPolygonRenderer(overlay: overlay)
+             pathController!.polygonView!.strokeColor = .green
+             pathController!.polygonView!.lineWidth = 1.0
+             pathController!.polygonView!.fillColor = UIColor.green.withAlphaComponent(0.25)
+             return pathController!.polygonView!
+           }
+           else if overlay is MKCircle {
+             NSLog("MKPOLYGON")
+             pathController!.circleView! = MKCircleRenderer(overlay: overlay)
+             pathController!.circleView!.strokeColor = .red
+             pathController!.circleView!.lineWidth = 2.0
+             pathController!.circleView!.fillColor = UIColor.red.withAlphaComponent(0.25)
+             return pathController!.circleView!
+         }
+           else if overlay is MKPolyline {
+             NSLog("MKPOLYGON")
+             pathController!.routeLineView! = MKPolylineRenderer(overlay: overlay)
+             pathController!.routeLineView!.strokeColor = UIColor.blue.withAlphaComponent(0.2)
+             pathController!.routeLineView!.fillColor = UIColor.blue.withAlphaComponent(0.2)
+             pathController!.routeLineView!.lineWidth = 45
+             return pathController!.routeLineView!
+         }
+           return MKOverlayRenderer()
+    }
+    
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKAnnotationView? {
         
         if annotation.isKind(of: MKPointAnnotation.self){
             let pinView = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: "Pin_Annotation")
             NSLog("Add new pin")
-            pinView.pinTintColor = .green
             return pinView
         }
         else if(annotation.isKind(of: DJIAircraftAnnotation.self)){
