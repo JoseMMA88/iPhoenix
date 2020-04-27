@@ -41,8 +41,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         //self.registerApp()
         self.initUI()
         self.initData()
-        pathController = FlyPathController(mapView: mapView!)
-        pathController!.updatePolygon()
+        pathController = FlyPathController()
+        mapController!.updatePolygon(with: mapView, and: pathController)
         mapView.mapType = .satellite
         
     }
@@ -159,7 +159,10 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         if (tapGesture?.state == .ended){
             
             if isEditingPoints {
-                mapController?.addPoint(point!, with: mapView)
+                mapController?.addPoint(point!, with: mapView, and: pathController)
+                mapController?.updatePolygon(with: mapView, and: pathController)
+                //let coordinate: CLLocationCoordinate2D = ((mapView?.convert(point!, toCoordinateFrom: mapView) ?? nil)!)
+                //pathController?.addPointoPath(point: coordinate, with: mapView)
             }
         }
     }
@@ -234,23 +237,23 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         NSLog("MAPVIEW 1")
            if overlay is MKPolygon {
              NSLog("MKPOLYGON")
-             pathController!.polygonView! = MKPolygonRenderer(overlay: overlay)
-             pathController!.polygonView!.strokeColor = .green
-             pathController!.polygonView!.lineWidth = 1.0
-             pathController!.polygonView!.fillColor = UIColor.green.withAlphaComponent(0.25)
-             return pathController!.polygonView!
+             mapController!.polygonView = MKPolygonRenderer(overlay: overlay)
+             mapController!.polygonView!.strokeColor = .green
+             mapController!.polygonView!.lineWidth = 1.0
+             mapController!.polygonView!.fillColor = UIColor.green.withAlphaComponent(0.25)
+             return mapController!.polygonView!
            }
            else if overlay is MKCircle {
              NSLog("MKPOLYGON")
-             pathController!.circleView! = MKCircleRenderer(overlay: overlay)
-             pathController!.circleView!.strokeColor = .red
-             pathController!.circleView!.lineWidth = 2.0
-             pathController!.circleView!.fillColor = UIColor.red.withAlphaComponent(0.25)
-             return pathController!.circleView!
+             mapController!.circleView = MKCircleRenderer(overlay: overlay)
+             mapController!.circleView!.strokeColor = .red
+             mapController!.circleView!.lineWidth = 2.0
+             mapController!.circleView!.fillColor = UIColor.red.withAlphaComponent(0.25)
+             return mapController!.circleView!
          }
            else if overlay is MKPolyline {
              NSLog("MKPOLYGON")
-             pathController!.routeLineView! = MKPolylineRenderer(overlay: overlay)
+             pathController!.routeLineView = MKPolylineRenderer(overlay: overlay)
              pathController!.routeLineView!.strokeColor = UIColor.blue.withAlphaComponent(0.2)
              pathController!.routeLineView!.fillColor = UIColor.blue.withAlphaComponent(0.2)
              pathController!.routeLineView!.lineWidth = 45
@@ -279,18 +282,26 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
     }
     
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationView.DragState, fromOldState oldState: MKAnnotationView.DragState) {
+          NSLog("MAPVIEW 3")
+          mapController!.updatePolygon(with: mapView, and: pathController)
+      }
+    
+    
+    //---------------------------------------------------------------------------------------------------------
+    
     
     func focusMap(){
          let regionRadius: CLLocationDistance = 200//[m]
          if(droneLocation != nil && CLLocationCoordinate2DIsValid(droneLocation)){
              let region: MKCoordinateRegion = MKCoordinateRegion.init(center: droneLocation, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-             
-             mapView.setRegion(region, animated: true)
+                pathController?.setDroneLocation(droneLocation: droneLocation)
+                mapView.setRegion(region, animated: true)
          }
          else{
              if(userLocation != nil && CLLocationCoordinate2DIsValid(userLocation)){
                  let region: MKCoordinateRegion = MKCoordinateRegion.init(center: userLocation, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-                 
+                 pathController?.setDroneLocation(droneLocation: userLocation)
                  mapView.setRegion(region, animated: true)
              }
              else{

@@ -22,7 +22,7 @@ class FlyPathController: NSObject{
     var center: MKCircle?
     
     
-    var points: [MKAnnotation] = [] // Aristas del poligono
+    //var points: [MKAnnotation] = [] // Aristas del poligono
     var startLocation: CGPoint?
     var droneLocation: CLLocationCoordinate2D!
     var d: Double = 0.00015
@@ -52,241 +52,26 @@ class FlyPathController: NSObject{
     var kradio: Int = 15
     
     // Init a FlyPathController instance
-    init(mapView: MKMapView?) {
+    override init() {
         super.init()
-        self.mapView = mapView!
     }
     
-    func getDroneLocation(droneLocation: CLLocationCoordinate2D){
-        self.droneLocation = droneLocation
-    }
-    
-    func updatePolygon(){
-        NSLog("UpdatePolygon")
-        // Si hay polygon lo borramos
-        if (polygon != nil){
-            mapView!.removeOverlay(polygon!)
-        }
-        
-        // Creamos un nuevo poligono
-        let coords = points.map { $0.coordinate }
-        polygon = MKPolygon.init(coordinates: coords, count: coords.count)
-        
-        //NSLog(String(regionArea(locations: coords)))
-       
-        mapView!.addOverlay(polygon!)
-        
-        // TRIANGULACION
-        if(points.count > 2){
-            if(center != nil){
-                mapView!.removeOverlay(center!)
-            }
-            if(path_coord.count > 0){
-                path_coord.removeAll()
-                //arr_circle_auxs2.removeAll()
-            }
-            let centr = polygon!.coordinate
-            
-            // Creamos el circulo
-            center = MKCircle.init(center: centr, radius: 5)
-            mapView!.addOverlay(center!)
-            
-            //Triangulamos
-            updateTriangles(poli: polygon!)
-        }
-        
-        // Buscamos y dibujamos el punto mas cercano al dron
-        if(path_coord.count > 0 && points.count > 2){
-            for i in 0..<points.count{
-                path_coord.append(points[i].coordinate)
-            }
-            updateCircle(coord: findStartWaypoint()!)
-            
-            // Anyadimos el punto mas cercano al path de vuelo
-            // y creamos el flight path
-            /*NSLog("----------------------------------------------------")
-            NSLog("Path Coords: ")
-            NSLog(String(path_coord.count))*/
-            createFlightPath()
-        }
-    }
-    
-    
-    // Draw MKCircle
-    func updateCircle(coord: CLLocationCoordinate2D){
-        let rad: CLLocationDistance = CLLocationDistance(kradio) //metros
-        if (circle != nil){
-            mapView!.removeOverlay(circle!)
-        }
-        
-        // Creamos el circulo
-        circle = MKCircle.init(center: coord, radius: rad)
-        
-        //updatePeriPoints(cent: coord, rad: rad)
-        mapView!.addOverlay(circle!)
-    }
-    
-    // Calcula el centro del poligono y triangula con los verticles,
-    // hace una segunda triangulacion a partir de la primera triangulacion
-    func updateTriangles(poli: MKPolygon){
-        var aux_points: [CLLocationCoordinate2D] = []
-        
-        // Añadimos el centro del poligono al path
-        addPointoPath(point: poli.coordinate)
-        
-        // Borramos los triangulos si existes
-        if(triangles.count > 0){
-            mapView!.removeOverlays(triangles)
-            triangles.removeAll()
-            aux_points.removeAll()
-            mapView!.removeOverlays(triangles2)
-            triangles2.removeAll()
-            mapView!.removeOverlays(triangles3)
-            triangles3.removeAll()
-        }
-        // Creamos los primero triangulos
-        for i in 0..<points.count{
-            if(i == 0){
-                aux_points.append(poli.coordinate)
-            }
-            var aux_arr: [CLLocationCoordinate2D] = []
-            aux_arr.append(poli.coordinate)
-            
-            let p1 = points[i > 0 ? i - 1 : points.count - 1]
-            aux_arr.append(p1.coordinate)
-            aux_points.append(p1.coordinate)
-            
-            let p2 = points[i]
-            aux_arr.append(p2.coordinate)
-            aux_points.append(p2.coordinate)
-            
-            // Dibujamos los triangulos
-            let aux_trian = MKPolygon.init(coordinates: aux_arr, count: 3)
-            /*mapView.addOverlay(aux_trian)*/
-            triangles.append(aux_trian)
-        }
-        
-        // Borramos circulos
-        if(arr_circle_auxs2.count > 0){
-            mapView!.removeOverlays(arr_circle_auxs2)
-            arr_circle_auxs2.removeAll()
-        }
-        for h in 0..<triangles.count{
-            // Anyade y dibuja circulos
-            addPointoPath(point: triangles[h].coordinate)
-            
-            
-            for h1 in 0..<triangles[h].pointCount{
-                var aux_arr: [CLLocationCoordinate2D] = []
-                
-                // Anyadimos puntos
-                aux_arr.append(triangles[h].coordinate)
-                let p2 = triangles[h].points()[h1 > 0 ? h1 - 1 : triangles[h].pointCount - 1]
-                aux_arr.append(p2.coordinate)
-                let p3 = triangles[h].points()[h1]
-                aux_arr.append(p3.coordinate)
-                
-                
-                // Dibujamos triangulos2
-                let aux_trian = MKPolygon.init(coordinates: aux_arr, count: 3)
-                //mapView.addOverlay(aux_trian)
-                triangles2.append(aux_trian)
-                
-                // Anyane y dubuja circulos
-                addPointoPath(point: aux_trian.coordinate)
-            }
-        }
-        
-        for h2 in 0..<triangles2.count{
-            //Anyade y dibuja circulos
-            addPointoPath(point: triangles2[h2].coordinate)
-            
-            for h22 in 0..<triangles2[h2].pointCount{
-                var aux_arr: [CLLocationCoordinate2D] = []
-                
-                // Anyadimos puntos
-                aux_arr.append(triangles2[h2].coordinate)
-                let p2 = triangles2[h2].points()[h22 > 0 ? h22 - 1 : triangles2[h2].pointCount - 1]
-                aux_arr.append(p2.coordinate)
-                let p3 = triangles2[h2].points()[h22]
-                aux_arr.append(p3.coordinate)
-                
-                
-                // Dibujamos triangulos3
-                let aux_trian = MKPolygon.init(coordinates: aux_arr, count: 3)
-                triangles3.append(aux_trian)
-                
-                //Anyade y dibuja circulos
-                addPointoPath(point: aux_trian.coordinate)
-            }
-        }
-        
-        
-        for h3 in 0..<triangles3.count{
-            //Anyade y dibuja circulos
-            addPointoPath(point: triangles3[h3].coordinate)
-            
-            for h33 in 0..<triangles3[h3].pointCount{
-                var aux_arr: [CLLocationCoordinate2D] = []
-                
-                // Anyadimos puntos
-                aux_arr.append(triangles3[h3].coordinate)
-                let p2 = triangles3[h3].points()[h33 > 0 ? h33 - 1 : triangles3[h3].pointCount - 1]
-                aux_arr.append(p2.coordinate)
-                let p3 = triangles3[h3].points()[h33]
-                aux_arr.append(p3.coordinate)
-                
-                
-                // Dibujamos triangulos3
-                let aux_trian = MKPolygon.init(coordinates: aux_arr, count: 3)
-                triangles4.append(aux_trian)
-                
-                //Anyade y dibuja circulos
-                addPointoPath(point: aux_trian.coordinate)
-            }
-        }
-        
-        for h4 in 0..<triangles4.count{
-            //Anyade y dibuja circulos
-            addPointoPath(point: triangles4[h4].coordinate)
-            
-            for h44 in 0..<triangles4[h4].pointCount{
-                var aux_arr: [CLLocationCoordinate2D] = []
-                
-                // Anyadimos puntos
-                aux_arr.append(triangles4[h4].coordinate)
-                let p2 = triangles4[h4].points()[h44 > 0 ? h44 - 1 : triangles4[h4].pointCount - 1]
-                aux_arr.append(p2.coordinate)
-                let p3 = triangles4[h4].points()[h44]
-                aux_arr.append(p3.coordinate)
-                
-                
-                // Dibujamos triangulos3
-                let aux_trian = MKPolygon.init(coordinates: aux_arr, count: 3)
-                triangles5.append(aux_trian)
-                
-                //Anyade y dibuja circulos
-                addPointoPath(point: aux_trian.coordinate)
-            }
-        }
-    }
-    
-    
+   
     // Find the closest waypoint to DronLocation
-    func findStartWaypoint() -> CLLocationCoordinate2D?{
-        if(points.count>0){
-            var aux = points[0]
+    func findStartWaypoint(points: [CLLocationCoordinate2D]?) -> CLLocationCoordinate2D?{
+        if(points!.count>0){
+            var aux = points![0]
             let p1 = MKMapPoint(droneLocation)
-            let p2 = MKMapPoint(points[0].coordinate)
+            let p2 = MKMapPoint(points![0])
             var dis = p1.distance(to: p2)
-            for i in 0..<points.count {
-                let dis2 = p1.distance(to: MKMapPoint(points[i].coordinate))
+            for i in 0..<points!.count {
+                let dis2 = p1.distance(to: MKMapPoint(points![i]))
                 if(dis2 < dis){
-                    aux = points[i]
+                    aux = points![i]
                     dis = dis2
                 }
             }
-            return aux.coordinate
+            return aux
         }
         else{
             return nil
@@ -333,7 +118,7 @@ class FlyPathController: NSObject{
     
     
     // Ordena la array path_coords dependiendo de cual sea el punto de inicio
-    func createFlightPath(){
+    /*func createFlightPath(){
         var aux_coords: [CLLocationCoordinate2D] = path_coord
         var derecha_coords: [CLLocationCoordinate2D] = []
         var izquierda_coords: [CLLocationCoordinate2D] = []
@@ -522,7 +307,7 @@ class FlyPathController: NSObject{
             NSLog(String(fly_points[i3].longitude))
         }
         NSLog("-----------------------------------------------------")*/
-    }
+    }*/
     
     // Si devuelve 1 esta al Oeste
     // Si devuelve 2 esta al Este
@@ -552,7 +337,7 @@ class FlyPathController: NSObject{
     }
     
     
-    func cleanAllPoints(aircraft: DJIAircraftAnnotation?){
+    /*func cleanAllPoints(aircraft: DJIAircraftAnnotation?){
         fly_points.removeAll()
         points.removeAll()
         peripoints.removeAll()
@@ -577,6 +362,11 @@ class FlyPathController: NSObject{
                 mapView?.removeAnnotation(ann!)
             }
         }
+    }*/
+    
+    
+    func setDroneLocation(droneLocation: CLLocationCoordinate2D!){
+        self.droneLocation = droneLocation
     }
     
     
