@@ -58,20 +58,20 @@ class FlyPathController: NSObject{
     
    
     // Find the closest waypoint to DronLocation
-    func findStartWaypoint(points: [CLLocationCoordinate2D]?) -> CLLocationCoordinate2D?{
+    func findStartWaypoint(points: [MKAnnotation]?) -> CLLocationCoordinate2D?{
         if(points!.count>0){
             var aux = points![0]
             let p1 = MKMapPoint(droneLocation)
-            let p2 = MKMapPoint(points![0])
+            let p2 = MKMapPoint(points![0].coordinate)
             var dis = p1.distance(to: p2)
             for i in 0..<points!.count {
-                let dis2 = p1.distance(to: MKMapPoint(points![i]))
+                let dis2 = p1.distance(to: MKMapPoint(points![i].coordinate))
                 if(dis2 < dis){
                     aux = points![i]
                     dis = dis2
                 }
             }
-            return aux
+            return aux.coordinate
         }
         else{
             return nil
@@ -94,7 +94,6 @@ class FlyPathController: NSObject{
                 
                 if(dis < CLLocationDistance(kradio)){
                     distancia = false
-                    //NSLog(String(dis))
                 }
 
             }
@@ -118,7 +117,7 @@ class FlyPathController: NSObject{
     
     
     // Ordena la array path_coords dependiendo de cual sea el punto de inicio
-    /*func createFlightPath(){
+    func createFlightPath(with editPoints: [MKAnnotation]){
         var aux_coords: [CLLocationCoordinate2D] = path_coord
         var derecha_coords: [CLLocationCoordinate2D] = []
         var izquierda_coords: [CLLocationCoordinate2D] = []
@@ -128,7 +127,7 @@ class FlyPathController: NSObject{
         }
         
         // Empezamos por el punto mas cercano al dron
-        fly_points.append(findStartWaypoint()!)
+        fly_points.append(findStartWaypoint(points: editPoints)!)
         
         var i = 0
         while ( i < aux_coords.count && enco == false){
@@ -143,19 +142,19 @@ class FlyPathController: NSObject{
         var ori = 2 //2 --> Sur-Norte
                     //1 --> Norte-Sur
         
-        var aux0 = points[0].coordinate
-        let p1 = MKMapPoint(findStartWaypoint()!)
-        let p2 = MKMapPoint(points[0].coordinate)
+        var aux0 = editPoints[0].coordinate
+        let p1 = MKMapPoint(findStartWaypoint(points: editPoints)!)
+        let p2 = MKMapPoint(editPoints[0].coordinate)
         var dis = p1.distance(to: p2)
-        for n0 in 0..<points.count{
-            let dis2 = p1.distance(to: MKMapPoint(points[n0].coordinate))
+        for n0 in 0..<editPoints.count{
+            let dis2 = p1.distance(to: MKMapPoint(editPoints[n0].coordinate))
             if(dis2 > dis){
-                aux0 = points[n0].coordinate
+                aux0 = editPoints[n0].coordinate
                 dis = dis2
             }
         }
 
-        if(pointsLatPosition(coord_guia: findStartWaypoint()!, coord2: aux0) == 2){
+        if(pointsLatPosition(coord_guia: findStartWaypoint(points: editPoints)!, coord2: aux0) == 2){
             ori = 1
         }
 
@@ -307,7 +306,7 @@ class FlyPathController: NSObject{
             NSLog(String(fly_points[i3].longitude))
         }
         NSLog("-----------------------------------------------------")*/
-    }*/
+    }
     
     // Si devuelve 1 esta al Oeste
     // Si devuelve 2 esta al Este

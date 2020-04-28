@@ -14,7 +14,7 @@ class DJIMapControler: NSObject {
     
     
     //MARK: VARs
-    var editPoints: [CLLocationCoordinate2D]?
+    var editPoints: [MKAnnotation] = []
     var aircraftAnnotation: DJIAircraftAnnotation?
     
     var polygon: MKPolygon?
@@ -41,7 +41,7 @@ class DJIMapControler: NSObject {
     // Init a DJIMapController instance and create editPoints array
     override init() {
         super.init()
-        editPoints = [CLLocationCoordinate2D]()
+        //editPoints = [CLLocationCoordinate2D]()
     }
     
     // Ad waypoints in Map
@@ -53,15 +53,15 @@ class DJIMapControler: NSObject {
         annotation.coordinate = location.coordinate
         mapView?.addAnnotation(annotation)
         
-        editPoints?.append(coodinate)
-        updatePolygon(with: mapView, and: pathController)
+        editPoints.append(annotation)
+        //updatePolygon(with: mapView, and: pathController)
         
     }
     
     
     // Clean all waypoints in Map
     func cleanAllPointsWithMapView(with mapView: MKMapView?){
-        editPoints?.removeAll()
+        editPoints.removeAll()
         let annos: NSArray = NSArray.init(array: mapView!.annotations)
         for i in 0..<annos.count{
             weak var ann = annos[i] as? MKAnnotation
@@ -115,15 +115,15 @@ class DJIMapControler: NSObject {
         }
         
         // Creamos un nuevo poligono
-        let coords = editPoints.map { $0 }
-        polygon = MKPolygon.init(coordinates: coords!, count: coords!.count)
+        let coords = editPoints.map { $0.coordinate }
+        polygon = MKPolygon.init(coordinates: coords, count: coords.count)
         
         //NSLog(String(regionArea(locations: coords)))
        
         mapView!.addOverlay(polygon!)
         
         // TRIANGULACION
-        if(editPoints!.count > 2){
+        if(editPoints.count > 2){
             if(center != nil){
                 mapView!.removeOverlay(center!)
             }
@@ -142,18 +142,18 @@ class DJIMapControler: NSObject {
         }
         
         // Buscamos y dibujamos el punto mas cercano al dron
-        if(pathController!.path_coord.count > 0 && editPoints!.count > 2){
-            for i in 0..<editPoints!.count{
-                pathController!.path_coord.append(editPoints![i])
+        if(pathController!.path_coord.count > 0 && editPoints.count > 2){
+            for i in 0..<editPoints.count{
+                pathController!.path_coord.append(editPoints[i].coordinate)
             }
-            updateCircle(coord: pathController!.findStartWaypoint(points: editPoints!)!, with: mapView)
+            updateCircle(coord: pathController!.findStartWaypoint(points: editPoints)!, with: mapView)
             
             // Anyadimos el punto mas cercano al path de vuelo
             // y creamos el flight path
             /*NSLog("----------------------------------------------------")
             NSLog("Path Coords: ")
             NSLog(String(path_coord.count))*/
-            //pathController!.createFlightPath()
+            pathController!.createFlightPath(with: editPoints)
         }
     }
     
@@ -191,20 +191,20 @@ class DJIMapControler: NSObject {
             triangles3.removeAll()
         }
         // Creamos los primero triangulos
-        for i in 0..<editPoints!.count{
+        for i in 0..<editPoints.count{
             if(i == 0){
                 aux_points.append(poli.coordinate)
             }
             var aux_arr: [CLLocationCoordinate2D] = []
             aux_arr.append(poli.coordinate)
             
-            let p1 = editPoints![i > 0 ? i - 1 : editPoints!.count - 1]
-            aux_arr.append(p1)
-            aux_points.append(p1)
+            let p1 = editPoints[i > 0 ? i - 1 : editPoints.count - 1]
+            aux_arr.append(p1.coordinate)
+            aux_points.append(p1.coordinate)
             
-            let p2 = editPoints![i]
-            aux_arr.append(p2)
-            aux_points.append(p2)
+            let p2 = editPoints[i]
+            aux_arr.append(p2.coordinate)
+            aux_points.append(p2.coordinate)
             
             // Dibujamos los triangulos
             let aux_trian = MKPolygon.init(coordinates: aux_arr, count: 3)

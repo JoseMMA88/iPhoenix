@@ -31,7 +31,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var userLocation: CLLocationCoordinate2D!
     var droneLocation: CLLocationCoordinate2D!
     var waypointMission: DJIMutableWaypointMission?
-    
+    var startLocation: CGPoint?
     
     //MARK: View Controller functions
     
@@ -179,6 +179,56 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     
+    @IBAction func removeLastPointsAction(_ sender: Any) {
+        let annos: NSArray = NSArray.init(array: mapView!.annotations)
+        var borrlat: Double = 0
+        var borrlong: Double = 0
+        
+        // Borramos en la array points
+        for i in 0..<mapController!.editPoints.count{
+            if(i == (mapController!.editPoints.count-1)){
+                //if (!(ann!.isEqual(self.aircraftAnnotation)))
+                borrlat = mapController!.editPoints[i].coordinate.latitude
+                borrlong = mapController!.editPoints[i].coordinate.longitude
+                                       
+                mapController!.editPoints.remove(at: i)
+            }
+        }
+        
+        // Borramos en la array de Annotations
+        for n in 0..<annos.count{
+            weak var ann = annos[n] as? MKAnnotation
+                if((borrlat == ann!.coordinate.latitude) && (borrlong == ann!.coordinate.longitude)){
+                    // Borramos annotation
+                    mapView?.removeAnnotation(ann!)
+                }
+        }
+        mapController!.updatePolygon(with: mapView, and: pathController)
+    }
+    
+    
+    
+    @IBAction func btnActionDebug(_ sender: Any) {
+        mapView.removeAnnotations(mapController!.editPoints)
+        for i in 0..<pathController!.fly_points.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points[i]
+            ano.title = String(i)
+            mapView.addAnnotation(ano)
+            
+            if(i < pathController!.fly_points.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points[i], pathController!.fly_points[i+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }
+    }
+    
+    
+    
     //-----------------------------------------------------------------------------------------------------//
     
     
@@ -228,15 +278,14 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         mapController = DJIMapControler()
         tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(addWaypoints(tapGesture:)))
         mapView.addGestureRecognizer(tapGesture)
+        startLocation = CGPoint.zero
         
     }
     
     //MARK: MKMapViewDelegate Method
     // Se llama al principio de la ejecucion y cuando movemos un annotation
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        NSLog("MAPVIEW 1")
            if overlay is MKPolygon {
-             NSLog("MKPOLYGON")
              mapController!.polygonView = MKPolygonRenderer(overlay: overlay)
              mapController!.polygonView!.strokeColor = .green
              mapController!.polygonView!.lineWidth = 1.0
@@ -244,7 +293,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
              return mapController!.polygonView!
            }
            else if overlay is MKCircle {
-             NSLog("MKPOLYGON")
              mapController!.circleView = MKCircleRenderer(overlay: overlay)
              mapController!.circleView!.strokeColor = .red
              mapController!.circleView!.lineWidth = 2.0
@@ -252,7 +300,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
              return mapController!.circleView!
          }
            else if overlay is MKPolyline {
-             NSLog("MKPOLYGON")
              pathController!.routeLineView = MKPolylineRenderer(overlay: overlay)
              pathController!.routeLineView!.strokeColor = UIColor.blue.withAlphaComponent(0.2)
              pathController!.routeLineView!.fillColor = UIColor.blue.withAlphaComponent(0.2)
@@ -265,12 +312,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKAnnotationView? {
         
-        if annotation.isKind(of: MKPointAnnotation.self){
+        /*if annotation.isKind(of: MKPointAnnotation.self){
             let pinView = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: "Pin_Annotation")
             NSLog("Add new pin")
             return pinView
         }
-        else if(annotation.isKind(of: DJIAircraftAnnotation.self)){
+        else*/ if(annotation.isKind(of: DJIAircraftAnnotation.self)){
             let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
             (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
             
@@ -278,17 +325,66 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             
         }
         
-        return nil
+        guard let annotation = annotation as? MKPointAnnotation else { return nil }
+        var view = mapView.dequeueReusableAnnotationView(withIdentifier: "marker")
+        
+        
+        if (view == nil){
+            view = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: "marker")
+            view?.canShowCallout = false
+            view?.isDraggable = false
+            
+            // Sobreescribimos la logica de drag con la nuestra propia
+            let drag = UILongPressGestureRecognizer(target: self, action: #selector(handleDrag(gesture:)))
+            
+            drag.minimumPressDuration = 0 // instant bru
+            drag.allowableMovement = .greatestFiniteMagnitude
+            view?.addGestureRecognizer(drag)
+        }
+        else{
+            view?.annotation = annotation
+        }
+        
+        return view
         
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationView.DragState, fromOldState oldState: MKAnnotationView.DragState) {
-          NSLog("MAPVIEW 3")
           mapController!.updatePolygon(with: mapView, and: pathController)
       }
     
     
     //---------------------------------------------------------------------------------------------------------
+    
+    //MARK: TOUCH HANDLING
+    //Handle drag custom
+    @objc func handleDrag(gesture: UILongPressGestureRecognizer){
+        let annotationView = gesture.view as! MKAnnotationView
+        annotationView.setSelected(false, animated: false)
+        
+        let location = gesture.location(in: mapView)
+        
+        if(gesture.state == .began){
+            
+           startLocation = location
+        }
+        else if (gesture.state == .changed){
+            gesture.view?.transform = CGAffineTransform.init(translationX: location.x - startLocation!.x, y: location.y - startLocation!.y)
+        }
+        else if (gesture.state == .ended || gesture.state == .cancelled){
+            let annotation = annotationView.annotation as! MKPointAnnotation
+            let translate = CGPoint.init(x: location.x - startLocation!.x , y: location.y - startLocation!.y)
+            let originalLocaton = mapView.convert(annotation.coordinate, toPointTo: mapView)
+            let updatedLocation = CGPoint.init(x: originalLocaton.x + translate.x, y: originalLocaton.y + translate.y)
+            
+            annotationView.transform = CGAffineTransform.identity
+            annotation.coordinate = mapView.convert(updatedLocation, toCoordinateFrom: mapView)
+            
+            //Actualizamos el poligono cuando acaba el gesto
+            mapController!.updatePolygon(with: mapView, and: pathController)
+            
+        }
+    }
     
     
     func focusMap(){
