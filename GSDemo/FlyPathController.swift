@@ -336,9 +336,8 @@ class FlyPathController: NSObject{
     }
     
     
-    /*func cleanAllPoints(aircraft: DJIAircraftAnnotation?){
+    func cleanAllPoints(){
         fly_points.removeAll()
-        points.removeAll()
         peripoints.removeAll()
         arr_circle_auxs.removeAll()
         
@@ -353,15 +352,7 @@ class FlyPathController: NSObject{
         
         // Debug visual
         annotations.removeAll()
-        
-        let annos: NSArray = NSArray.init(array: mapView!.annotations)
-        for i in 0..<annos.count{
-            weak var ann = annos[i] as? MKAnnotation
-            if (!(ann!.isEqual(aircraft))){
-                mapView?.removeAnnotation(ann!)
-            }
-        }
-    }*/
+    }
     
     
     func setDroneLocation(droneLocation: CLLocationCoordinate2D!){

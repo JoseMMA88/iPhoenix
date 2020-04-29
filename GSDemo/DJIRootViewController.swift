@@ -148,7 +148,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     @IBAction func cleanWaypoints(_ sender: Any) {
-        mapController?.cleanAllPointsWithMapView(with: mapView)
+        mapController?.cleanAllPointsWithMapView(with: mapView, and: pathController!)
     }
     
     

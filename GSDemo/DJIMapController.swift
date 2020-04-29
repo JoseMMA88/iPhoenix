@@ -60,7 +60,9 @@ class DJIMapControler: NSObject {
     
     
     // Clean all waypoints in Map
-    func cleanAllPointsWithMapView(with mapView: MKMapView?){
+    func cleanAllPointsWithMapView(with mapView: MKMapView?, and pathController: FlyPathController){
+        mapView!.removeOverlays(mapView!.overlays)
+        arr_circle_auxs2.removeAll()
         editPoints.removeAll()
         let annos: NSArray = NSArray.init(array: mapView!.annotations)
         for i in 0..<annos.count{
@@ -69,6 +71,8 @@ class DJIMapControler: NSObject {
                 mapView?.removeAnnotation(ann!)
             }
         }
+        pathController.cleanAllPoints()
+        updatePolygon(with: mapView, and: pathController)
     }
     
     // Return NSArray contains multiple CCLocation objects
@@ -214,13 +218,14 @@ class DJIMapControler: NSObject {
         
         // Borramos circulos
         if(arr_circle_auxs2.count > 0){
+            NSLog("Entro")
             mapView!.removeOverlays(arr_circle_auxs2)
             arr_circle_auxs2.removeAll()
         }
+        
         for h in 0..<triangles.count{
             // Anyade y dibuja circulos
             addPointoPath(point: triangles[h].coordinate, with: mapView, and: pathController)
-            
             
             for h1 in 0..<triangles[h].pointCount{
                 var aux_arr: [CLLocationCoordinate2D] = []
