@@ -127,7 +127,7 @@ class DJIMapControler: NSObject {
         mapView!.addOverlay(polygon!)
         
         // TRIANGULACION
-        if(editPoints.count > 2){
+        if(editPoints.count > 1){
             if(center != nil){
                 mapView!.removeOverlay(center!)
             }
@@ -158,6 +158,10 @@ class DJIMapControler: NSObject {
             NSLog("Path Coords: ")
             NSLog(String(path_coord.count))*/
             pathController!.createFlightPath(with: editPoints)
+        }
+        else{
+            mapView?.removeOverlays(mapView!.overlays)
+            pathController?.fly_points.removeAll()
         }
     }
     
@@ -218,7 +222,6 @@ class DJIMapControler: NSObject {
         
         // Borramos circulos
         if(arr_circle_auxs2.count > 0){
-            NSLog("Entro")
             mapView!.removeOverlays(arr_circle_auxs2)
             arr_circle_auxs2.removeAll()
         }
@@ -328,7 +331,7 @@ class DJIMapControler: NSObject {
         if(pathController!.path_coord.count == 0){
             pathController!.path_coord.append(point)
         }
-        else{
+        else if(editPoints.count > 2){
             let p2 = MKMapPoint(point)
             for i in 0..<pathController!.path_coord.count{
                 let p1 = MKMapPoint(pathController!.path_coord[i])

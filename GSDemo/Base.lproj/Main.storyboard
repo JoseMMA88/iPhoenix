@@ -98,7 +98,7 @@
                                     <action selector="editBtnAction:" destination="ot5-9z-CeC" eventType="touchUpInside" id="bDq-ex-fEq"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Fwa-61-M7v">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fwa-61-M7v">
                                 <rect key="frame" x="0.0" y="69" width="414" height="532"/>
                                 <gestureRecognizers/>
                                 <connections>
