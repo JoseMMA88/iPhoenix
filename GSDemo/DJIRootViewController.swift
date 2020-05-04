@@ -446,65 +446,64 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     func finishBtnAction() {
         
-        let wayPoints = self.mapController?.wayPoints()
+        let wayPoints = pathController!.fly_points
         
-        if(wayPoints == nil || wayPoints!.count < 2){
+        if(wayPoints.count < 2){
             showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
         }
-        
-        if(self.waypointMission != nil){
-            self.waypointMission?.removeAllWaypoints()
-        }
         else{
-            self.waypointMission = DJIMutableWaypointMission()
-        }
+            if(self.waypointMission != nil){
+                self.waypointMission?.removeAllWaypoints()
+            }
+            else{
+                self.waypointMission = DJIMutableWaypointMission()
+            }
         
-        for i in 0..<wayPoints!.count{
-            let location = wayPoints![i] as? CLLocation
-            if let coordinate = location?.coordinate{
+            for i in 0..<wayPoints.count{
+                let location = wayPoints[i]
+                let coordinate = location
                 if CLLocationCoordinate2DIsValid(coordinate){
-                    let waypoint = DJIWaypoint(coordinate: location!.coordinate)
-                    waypointMission!.add(waypoint)
+                        let waypoint = DJIWaypoint(coordinate: location)
+                        waypointMission!.add(waypoint)
                 }
             }
-        }
         
         
-        if(waypointMission != nil){
-            for i in 0..<waypointMission!.waypointCount{
-                let waypoint = waypointMission?.waypoint(at: i)
-                waypoint?.altitude = 20  //MARK: ALTITUD DE WAYPOINT
-            }
+            if(waypointMission != nil){
+                for i in 0..<waypointMission!.waypointCount{
+                    let waypoint = waypointMission?.waypoint(at: i)
+                    waypoint?.altitude = 20  //MARK: ALTITUD DE WAYPOINT
+                }
         
-            waypointMission?.maxFlightSpeed = 10 //MARK: VELOCIDAD MAXIMA
-            waypointMission?.autoFlightSpeed = 10 //MARK: VELOCIDAD AUTOMATICA
-            waypointMission?.headingMode = DJIWaypointMissionHeadingMode.auto //MARK: HEADING AUTO
-            waypointMission?.finishedAction = DJIWaypointMissionFinishedAction.goHome //MARK: ACCION AL FINAL
+                waypointMission?.maxFlightSpeed = 10 //MARK: VELOCIDAD MAXIMA
+                waypointMission?.autoFlightSpeed = 10 //MARK: VELOCIDAD AUTOMATICA
+                waypointMission?.headingMode = DJIWaypointMissionHeadingMode.auto //MARK: HEADING AUTO
+                waypointMission?.finishedAction = DJIWaypointMissionFinishedAction.goHome //MARK: ACCION AL FINAL
         
-            missionOperator()?.load(waypointMission!)
+                missionOperator()?.load(waypointMission!)
         
-            missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
-                if(error != nil){
-                    if let descripcion = error?.localizedDescription {
-                        self.showAlertViewWithTittle(title: "MISION EXECUTION FAILED", WithMessage: descripcion)
+                missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
+                    if(error != nil){
+                        if let descripcion = error?.localizedDescription {
+                            self.showAlertViewWithTittle(title: "MISION EXECUTION FAILED", WithMessage: descripcion)
+                        }
                     }
-                }
-                else{
-                    self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
-                }
-            })
+                    else{
+                        self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
+                    }
+                })
         
-            missionOperator()?.uploadMission(completion: { error in
-                if(error != nil){
-                    self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
-                }
-                else{
-                    self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
-                }
-            })
+                missionOperator()?.uploadMission(completion: { error in
+                    if(error != nil){
+                        self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
+                    }
+                    else{
+                        self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
+                    }
+                })
         
             
-            
+            }
             
             
         }
