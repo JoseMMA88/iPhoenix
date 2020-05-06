@@ -20,6 +20,8 @@
 		C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */; };
 		C4D3EC5123F1647E0041D025 /* DJIAircraftAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */; };
 		C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5223F17FC00041D025 /* DemoUtility.swift */; };
+		C4E4FFA9246068C90060D7B3 /* ButtonControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E4FFA7246068C90060D7B3 /* ButtonControllerViewController.swift */; };
+		C4E4FFAA246068C90060D7B3 /* ButtonControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4E4FFA8246068C90060D7B3 /* ButtonControllerViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,8 @@
 		C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotationView.swift; sourceTree = "<group>"; };
 		C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotation.swift; sourceTree = "<group>"; };
 		C4D3EC5223F17FC00041D025 /* DemoUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUtility.swift; sourceTree = "<group>"; };
+		C4E4FFA7246068C90060D7B3 /* ButtonControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonControllerViewController.swift; sourceTree = "<group>"; };
+		C4E4FFA8246068C90060D7B3 /* ButtonControllerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ButtonControllerViewController.xib; sourceTree = "<group>"; };
 		D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.debug.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,6 +142,8 @@
 				C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */,
 				C4D3EC5223F17FC00041D025 /* DemoUtility.swift */,
 				C411567A245344BB0011F583 /* FlyPathController.swift */,
+				C4E4FFA7246068C90060D7B3 /* ButtonControllerViewController.swift */,
+				C4E4FFA8246068C90060D7B3 /* ButtonControllerViewController.xib */,
 				C47BB56223E481DF00D80BE6 /* Main.storyboard */,
 				C47BB56523E481E000D80BE6 /* Assets.xcassets */,
 				C47BB56723E481E000D80BE6 /* LaunchScreen.storyboard */,
@@ -275,6 +281,7 @@
 			files = (
 				C47BB56923E481E000D80BE6 /* LaunchScreen.storyboard in Resources */,
 				C47BB56623E481E000D80BE6 /* Assets.xcassets in Resources */,
+				C4E4FFAA246068C90060D7B3 /* ButtonControllerViewController.xib in Resources */,
 				C47BB56423E481DF00D80BE6 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,6 +355,7 @@
 				C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */,
 				C411567B245344BB0011F583 /* FlyPathController.swift in Sources */,
 				C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */,
+				C4E4FFA9246068C90060D7B3 /* ButtonControllerViewController.swift in Sources */,
 				C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

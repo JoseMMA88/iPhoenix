@@ -11,12 +11,13 @@ import MapKit
 import UIKit
 import CoreLocation
 
-class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate{
-    
+class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate{
+
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tapGesture: UITapGestureRecognizer!
-    @IBOutlet weak var editBtn: UIButton!
+    //@IBOutlet weak var editBtn: UIButton!
+    @IBOutlet weak var topBarView: UIView!
     @IBOutlet weak var modeLabel: UILabel!
     @IBOutlet weak var gpsLabel: UILabel!
     @IBOutlet weak var hsLabel: UILabel!
@@ -27,6 +28,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var pathController: FlyPathController?
     var mapController: DJIMapControler?
     var isEditingPoints: Bool = false
+    var ButtonVC: ButtonControllerViewController?
     var locationManager: CLLocationManager?
     var userLocation: CLLocationCoordinate2D!
     var droneLocation: CLLocationCoordinate2D!
@@ -41,6 +43,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         //self.registerApp()
         self.initUI()
         self.initData()
+        
         pathController = FlyPathController()
         mapController!.updatePolygon(with: mapView, and: pathController)
         mapView.mapType = .satellite
@@ -63,8 +66,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         //viewWillDisappear(animated)
         locationManager?.stopUpdatingLocation()
     }
-    
-
     
     func prefersStatusBarHidden()-> Bool{
         return false
@@ -112,62 +113,18 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     
     //MARK:Buttons Functions
-    @IBAction func editBtnAction(_ sender: Any) {
+    
+    func addBtn(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         if isEditingPoints {
-            isEditing = false
-            finishBtnAction()
-            //mapController?.cleanAllPointsWithMapView(with: mapView)
-            editBtn.setTitle("Add", for: .normal)
-        }
-        else{
-            isEditing = true
-            
-            focusMap()
-            
-            editBtn.setTitle("Finished", for: .normal)
-        }
-        
-        isEditingPoints = !isEditingPoints
-    }
-    
-    
-    @IBAction func startBtnAction(_ sender: Any) {
-        missionOperator()?.startMission(completion: { error in
-            if (error != nil){
-                self.showAlertViewWithTittle(title: "Start Mission Failed!", WithMessage: error!.localizedDescription)
-            }
-            else{
-                self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
-            }
-        })
-    }
-    
-    @IBAction func focusMapAction(_ sender: Any) {
-        focusMap()
-        
-    }
-    
-    @IBAction func cleanWaypoints(_ sender: Any) {
-        mapController?.cleanAllPointsWithMapView(with: mapView, and: pathController!)
-    }
-    
-    
-    //MARK: Custom Functions
-    @objc func addWaypoints(tapGesture: UITapGestureRecognizer?){
-        let point = tapGesture?.location(in: self.mapView)
-        
-        if (tapGesture?.state == .ended){
-            
-            if isEditingPoints {
-                mapController?.addPoint(point!, with: mapView, and: pathController)
-                mapController?.updatePolygon(with: mapView, and: pathController)
-                //let coordinate: CLLocationCoordinate2D = ((mapView?.convert(point!, toCoordinateFrom: mapView) ?? nil)!)
-                //pathController?.addPointoPath(point: coordinate, with: mapView)
-            }
+            isEditingPoints = false
+            button?.setTitle("Add", for: .normal)
+        } else {
+            isEditingPoints = true
+            button?.setTitle("Finished", for: .normal)
         }
     }
     
-    @IBAction func stopBtnAction(_ sender: Any) {
+    func stopBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         missionOperator()?.stopMission(completion: { error in
             if(error != nil){
                 self.showAlertViewWithTittle(title: "Stop Mission Failed: ", WithMessage: error!.localizedDescription)
@@ -178,8 +135,26 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         })
     }
     
+    func clearBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+        mapController?.cleanAllPointsWithMapView(with: mapView, and: pathController!)
+    }
     
-    @IBAction func removeLastPointsAction(_ sender: Any) {
+    func focusMapBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+        focusMap()
+    }
+    
+    func startBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+        missionOperator()?.startMission(completion: { error in
+            if (error != nil){
+                self.showAlertViewWithTittle(title: "Start Mission Failed!", WithMessage: error!.localizedDescription)
+            }
+            else{
+                self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
+            }
+        })
+    }
+    
+    func deleteBtnAction(InGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         let annos: NSArray = NSArray.init(array: mapView!.annotations)
         var borrlat: Double = 0
         var borrlong: Double = 0
@@ -206,9 +181,17 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         mapController!.updatePolygon(with: mapView, and: pathController)
     }
     
+    func configBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+        
+    }
     
+    func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+        if(mode == ViewMode._EditMode){
+            focusMap()
+        }
+    }
     
-    @IBAction func btnActionDebug(_ sender: Any) {
+    func debugBtn(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         mapView.removeAnnotations(mapController!.editPoints)
         for i in 0..<pathController!.fly_points.count{
             
@@ -227,6 +210,87 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }
     
+    
+    /*@IBAction func startBtnAction(_ sender: Any) {
+        missionOperator()?.startMission(completion: { error in
+            if (error != nil){
+                self.showAlertViewWithTittle(title: "Start Mission Failed!", WithMessage: error!.localizedDescription)
+            }
+            else{
+                self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
+            }
+        })
+    }*/
+    
+
+    
+ 
+    
+    
+    //MARK: Custom Functions
+    @objc func addWaypoints(tapGesture: UITapGestureRecognizer?){
+        let point = tapGesture?.location(in: self.mapView)
+        
+        if (tapGesture?.state == .ended){
+            
+            if isEditingPoints {
+                mapController?.addPoint(point!, with: mapView, and: pathController)
+                mapController?.updatePolygon(with: mapView, and: pathController)
+                //let coordinate: CLLocationCoordinate2D = ((mapView?.convert(point!, toCoordinateFrom: mapView) ?? nil)!)
+                //pathController?.addPointoPath(point: coordinate, with: mapView)
+            }
+        }
+    }
+    
+    
+    
+    /*@IBAction func removeLastPointsAction(_ sender: Any) {
+        let annos: NSArray = NSArray.init(array: mapView!.annotations)
+        var borrlat: Double = 0
+        var borrlong: Double = 0
+        
+        // Borramos en la array points
+        for i in 0..<mapController!.editPoints.count{
+            if(i == (mapController!.editPoints.count-1)){
+                //if (!(ann!.isEqual(self.aircraftAnnotation)))
+                borrlat = mapController!.editPoints[i].coordinate.latitude
+                borrlong = mapController!.editPoints[i].coordinate.longitude
+                                       
+                mapController!.editPoints.remove(at: i)
+            }
+        }
+        
+        // Borramos en la array de Annotations
+        for n in 0..<annos.count{
+            weak var ann = annos[n] as? MKAnnotation
+                if((borrlat == ann!.coordinate.latitude) && (borrlong == ann!.coordinate.longitude)){
+                    // Borramos annotation
+                    mapView?.removeAnnotation(ann!)
+                }
+        }
+        mapController!.updatePolygon(with: mapView, and: pathController)
+    }*/
+    
+    
+    
+    /*@IBAction func btnActionDebug(_ sender: Any) {
+        mapView.removeAnnotations(mapController!.editPoints)
+        for i in 0..<pathController!.fly_points.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points[i]
+            ano.title = String(i)
+            mapView.addAnnotation(ano)
+            
+            if(i < pathController!.fly_points.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points[i], pathController!.fly_points[i+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }
+    }*/
     
     
     //-----------------------------------------------------------------------------------------------------//
@@ -268,6 +332,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         self.vsLabel.text       = "0.0 M/S"
         self.hsLabel.text       = "0.0 M/S"
         self.altitudeLabel.text = "0 M"
+        
+        ButtonVC = ButtonControllerViewController.init(nibName: "ButtonControllerViewController", bundle: Bundle.main)
+        ButtonVC?.view.frame = CGRect(x: 0, y: CGFloat(Int(topBarView.frame.origin.y + topBarView.frame.size.height)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
+        ButtonVC!.delegate = self
+        view.addSubview(ButtonVC!.view)
+
     }
     
     // Initialize
