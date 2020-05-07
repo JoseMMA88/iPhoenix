@@ -114,7 +114,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     //MARK:Buttons Functions
     
-    func addBtn(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+    func addBtnAction(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         if isEditingPoints {
             isEditingPoints = false
             button?.setTitle("Add", for: .normal)

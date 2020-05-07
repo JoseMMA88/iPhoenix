@@ -23,7 +23,7 @@ import UIKit
     func configBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func debugBtn(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
-    func addBtn(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?)
+    func addBtnAction(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?)
 }
 
 
@@ -139,8 +139,8 @@ class ButtonControllerViewController: UIViewController {
     
     
     @IBAction func addBtnAction(_ sender: Any) {
-        if delegate!.responds(to: #selector(delegate!.addBtn(_:inGSButtonVC:))) {
-            delegate!.addBtn(addButton, inGSButtonVC: self)
+        if delegate!.responds(to: #selector(delegate!.addBtnAction(_:inGSButtonVC:))) {
+            delegate!.addBtnAction(addButton, inGSButtonVC: self)
         }
     }
 
