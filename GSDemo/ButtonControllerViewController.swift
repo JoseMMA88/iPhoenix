@@ -53,13 +53,7 @@ class ButtonControllerViewController: UIViewController {
 
     func setMode(mode: ViewMode){
         self.mode = mode
-        NSLog("SET MODE")
-        if(self.mode == ViewMode._EditMode){
-            NSLog("MODO EDIT")
-        }
-        else if(self.mode == ViewMode._ViewMode){
-            NSLog("MODO VIEW")
-        }
+
         editButton.isHidden = (mode == ViewMode._EditMode)
         focusButton.isHidden = (mode == ViewMode._EditMode)
         

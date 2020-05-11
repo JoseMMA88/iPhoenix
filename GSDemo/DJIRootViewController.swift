@@ -11,7 +11,8 @@ import MapKit
 import UIKit
 import CoreLocation
 
-class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate{
+class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate{
+    
 
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -29,6 +30,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var mapController: DJIMapControler?
     var isEditingPoints: Bool = false
     var ButtonVC: ButtonControllerViewController?
+    var waypointConfigVC: ConfigViewController?
     var locationManager: CLLocationManager?
     var userLocation: CLLocationCoordinate2D!
     var droneLocation: CLLocationCoordinate2D!
@@ -117,6 +119,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func addBtnAction(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         if isEditingPoints {
             isEditingPoints = false
+            //finishBtnActions()
             button?.setTitle("Add", for: .normal)
         } else {
             isEditingPoints = true
@@ -182,7 +185,31 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func configBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+        NSLog("CONFIIIIG!!!")
         
+        let wayPoints = pathController!.fly_points
+         
+        if(wayPoints.count < 2){
+            showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
+        }
+        else{
+            waypointConfigVC!.view.alpha = 1.0
+            if(self.waypointMission != nil){
+                self.waypointMission?.removeAllWaypoints()
+            }
+            else{
+                self.waypointMission = DJIMutableWaypointMission()
+            }
+        
+            for i in 0..<wayPoints.count{
+                let location = wayPoints[i]
+                let coordinate = location
+                if CLLocationCoordinate2DIsValid(coordinate){
+                    let waypoint = DJIWaypoint(coordinate: location)
+                    waypointMission!.add(waypoint)
+                }
+            }
+        }
     }
     
     func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
@@ -208,6 +235,56 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 mapView.addOverlay(line)
             }
         }
+    }
+    
+    func cancelBtnAction(inButtonVC BtnVC: ConfigViewController?) {
+        UIView.animate(withDuration: 0.25, animations: {
+            self.waypointConfigVC!.view.alpha = 0
+        })
+    }
+    
+    func finishBtnAction(inButtonVC BtnVC: ConfigViewController?) {
+        UIView.animate(withDuration: 0.25, animations: {
+            self.waypointConfigVC?.view.alpha = 0
+        })
+        
+        if(waypointMission != nil){
+            for i in 0..<waypointMission!.waypointCount{
+                let waypoint = waypointMission?.waypoint(at: i)
+                waypoint?.altitude = 20  //MARK: ALTITUD DE WAYPOINT
+            }
+        
+            waypointMission?.maxFlightSpeed = (waypointConfigVC!.maxFlightSpeedTextField.text! as NSString).floatValue //MARK: VELOCIDAD MAXIMA
+            waypointMission?.autoFlightSpeed = (waypointConfigVC!.autoFlightSpeedTextField.text! as NSString).floatValue //MARK: VELOCIDAD AUTOMATICA
+            waypointMission?.headingMode = DJIWaypointMissionHeadingMode(rawValue: DJIWaypointMissionHeadingMode.RawValue(waypointConfigVC!.headingSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionHeadingMode //MARK: HEADING AUTO
+            waypointMission?.finishedAction = DJIWaypointMissionFinishedAction(rawValue: DJIWaypointMissionFinishedAction.RawValue(waypointConfigVC!.actionSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionFinishedAction //MARK: ACCION AL FINAL
+        
+            missionOperator()?.load(waypointMission!)
+        
+            missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
+                if(error != nil){
+                    if let descripcion = error?.localizedDescription {
+                        self.showAlertViewWithTittle(title: "MISION EXECUTION FAILED", WithMessage: descripcion)
+                    }
+                }
+                else{
+                    self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
+                }
+                })
+        
+                missionOperator()?.uploadMission(completion: { error in
+                    if(error != nil){
+                        self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
+                    }
+                    else{
+                        self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
+                    }
+                })
+        
+            
+            }
+        
+        
     }
     
     
@@ -337,6 +414,23 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         ButtonVC?.view.frame = CGRect(x: 0, y: CGFloat(Int(topBarView.frame.origin.y + topBarView.frame.size.height)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
         ButtonVC!.delegate = self
         view.addSubview(ButtonVC!.view)
+        
+        waypointConfigVC = ConfigViewController.init(nibName: "ConfigViewController", bundle: Bundle.main)
+        waypointConfigVC!.view.alpha = 0
+        
+        waypointConfigVC!.view.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
+        
+        let configVCOriginX: CGFloat = (view.frame.width - waypointConfigVC!.view.frame.width) / 2
+        let configVCOriginY: CGFloat = topBarView.frame.height + topBarView.frame.minY + 8
+        
+        waypointConfigVC!.view.frame = CGRect(x: configVCOriginX, y: configVCOriginY, width: waypointConfigVC!.view.frame.width, height: waypointConfigVC!.view.frame.height)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            waypointConfigVC?.view.center = view.center
+        }
+        
+        waypointConfigVC!.delegate = self
+        view.addSubview(waypointConfigVC!.view)
 
     }
     
@@ -514,7 +608,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         return DJISDKManager.missionControl()?.waypointMissionOperator()
     }
     
-    func finishBtnAction() {
+    func finishBtnActions() {
         
         let wayPoints = pathController!.fly_points
         

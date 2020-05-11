@@ -11,6 +11,10 @@
 		C411567B245344BB0011F583 /* FlyPathController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411567A245344BB0011F583 /* FlyPathController.swift */; };
 		C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429550323E82C8600A7988B /* DJIRootViewController.swift */; };
 		C429F43A23E9629D006950A8 /* DJIMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429F43923E9629D006950A8 /* DJIMapController.swift */; };
+		C44EEF1A24694DC50083194C /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44EEF1824694DC50083194C /* StartViewController.swift */; };
+		C44EEF1B24694DC50083194C /* StartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C44EEF1924694DC50083194C /* StartViewController.xib */; };
+		C46AD18924642A950014F26C /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46AD18724642A950014F26C /* ConfigViewController.swift */; };
+		C46AD18A24642A950014F26C /* ConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C46AD18824642A950014F26C /* ConfigViewController.xib */; };
 		C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */; };
 		C47BB56423E481DF00D80BE6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C47BB56223E481DF00D80BE6 /* Main.storyboard */; };
 		C47BB56623E481E000D80BE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47BB56523E481E000D80BE6 /* Assets.xcassets */; };
@@ -47,6 +51,10 @@
 		C411567A245344BB0011F583 /* FlyPathController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyPathController.swift; sourceTree = "<group>"; };
 		C429550323E82C8600A7988B /* DJIRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIRootViewController.swift; sourceTree = "<group>"; };
 		C429F43923E9629D006950A8 /* DJIMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIMapController.swift; sourceTree = "<group>"; };
+		C44EEF1824694DC50083194C /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		C44EEF1924694DC50083194C /* StartViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartViewController.xib; sourceTree = "<group>"; };
+		C46AD18724642A950014F26C /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		C46AD18824642A950014F26C /* ConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfigViewController.xib; sourceTree = "<group>"; };
 		C47BB55B23E481DF00D80BE6 /* GSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C47BB56323E481DF00D80BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -144,6 +152,10 @@
 				C411567A245344BB0011F583 /* FlyPathController.swift */,
 				C4E4FFA7246068C90060D7B3 /* ButtonControllerViewController.swift */,
 				C4E4FFA8246068C90060D7B3 /* ButtonControllerViewController.xib */,
+				C46AD18724642A950014F26C /* ConfigViewController.swift */,
+				C46AD18824642A950014F26C /* ConfigViewController.xib */,
+				C44EEF1824694DC50083194C /* StartViewController.swift */,
+				C44EEF1924694DC50083194C /* StartViewController.xib */,
 				C47BB56223E481DF00D80BE6 /* Main.storyboard */,
 				C47BB56523E481E000D80BE6 /* Assets.xcassets */,
 				C47BB56723E481E000D80BE6 /* LaunchScreen.storyboard */,
@@ -283,6 +295,8 @@
 				C47BB56623E481E000D80BE6 /* Assets.xcassets in Resources */,
 				C4E4FFAA246068C90060D7B3 /* ButtonControllerViewController.xib in Resources */,
 				C47BB56423E481DF00D80BE6 /* Main.storyboard in Resources */,
+				C46AD18A24642A950014F26C /* ConfigViewController.xib in Resources */,
+				C44EEF1B24694DC50083194C /* StartViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,9 +368,11 @@
 				C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */,
 				C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */,
 				C411567B245344BB0011F583 /* FlyPathController.swift in Sources */,
+				C44EEF1A24694DC50083194C /* StartViewController.swift in Sources */,
 				C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */,
 				C4E4FFA9246068C90060D7B3 /* ButtonControllerViewController.swift in Sources */,
 				C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */,
+				C46AD18924642A950014F26C /* ConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
