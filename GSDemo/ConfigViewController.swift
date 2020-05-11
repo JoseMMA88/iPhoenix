@@ -28,6 +28,11 @@ class ConfigViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initUI()
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(self.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
     }
     
     //MARK: Buttons Methods
@@ -46,11 +51,18 @@ class ConfigViewController: UIViewController {
     
     //MARK: Custom Methods
     func initUI(){
+        altitudeTextField.keyboardType = UIKeyboardType.numberPad
+        autoFlightSpeedTextField.keyboardType = UIKeyboardType.numberPad
+        maxFlightSpeedTextField.keyboardType = UIKeyboardType.numberPad
         altitudeTextField.text = "20"//Set altitude
         autoFlightSpeedTextField.text = "8" //Set auto speed
         maxFlightSpeedTextField.text = "10" //Set max speed
         actionSegmentedControl.selectedSegmentIndex = 1
         headingSegmentedControl.selectedSegmentIndex = 0
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     

@@ -11,9 +11,9 @@ import MapKit
 import UIKit
 import CoreLocation
 
-class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate{
-    
+class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate, StartViewControllerDelegate{
 
+    
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tapGesture: UITapGestureRecognizer!
@@ -29,8 +29,11 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var pathController: FlyPathController?
     var mapController: DJIMapControler?
     var isEditingPoints: Bool = false
+    
     var ButtonVC: ButtonControllerViewController?
     var waypointConfigVC: ConfigViewController?
+    var StartVC: StartViewController?
+    
     var locationManager: CLLocationManager?
     var userLocation: CLLocationCoordinate2D!
     var droneLocation: CLLocationCoordinate2D!
@@ -127,17 +130,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }
     
-    func stopBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
-        missionOperator()?.stopMission(completion: { error in
-            if(error != nil){
-                self.showAlertViewWithTittle(title: "Stop Mission Failed: ", WithMessage: error!.localizedDescription)
-            }
-            else{
-                self.showAlertViewWithTittle(title: "Stop Mission", WithMessage: "")
-            }
-        })
-    }
-    
     func clearBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         mapController?.cleanAllPointsWithMapView(with: mapView, and: pathController!)
     }
@@ -146,13 +138,24 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         focusMap()
     }
     
-    func startBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+    func startBtnAction(inButtonVC BtnVC: StartViewController?) {
         missionOperator()?.startMission(completion: { error in
             if (error != nil){
                 self.showAlertViewWithTittle(title: "Start Mission Failed!", WithMessage: error!.localizedDescription)
             }
             else{
                 self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
+            }
+        })
+    }
+    
+    func stopBtnAction(inButtonVC BtnVC: StartViewController?) {
+        missionOperator()?.stopMission(completion: { error in
+            if(error != nil){
+                self.showAlertViewWithTittle(title: "Stop Mission Failed: ", WithMessage: error!.localizedDescription)
+            }
+            else{
+                self.showAlertViewWithTittle(title: "Stop Mission", WithMessage: "")
             }
         })
     }
@@ -278,6 +281,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                     }
                     else{
                         self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
+                        self.StartVC!.view.alpha = 1
                     }
                 })
         
@@ -286,22 +290,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         
     }
-    
-    
-    /*@IBAction func startBtnAction(_ sender: Any) {
-        missionOperator()?.startMission(completion: { error in
-            if (error != nil){
-                self.showAlertViewWithTittle(title: "Start Mission Failed!", WithMessage: error!.localizedDescription)
-            }
-            else{
-                self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
-            }
-        })
-    }*/
-    
-
-    
- 
     
     
     //MARK: Custom Functions
@@ -318,57 +306,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             }
         }
     }
-    
-    
-    
-    /*@IBAction func removeLastPointsAction(_ sender: Any) {
-        let annos: NSArray = NSArray.init(array: mapView!.annotations)
-        var borrlat: Double = 0
-        var borrlong: Double = 0
-        
-        // Borramos en la array points
-        for i in 0..<mapController!.editPoints.count{
-            if(i == (mapController!.editPoints.count-1)){
-                //if (!(ann!.isEqual(self.aircraftAnnotation)))
-                borrlat = mapController!.editPoints[i].coordinate.latitude
-                borrlong = mapController!.editPoints[i].coordinate.longitude
-                                       
-                mapController!.editPoints.remove(at: i)
-            }
-        }
-        
-        // Borramos en la array de Annotations
-        for n in 0..<annos.count{
-            weak var ann = annos[n] as? MKAnnotation
-                if((borrlat == ann!.coordinate.latitude) && (borrlong == ann!.coordinate.longitude)){
-                    // Borramos annotation
-                    mapView?.removeAnnotation(ann!)
-                }
-        }
-        mapController!.updatePolygon(with: mapView, and: pathController)
-    }*/
-    
-    
-    
-    /*@IBAction func btnActionDebug(_ sender: Any) {
-        mapView.removeAnnotations(mapController!.editPoints)
-        for i in 0..<pathController!.fly_points.count{
-            
-            // Creamos Annotation
-            let ano: MKPointAnnotation = MKPointAnnotation()
-            ano.coordinate = pathController!.fly_points[i]
-            ano.title = String(i)
-            mapView.addAnnotation(ano)
-            
-            if(i < pathController!.fly_points.count-1){
-                // Creamos lineas
-                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points[i], pathController!.fly_points[i+1]]
-                let line = MKPolyline.init(coordinates: lines, count: 2)
-                mapView.addOverlay(line)
-            }
-        }
-    }*/
-    
     
     //-----------------------------------------------------------------------------------------------------//
     
@@ -414,6 +351,16 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         ButtonVC?.view.frame = CGRect(x: 0, y: CGFloat(Int(topBarView.frame.origin.y + topBarView.frame.size.height)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
         ButtonVC!.delegate = self
         view.addSubview(ButtonVC!.view)
+        
+        StartVC = StartViewController.init(nibName: "StartViewController", bundle: Bundle.main)
+        StartVC!.view.alpha = 0
+        
+        let startVCOriginX: CGFloat = (topBarView.frame.width - StartVC!.view.frame.width - 5)
+        let startVCOriginY: CGFloat = (view.frame.height - StartVC!.view.frame.height - 10)
+        
+        StartVC!.view.frame = CGRect(x: startVCOriginX, y: startVCOriginY, width: StartVC!.view.frame.size.width, height: StartVC!.view.frame.size.height)
+        StartVC!.delegate = self
+        view.addSubview(StartVC!.view)
         
         waypointConfigVC = ConfigViewController.init(nibName: "ConfigViewController", bundle: Bundle.main)
         waypointConfigVC!.view.alpha = 0

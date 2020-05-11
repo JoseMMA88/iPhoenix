@@ -15,10 +15,8 @@ import UIKit
 
 
 @objc protocol ButtonViewControllerDelegate: NSObjectProtocol {
-    func stopBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func clearBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func focusMapBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
-    func startBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func deleteBtnAction(InGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func configBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?)
@@ -32,13 +30,11 @@ class ButtonControllerViewController: UIViewController {
     //MARK: Outlets
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var focusButton: UIButton!
-    @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var cleanButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var configButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var debugButton: UIButton!
-    @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     
     //MARK: Vars
@@ -61,9 +57,7 @@ class ButtonControllerViewController: UIViewController {
         cleanButton.isHidden = (mode == ViewMode._ViewMode)
         configButton.isHidden = (mode == ViewMode._ViewMode)
         debugButton.isHidden = (mode == ViewMode._ViewMode)
-        stopButton.isHidden = (mode == ViewMode._ViewMode)
         deleteButton.isHidden = (mode == ViewMode._ViewMode)
-        startButton.isHidden = (mode == ViewMode._ViewMode)
         addButton.isHidden = (mode == ViewMode._ViewMode)
     }
     
@@ -73,14 +67,6 @@ class ButtonControllerViewController: UIViewController {
             delegate!.switchto(to: self.mode!, inGSButtonVC: self)
         }*/
     }
-    
-
-    @IBAction func stopBtnAction(_ sender: Any) {
-        if delegate!.responds(to: #selector(delegate!.stopBtnAction(inGSButtonVC:))) {
-            delegate!.stopBtnAction(inGSButtonVC: self)
-        }
-    }
-    
     
     @IBAction func focusmapBtnAction(_ sender: Any) {
         if delegate!.responds(to: #selector(delegate!.focusMapBtnAction(inGSButtonVC:))) {
@@ -95,14 +81,6 @@ class ButtonControllerViewController: UIViewController {
             delegate!.switchto(to: self.mode!, inGSButtonVC: self)
         }
     }
-    
-    
-    @IBAction func startBtnAction(_ sender: Any) {
-        if delegate!.responds(to: #selector(delegate!.startBtnAction(inGSButtonVC:))) {
-            delegate!.startBtnAction(inGSButtonVC: self)
-        }
-    }
-    
     
     @IBAction func deleteBtnAction(_ sender: Any) {
         if delegate!.responds(to: #selector(delegate!.deleteBtnAction(InGSButtonVC:))){

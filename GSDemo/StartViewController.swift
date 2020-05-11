@@ -9,27 +9,34 @@
 import UIKit
 
 @objc protocol StartViewControllerDelegate: NSObjectProtocol {
-    func startBtnAction(inButtonVC BtnVC: ConfigViewController?)
-    func stopBtnAction(inButtonVC BtnVC: ConfigViewController?)
+    func startBtnAction(inButtonVC BtnVC: StartViewController?)
+    func stopBtnAction(inButtonVC BtnVC: StartViewController?)
 }
 
 class StartViewController: UIViewController {
+    
+    //MARK: Vars
+    weak var delegate: StartViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    //MARK: Buttons Methods
+    @IBAction func startBtnAction(_ sender: Any) {
+        if delegate!.responds(to: #selector(delegate!.startBtnAction(inButtonVC:))){
+            delegate!.startBtnAction(inButtonVC: self)
+        }
     }
-    */
-
+    
+    @IBAction func stopBtnAction(_ sender: Any) {
+        if delegate!.responds(to: #selector(delegate!.stopBtnAction(inButtonVC:))){
+            delegate!.stopBtnAction(inButtonVC: self)
+        }
+    }
+    
+    @IBAction func resumeBtnAction(_ sender: Any) {
+    }
+    
 }
