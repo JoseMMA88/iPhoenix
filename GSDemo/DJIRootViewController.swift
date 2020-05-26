@@ -85,17 +85,17 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func appRegisteredWithError(_ error: Error?) {
-        var message = "App registrada"
+        var message = "Registration Complete!"
         
         if (error != nil){
-            message = "Error al registrar la App"
+            message = "Error registering app"
         }
         else{
-            NSLog("App registrada!\n")
+          //  NSLog("App registrada!\n")
             DJISDKManager.startConnectionToProduct()
         }
         
-        self.showAlertViewWithTittle(title: "Registro de App", WithMessage: message)
+        self.showAlertViewWithTittle(title: "App Registration", WithMessage: message)
     }
     
     func productConnected(_ product: DJIBaseProduct?) {
