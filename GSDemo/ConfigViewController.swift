@@ -54,9 +54,9 @@ class ConfigViewController: UIViewController {
         altitudeTextField.keyboardType = UIKeyboardType.numberPad
         autoFlightSpeedTextField.keyboardType = UIKeyboardType.numberPad
         maxFlightSpeedTextField.keyboardType = UIKeyboardType.numberPad
-        altitudeTextField.text = "20"//Set altitude
-        autoFlightSpeedTextField.text = "8" //Set auto speed
-        maxFlightSpeedTextField.text = "10" //Set max speed
+        altitudeTextField.text = "15"//Set altitude
+        autoFlightSpeedTextField.text = "6" //Set auto speed
+        maxFlightSpeedTextField.text = "8" //Set max speed
         actionSegmentedControl.selectedSegmentIndex = 1
         headingSegmentedControl.selectedSegmentIndex = 0
     }

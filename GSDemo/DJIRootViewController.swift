@@ -101,14 +101,15 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func productConnected(_ product: DJIBaseProduct?) {
         if (product != nil){
             self.showAlertViewWithTittle(title: "Dron connected!", WithMessage: "")
-            NSLog("Producto conectado \n")
+            //NSLog("Producto conectado \n")
             let flightControler = DemoUtility.fetchFlightController()
             if(flightControler != nil){
                 flightControler!.delegate = self
             }
         }
         else{
-            NSLog("Producto desconectado \n")
+            self.showAlertViewWithTittle(title: "Dron disconnected", WithMessage: "")
+            //NSLog("Producto desconectado \n")
         }
     }
     
@@ -254,7 +255,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         if(waypointMission != nil){
             for i in 0..<waypointMission!.waypointCount{
                 let waypoint = waypointMission?.waypoint(at: i)
-                waypoint?.altitude = 20  //MARK: ALTITUD DE WAYPOINT
+                waypoint?.altitude = (waypointConfigVC!.altitudeTextField.text! as NSString).floatValue  //MARK: ALTITUD DE WAYPOINT
             }
         
             waypointMission?.maxFlightSpeed = (waypointConfigVC!.maxFlightSpeedTextField.text! as NSString).floatValue //MARK: VELOCIDAD MAXIMA
@@ -428,10 +429,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             NSLog("Add new pin")
             return pinView
         }
-        else*/ if(annotation.isKind(of: DJIAircraftAnnotation.self)){
+        else*/
+        
+        if(annotation.isKind(of: DJIAircraftAnnotation.self)){
             let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
             (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
-            
+            NSLog("LO DIBUJA????")
             return annoView
             
         }
@@ -520,6 +523,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     //MARK: DJIFlightControllerDelegate
     func flightController(_ fc: DJIFlightController,didUpdate state: DJIFlightControllerState){
+        NSLog("FLIGHT CONTROLLER")
         droneLocation = state.aircraftLocation?.coordinate
         
         modeLabel.text = state.flightModeString

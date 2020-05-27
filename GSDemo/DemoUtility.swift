@@ -10,7 +10,7 @@ import DJISDK
 
 func ShowMessage(_ tittle: NSString?,_ message: NSString?,_ target: Any?, _ cancleBtnTittle: NSString?){
     DispatchQueue.main.async(execute: {
-        _ = UIAlertView.init(title: tittle! as String, message: message! as String, delegate: target as? UIAlertViewDelegate, cancelButtonTitle: cancleBtnTittle as String?, otherButtonTitles: "")
+        /*_ = UIAlertView.init(title: tittle! as String, message: message! as String, delegate: target as? UIAlertViewDelegate, cancelButtonTitle: cancleBtnTittle as String?, otherButtonTitles: "")*/
         
         NSLog(tittle! as String)
         NSLog(" ")
