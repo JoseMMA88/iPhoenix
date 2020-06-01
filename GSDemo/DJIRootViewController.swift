@@ -99,6 +99,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func productConnected(_ product: DJIBaseProduct?) {
+    
         if (product != nil){
             self.showAlertViewWithTittle(title: "Dron connected!", WithMessage: "")
             //NSLog("Producto conectado \n")

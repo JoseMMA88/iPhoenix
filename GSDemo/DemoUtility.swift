@@ -27,7 +27,7 @@ class DemoUtility: NSObject {
             return nil
         }
         if(DJISDKManager.product() is DJIAircraft){
-            return (DJISDKManager.product() as? DJIAircraft)?.flightController
+            return (DJISDKManager.product() as! DJIAircraft).flightController
         }
         return nil
     }
