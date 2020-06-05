@@ -12,6 +12,7 @@ import UIKit
 import CoreLocation
 
 class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate, StartViewControllerDelegate{
+    
 
     
     //MARK: Outlets
@@ -39,6 +40,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var droneLocation: CLLocationCoordinate2D!
     var waypointMission: DJIMutableWaypointMission?
     var startLocation: CGPoint?
+    //var isConfigured: Bool = false
     
     //MARK: View Controller functions
     
@@ -125,6 +127,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         if isEditingPoints {
             isEditingPoints = false
             //finishBtnActions()
+            multiFly()
             button?.setTitle("Add", for: .normal)
         } else {
             isEditingPoints = true
@@ -134,6 +137,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     func clearBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         mapController?.cleanAllPointsWithMapView(with: mapView, and: pathController!)
+        //isConfigured = false
     }
     
     func focusMapBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
@@ -160,6 +164,10 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 self.showAlertViewWithTittle(title: "Stop Mission", WithMessage: "")
             }
         })
+    }
+    
+    func multiFlyBtnAction(inButtonVC BtnVC: StartViewController?) {
+        multiFly()
     }
     
     func deleteBtnAction(InGSButtonVC GSBtnVC: ButtonControllerViewController?) {
@@ -190,7 +198,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func configBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
-        NSLog("CONFIIIIG!!!")
         
         let wayPoints = pathController!.fly_points
          
@@ -201,6 +208,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             waypointConfigVC!.view.alpha = 1.0
             if(self.waypointMission != nil){
                 self.waypointMission?.removeAllWaypoints()
+                //isConfigured = false
             }
             else{
                 self.waypointMission = DJIMutableWaypointMission()
@@ -284,12 +292,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                     else{
                         self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
                         self.StartVC!.view.alpha = 1
+                        //self.isConfigured = true
                     }
                 })
         
             
             }
-        
         
     }
     
@@ -560,7 +568,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         return DJISDKManager.missionControl()?.waypointMissionOperator()
     }
     
-    func finishBtnActions() {
+    /*func finishBtnActions() {
         
         let wayPoints = pathController!.fly_points
         
@@ -623,12 +631,78 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             
             
         }
+    }*/
+    
+    //---------------------------------------------------------------------
+    //MARK: MultiFLY
+    
+    func multiFly(){
+        let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
+             
+        var request = URLRequest(url:myUrl!)
+             
+        request.httpMethod = "POST"// Metodo post
+        
+        let password = randomString(length: 5)
+        var prueba = ""
+        for i in 0..<pathController!.fly_points.count{
+            let lat = pathController!.fly_points[i].latitude
+            let long = pathController!.fly_points[i].longitude
+            prueba = prueba + "@\(lat):\(long)"
+        }
+        
+        var polygon = ""
+        for n in 0..<mapController!.editPoints.count{
+            let lat = mapController!.editPoints[n].coordinate.latitude
+            let long = mapController!.editPoints[n].coordinate.longitude
+            polygon = polygon + "@\(lat):\(long)"
+        }
+        
+        let postString = "password=\(password)&coords=\(prueba)&polygon=\(polygon)";
+        
+        //Concatenar variables
+        request.httpBody = postString.data(using: String.Encoding.utf8);
+        
+        //Peticion
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+        //Error en la peticion
+        if error != nil{
+            print("error=\(String(describing: error))")
+            return
+        }
+
+
+            print("response = \(String(describing: response))")
+            //Pasamos a NSdictionary object
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                     
+                if let parseJSON = json {
+                    DispatchQueue.main.sync {
+                        let passwordNameValue = parseJSON["password"] as? String
+                        print("Password: \(String(passwordNameValue!))")
+                        
+                        let polygonNameValue = parseJSON["polygon"] as? String
+                        print("Polygon: \(String(polygonNameValue!))")
+                        
+                        let coordsNameValue = parseJSON["coords"] as? String
+                        print("Coords: \(String(coordsNameValue!))")
+                    }
+                }
+            }
+            catch {
+            print(error)
+            }
+        }
+        task.resume()
+        
     }
     
-    
-    
-    
-    
-    
+    func randomString(length: Int) -> String {
+      let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+      return String((0..<length).map{ _ in letters.randomElement()! })
+    }
     
 }
+    
+

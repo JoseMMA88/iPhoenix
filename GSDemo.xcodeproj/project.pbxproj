@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C1C4B0B063F2C4A77C719DBD /* Pods_GSDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */; };
 		C411567B245344BB0011F583 /* FlyPathController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411567A245344BB0011F583 /* FlyPathController.swift */; };
 		C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429550323E82C8600A7988B /* DJIRootViewController.swift */; };
 		C429F43A23E9629D006950A8 /* DJIMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429F43923E9629D006950A8 /* DJIMapController.swift */; };
@@ -46,8 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.release.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.release.xcconfig"; sourceTree = "<group>"; };
-		94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		54781813E4B0686330E317B0 /* Pods-GSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.debug.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		C411567A245344BB0011F583 /* FlyPathController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyPathController.swift; sourceTree = "<group>"; };
 		C429550323E82C8600A7988B /* DJIRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIRootViewController.swift; sourceTree = "<group>"; };
 		C429F43923E9629D006950A8 /* DJIMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIMapController.swift; sourceTree = "<group>"; };
@@ -72,7 +70,7 @@
 		C4D3EC5223F17FC00041D025 /* DemoUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUtility.swift; sourceTree = "<group>"; };
 		C4E4FFA7246068C90060D7B3 /* ButtonControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonControllerViewController.swift; sourceTree = "<group>"; };
 		C4E4FFA8246068C90060D7B3 /* ButtonControllerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ButtonControllerViewController.xib; sourceTree = "<group>"; };
-		D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.debug.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		D749C94548E7C57F7E5ECDBC /* Pods-GSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.release.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +78,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1C4B0B063F2C4A77C719DBD /* Pods_GSDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,21 +98,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E1E60391C19617D00B2B666 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		7F7D769C32EC01D8893B06C5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */,
-				48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */,
+				54781813E4B0686330E317B0 /* Pods-GSDemo.debug.xcconfig */,
+				D749C94548E7C57F7E5ECDBC /* Pods-GSDemo.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		A19D9CE84BCFAB080E885C7E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		C47BB55223E481DF00D80BE6 = {
@@ -126,7 +122,7 @@
 				C47BB57D23E481E000D80BE6 /* GSDemoUITests */,
 				C47BB55C23E481DF00D80BE6 /* Products */,
 				7F7D769C32EC01D8893B06C5 /* Pods */,
-				0E1E60391C19617D00B2B666 /* Frameworks */,
+				A19D9CE84BCFAB080E885C7E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -189,11 +185,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C47BB58323E481E000D80BE6 /* Build configuration list for PBXNativeTarget "GSDemo" */;
 			buildPhases = (
-				E5D4069353DECD02D6E3DFA2 /* [CP] Check Pods Manifest.lock */,
+				9E9937A3D49857DD5C8E68A8 /* [CP] Check Pods Manifest.lock */,
 				C47BB55723E481DF00D80BE6 /* Sources */,
 				C47BB55823E481DF00D80BE6 /* Frameworks */,
 				C47BB55923E481DF00D80BE6 /* Resources */,
-				BCB8A4CACBE5C679250ED6DE /* [CP] Embed Pods Frameworks */,
+				D350486C8F36C98EA9BD5BA2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -317,24 +313,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		BCB8A4CACBE5C679250ED6DE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E5D4069353DECD02D6E3DFA2 /* [CP] Check Pods Manifest.lock */ = {
+		9E9937A3D49857DD5C8E68A8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -354,6 +333,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D350486C8F36C98EA9BD5BA2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -545,7 +541,7 @@
 		};
 		C47BB58423E481E000D80BE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */;
+			baseConfigurationReference = 54781813E4B0686330E317B0 /* Pods-GSDemo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -567,7 +563,7 @@
 		};
 		C47BB58523E481E000D80BE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */;
+			baseConfigurationReference = D749C94548E7C57F7E5ECDBC /* Pods-GSDemo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

@@ -11,6 +11,7 @@ import UIKit
 @objc protocol StartViewControllerDelegate: NSObjectProtocol {
     func startBtnAction(inButtonVC BtnVC: StartViewController?)
     func stopBtnAction(inButtonVC BtnVC: StartViewController?)
+    func multiFlyBtnAction(inButtonVC BtnVC: StartViewController?)
 }
 
 class StartViewController: UIViewController {
@@ -37,6 +38,9 @@ class StartViewController: UIViewController {
     }
     
     @IBAction func resumeBtnAction(_ sender: Any) {
+        if delegate!.responds(to: #selector(delegate!.multiFlyBtnAction(inButtonVC:))){
+             delegate!.multiFlyBtnAction(inButtonVC: self)
+         }
     }
     
 }
