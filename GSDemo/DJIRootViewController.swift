@@ -643,7 +643,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
              
         request.httpMethod = "POST"// Metodo post
         
-        let password = randomString(length: 5)
+        let password = "12345"//randomString(length: 5)
         var prueba = ""
         for i in 0..<pathController!.fly_points.count{
             let lat = pathController!.fly_points[i].latitude
@@ -658,7 +658,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             polygon = polygon + "@\(lat):\(long)"
         }
         
-        let postString = "password=\(password)&coords=\(prueba)&polygon=\(polygon)";
+        let postString = "password=\(password)&polygon=\(polygon)";
         
         //Concatenar variables
         request.httpBody = postString.data(using: String.Encoding.utf8);
@@ -685,13 +685,13 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                         let polygonNameValue = parseJSON["polygon"] as? String
                         print("Polygon: \(String(polygonNameValue!))")
                         
-                        let coordsNameValue = parseJSON["coords"] as? String
-                        print("Coords: \(String(coordsNameValue!))")
+                        let playerNameValue = parseJSON["player"] as? String
+                        print("Player: \(String(playerNameValue!))")
                     }
                 }
             }
             catch {
-            print(error)
+                print("JSON Error: \(error.localizedDescription)")
             }
         }
         task.resume()
