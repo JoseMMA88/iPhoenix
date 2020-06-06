@@ -29,6 +29,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     //MARK: Vars
     var pathController: FlyPathController?
     var mapController: DJIMapControler?
+    var multiController: MultiflyController?
     var isEditingPoints: Bool = false
     
     var ButtonVC: ButtonControllerViewController?
@@ -126,8 +127,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func addBtnAction(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         if isEditingPoints {
             isEditingPoints = false
+            multiController = MultiflyController.init()
             //finishBtnActions()
-            multiFly()
+            multiController!.selectMultiFly(password: "qFONp")
             button?.setTitle("Add", for: .normal)
         } else {
             isEditingPoints = true
@@ -167,7 +169,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func multiFlyBtnAction(inButtonVC BtnVC: StartViewController?) {
-        multiFly()
+        multiController!.postMultiFly(pathController: pathController!, mapController: mapController!)
     }
     
     func deleteBtnAction(InGSButtonVC GSBtnVC: ButtonControllerViewController?) {
@@ -633,75 +635,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }*/
     
-    //---------------------------------------------------------------------
-    //MARK: MultiFLY
-    
-    func multiFly(){
-        let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
-             
-        var request = URLRequest(url:myUrl!)
-             
-        request.httpMethod = "POST"// Metodo post
-        
-        let password = "12345"//randomString(length: 5)
-        var prueba = ""
-        for i in 0..<pathController!.fly_points.count{
-            let lat = pathController!.fly_points[i].latitude
-            let long = pathController!.fly_points[i].longitude
-            prueba = prueba + "@\(lat):\(long)"
-        }
-        
-        var polygon = ""
-        for n in 0..<mapController!.editPoints.count{
-            let lat = mapController!.editPoints[n].coordinate.latitude
-            let long = mapController!.editPoints[n].coordinate.longitude
-            polygon = polygon + "@\(lat):\(long)"
-        }
-        
-        let postString = "password=\(password)&polygon=\(polygon)";
-        
-        //Concatenar variables
-        request.httpBody = postString.data(using: String.Encoding.utf8);
-        
-        //Peticion
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-        //Error en la peticion
-        if error != nil{
-            print("error=\(String(describing: error))")
-            return
-        }
-
-
-            print("response = \(String(describing: response))")
-            //Pasamos a NSdictionary object
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
-                     
-                if let parseJSON = json {
-                    DispatchQueue.main.sync {
-                        let passwordNameValue = parseJSON["password"] as? String
-                        print("Password: \(String(passwordNameValue!))")
-                        
-                        let polygonNameValue = parseJSON["polygon"] as? String
-                        print("Polygon: \(String(polygonNameValue!))")
-                        
-                        let playerNameValue = parseJSON["player"] as? String
-                        print("Player: \(String(playerNameValue!))")
-                    }
-                }
-            }
-            catch {
-                print("JSON Error: \(error.localizedDescription)")
-            }
-        }
-        task.resume()
-        
-    }
-    
-    func randomString(length: Int) -> String {
-      let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-      return String((0..<length).map{ _ in letters.randomElement()! })
-    }
+   
     
 }
     

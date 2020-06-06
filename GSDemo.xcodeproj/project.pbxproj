@@ -20,6 +20,7 @@
 		C47BB56923E481E000D80BE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C47BB56723E481E000D80BE6 /* LaunchScreen.storyboard */; };
 		C47BB57423E481E000D80BE6 /* GSDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB57323E481E000D80BE6 /* GSDemoTests.swift */; };
 		C47BB57F23E481E000D80BE6 /* GSDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47BB57E23E481E000D80BE6 /* GSDemoUITests.swift */; };
+		C497A18D248BEBDE009C6686 /* MultiflyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C497A18C248BEBDE009C6686 /* MultiflyController.swift */; };
 		C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */; };
 		C4D3EC5123F1647E0041D025 /* DJIAircraftAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */; };
 		C4D3EC5323F17FC00041D025 /* DemoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D3EC5223F17FC00041D025 /* DemoUtility.swift */; };
@@ -65,6 +66,7 @@
 		C47BB57A23E481E000D80BE6 /* GSDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GSDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47BB57E23E481E000D80BE6 /* GSDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSDemoUITests.swift; sourceTree = "<group>"; };
 		C47BB58023E481E000D80BE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C497A18C248BEBDE009C6686 /* MultiflyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiflyController.swift; sourceTree = "<group>"; };
 		C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotationView.swift; sourceTree = "<group>"; };
 		C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotation.swift; sourceTree = "<group>"; };
 		C4D3EC5223F17FC00041D025 /* DemoUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUtility.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */,
 				C4D3EC5223F17FC00041D025 /* DemoUtility.swift */,
 				C411567A245344BB0011F583 /* FlyPathController.swift */,
+				C497A18C248BEBDE009C6686 /* MultiflyController.swift */,
 				C4E4FFA7246068C90060D7B3 /* ButtonControllerViewController.swift */,
 				C4E4FFA8246068C90060D7B3 /* ButtonControllerViewController.xib */,
 				C46AD18724642A950014F26C /* ConfigViewController.swift */,
@@ -364,6 +367,7 @@
 				C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */,
 				C47BB55F23E481DF00D80BE6 /* AppDelegate.swift in Sources */,
 				C411567B245344BB0011F583 /* FlyPathController.swift in Sources */,
+				C497A18D248BEBDE009C6686 /* MultiflyController.swift in Sources */,
 				C44EEF1A24694DC50083194C /* StartViewController.swift in Sources */,
 				C4D3EC4D23F15CB50041D025 /* DJIAircraftAnnotationView.swift in Sources */,
 				C4E4FFA9246068C90060D7B3 /* ButtonControllerViewController.swift in Sources */,
