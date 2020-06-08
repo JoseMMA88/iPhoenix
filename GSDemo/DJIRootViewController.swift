@@ -169,7 +169,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func multiFlyBtnAction(inButtonVC BtnVC: StartViewController?) {
-        multiController!.postMultiFly(pathController: pathController!, mapController: mapController!)
+        //multiController!.postMultiFly(pathController: pathController!, mapController: mapController!)
     }
     
     func deleteBtnAction(InGSButtonVC GSBtnVC: ButtonControllerViewController?) {
@@ -203,7 +203,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         let wayPoints = pathController!.fly_points
          
-        if(wayPoints.count < 2){
+        if(pathController!.fly_points.count < 2){
             showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
         }
         else{
@@ -343,17 +343,42 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             self.waypointConfigVC?.view.alpha = 0
         })
         
+        let altitude = (waypointConfigVC!.altitudeTextField.text! as NSString).floatValue
+        let AFS = (waypointConfigVC!.autoFlightSpeedTextField.text! as NSString).floatValue
+        let MFS = (waypointConfigVC!.maxFlightSpeedTextField.text! as NSString).floatValue
+        let heading = waypointConfigVC!.headingSegmentedControl.selectedSegmentIndex
+        let AAF = waypointConfigVC!.actionSegmentedControl.selectedSegmentIndex
         if(waypointMission != nil){
             for i in 0..<waypointMission!.waypointCount{
                 let waypoint = waypointMission?.waypoint(at: i)
-                waypoint?.altitude = (waypointConfigVC!.altitudeTextField.text! as NSString).floatValue  //MARK: ALTITUD DE WAYPOINT
+                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
             }
         
-            waypointMission?.maxFlightSpeed = (waypointConfigVC!.maxFlightSpeedTextField.text! as NSString).floatValue //MARK: VELOCIDAD MAXIMA
-            waypointMission?.autoFlightSpeed = (waypointConfigVC!.autoFlightSpeedTextField.text! as NSString).floatValue //MARK: VELOCIDAD AUTOMATICA
+            waypointMission?.maxFlightSpeed = MFS //MARK: VELOCIDAD MAXIMA
+            waypointMission?.autoFlightSpeed = AFS //MARK: VELOCIDAD AUTOMATICA
             waypointMission?.headingMode = DJIWaypointMissionHeadingMode(rawValue: DJIWaypointMissionHeadingMode.RawValue(waypointConfigVC!.headingSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionHeadingMode //MARK: HEADING AUTO
             waypointMission?.finishedAction = DJIWaypointMissionFinishedAction(rawValue: DJIWaypointMissionFinishedAction.RawValue(waypointConfigVC!.actionSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionFinishedAction //MARK: ACCION AL FINAL
+            
+        var token1 = ""
+        var token2 = ""
+        var token3 = ""
         
+        if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 1){
+            token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+            self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)")
+        }
+        else if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 2){
+            token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+            token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+            self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)\n\n TOKEN 3: \(token2)")
+        }
+        else if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 3){
+            token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+            token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+            token3 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(4)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+            self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)\n\n TOKEN 3: \(token2)\n\n TOKEN 4: \(token3)")
+        }
+            
             missionOperator()?.load(waypointMission!)
         
             missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
@@ -372,6 +397,23 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                         self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
                     }
                     else{
+                        /*var token1 = ""
+                        var token2 = ""
+                        var token3 = ""
+                        
+                        if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 1){
+                            token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+                            self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)")
+                        }
+                        else if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 2){
+                            token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+                            token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+                        }
+                        else if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 3){
+                            token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+                            token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+                            token3 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(4)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
+                        }*/
                         self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
                         self.StartVC!.view.alpha = 1
                         //self.isConfigured = true

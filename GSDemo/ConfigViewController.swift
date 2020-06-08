@@ -15,12 +15,15 @@ import UIKit
 
 class ConfigViewController: UIViewController {
     
+    
     //MARK: Outlets
     @IBOutlet weak var altitudeTextField: UITextField!
     @IBOutlet weak var autoFlightSpeedTextField: UITextField!
     @IBOutlet weak var maxFlightSpeedTextField: UITextField!
     @IBOutlet weak var actionSegmentedControl: UISegmentedControl!
     @IBOutlet weak var headingSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var dronesNumSegmentedControl: UISegmentedControl!
+    
     
     //MARK: Vars
     weak var delegate: ConfigViewControllerDelegate?
@@ -33,6 +36,7 @@ class ConfigViewController: UIViewController {
         tap.cancelsTouchesInView = false
         
         view.addGestureRecognizer(tap)
+        //multiFlyVC!.view.alpha = 0
     }
     
     //MARK: Buttons Methods
@@ -59,6 +63,7 @@ class ConfigViewController: UIViewController {
         maxFlightSpeedTextField.text = "8" //Set max speed
         actionSegmentedControl.selectedSegmentIndex = 1
         headingSegmentedControl.selectedSegmentIndex = 0
+        dronesNumSegmentedControl.selectedSegmentIndex = 0
     }
     
     @objc func dismissKeyboard() {

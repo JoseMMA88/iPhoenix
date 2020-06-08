@@ -13,7 +13,7 @@ class MultiflyController: NSObject {
         super.init()
     }
     
-    func postMultiFly(pathController:FlyPathController!, mapController:DJIMapControler!, player: String)-> String{
+    func postMultiFly(pathController:FlyPathController!, mapController:DJIMapControler!, player: String, Alt: String, AFS: String, MFS: String, AAF: String, heading: String)-> String{
            let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
                 
            var request = URLRequest(url:myUrl!)
@@ -37,7 +37,7 @@ class MultiflyController: NSObject {
                polygon = polygon + "@\(lat):\(long)"
            }
            
-           let postString = "password=\(password)&polygon=\(polygon)&player=\(player)&fun=\(fun)";
+           let postString = "password=\(password)&polygon=\(polygon)&player=\(player)&fun=\(fun)&Alt=\(Alt)&AFS=\(AFS)&AMS=\(MFS)&AAF=\(AAF)&heading=\(heading)";
            
            //Concatenar variables
            request.httpBody = postString.data(using: String.Encoding.utf8);
@@ -101,6 +101,34 @@ class MultiflyController: NSObject {
                catch {
                    print("JSON Error: \(error.localizedDescription)")
                }
+           }
+           task.resume()
+        
+    }
+    
+    func deleteMultifly(password: String){
+        let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
+                
+           var request = URLRequest(url:myUrl!)
+                
+           request.httpMethod = "DELETE"// Metodo post
+
+           let fun = "SELECT"
+           let postString = "password=\(password)&fun=\(fun)";
+           
+           //Concatenar variables
+           request.httpBody = postString.data(using: String.Encoding.utf8);
+           
+           //Peticion
+           let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+           //Error en la peticion
+           if error != nil{
+               print("error=\(String(describing: error))")
+               return
+           }
+
+
+               print("response = \(String(describing: response))")
            }
            task.resume()
         
