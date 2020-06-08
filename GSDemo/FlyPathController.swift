@@ -36,6 +36,15 @@ class FlyPathController: NSObject{
     
     // Path
     var fly_points: [CLLocationCoordinate2D] = []
+    var fly_points_p1: [CLLocationCoordinate2D] = []
+    var fly_points_p2: [CLLocationCoordinate2D] = []
+    var fly_points_p11: [CLLocationCoordinate2D] = []
+    var fly_points_p21: [CLLocationCoordinate2D] = []
+    var fly_points_p31: [CLLocationCoordinate2D] = []
+    var fly_points_p12: [CLLocationCoordinate2D] = []
+    var fly_points_p22: [CLLocationCoordinate2D] = []
+    var fly_points_p32: [CLLocationCoordinate2D] = []
+    var fly_points_p42: [CLLocationCoordinate2D] = []
     var triangles: [MKPolygon] = []
     var triangles2: [MKPolygon] = []
     var triangles3: [MKPolygon] = []
@@ -118,6 +127,9 @@ class FlyPathController: NSObject{
     
     // Ordena la array path_coords dependiendo de cual sea el punto de inicio
     func createFlightPath(with editPoints: [MKAnnotation]){
+        var player: Int = 2 // 2 players
+        var player1: Int = 2 // 3 players
+        var player2: Int = 2 // 4 players
         var aux_coords: [CLLocationCoordinate2D] = path_coord
         var derecha_coords: [CLLocationCoordinate2D] = []
         var izquierda_coords: [CLLocationCoordinate2D] = []
@@ -126,8 +138,19 @@ class FlyPathController: NSObject{
             fly_points.removeAll()
         }
         
+        if(fly_points_p1.count>0){
+            fly_points_p1.removeAll()
+        }
+        
+        if(fly_points_p2.count>0){
+            fly_points_p2.removeAll()
+        }
+        
         // Empezamos por el punto mas cercano al dron
         fly_points.append(findStartWaypoint(points: editPoints)!)
+        fly_points_p1.append(findStartWaypoint(points: editPoints)!)
+        fly_points_p11.append(findStartWaypoint(points: editPoints)!)
+        fly_points_p12.append(findStartWaypoint(points: editPoints)!)
         
         var i = 0
         while ( i < aux_coords.count && enco == false){
@@ -219,6 +242,47 @@ class FlyPathController: NSObject{
                         if(aux.latitude == derecha_coords[i2].latitude && aux.longitude == derecha_coords[i2].longitude){
                             derecha_coords.remove(at: i2)
                             fly_points.append(aux)
+                            if(player == 2){
+                                fly_points_p2.append(aux)
+                                player = 1
+                            }
+                            else{
+                                fly_points_p1.append(aux)
+                                player = 2
+                            }
+                            
+                            // 3 DRONES
+                            if(player1 == 2){
+                                fly_points_p21.append(aux)
+                                player1 = 3
+                            }
+                            else if(player1 == 3){
+                                fly_points_p31.append(aux)
+                                player1 = 1
+                            }
+                            else if(player1 == 1){
+                                fly_points_p11.append(aux)
+                                player1 = 2
+                            }
+                            
+                            
+                            // 4 DRONES
+                            if(player2 == 1){
+                                fly_points_p12.append(aux)
+                                player2 = 2
+                            }
+                            else if(player2 == 2){
+                                fly_points_p22.append(aux)
+                                player2 = 3
+                            }
+                            else if(player2 == 3){
+                                fly_points_p32.append(aux)
+                                player2 = 4
+                            }
+                            else if(player2 == 4){
+                                fly_points_p42.append(aux)
+                                player2 = 1
+                            }
                             enco2=true
                         }
                         i2+=1
@@ -255,6 +319,50 @@ class FlyPathController: NSObject{
                         if(aux.latitude == izquierda_coords[i2].latitude && aux.longitude == izquierda_coords[i2].longitude){
                             izquierda_coords.remove(at: i2)
                             fly_points.append(aux)
+                            
+                            // 2 DRONES
+                            if(player == 2){
+                                fly_points_p2.append(aux)
+                                player = 1
+                            }
+                            else{
+                                fly_points_p1.append(aux)
+                                player = 2
+                            }
+                            
+                            // 3 DRONES
+                            if(player1 == 2){
+                                fly_points_p21.append(aux)
+                                player1 = 3
+                            }
+                            else if(player1 == 3){
+                                fly_points_p31.append(aux)
+                                player1 = 1
+                            }
+                            else if(player1 == 1){
+                                fly_points_p11.append(aux)
+                                player1 = 2
+                            }
+                            
+                            
+                            // 4 DRONES
+                            if(player2 == 1){
+                                fly_points_p12.append(aux)
+                                player2 = 2
+                            }
+                            else if(player2 == 2){
+                                fly_points_p22.append(aux)
+                                player2 = 3
+                            }
+                            else if(player2 == 3){
+                                fly_points_p32.append(aux)
+                                player2 = 4
+                            }
+                            else if(player2 == 4){
+                                fly_points_p42.append(aux)
+                                player2 = 1
+                            }
+                            
                             enco2=true
                         }
                         i2+=1
@@ -292,6 +400,47 @@ class FlyPathController: NSObject{
                     if(aux.latitude == aux_coords[i2].latitude && aux.longitude == aux_coords[i2].longitude){
                         aux_coords.remove(at: i2)
                         fly_points.append(aux)
+                        if(player == 2){
+                            fly_points_p2.append(aux)
+                            player = 1
+                        }
+                        else{
+                            fly_points_p1.append(aux)
+                            player = 2
+                        }
+                        
+                        // 3 DRONES
+                        if(player1 == 2){
+                            fly_points_p21.append(aux)
+                            player1 = 3
+                        }
+                        else if(player1 == 3){
+                            fly_points_p31.append(aux)
+                            player1 = 1
+                        }
+                        else if(player1 == 1){
+                            fly_points_p11.append(aux)
+                            player1 = 2
+                        }
+                        
+                        
+                        // 4 DRONES
+                        if(player2 == 1){
+                            fly_points_p12.append(aux)
+                            player2 = 2
+                        }
+                        else if(player2 == 2){
+                            fly_points_p22.append(aux)
+                            player2 = 3
+                        }
+                        else if(player2 == 3){
+                            fly_points_p32.append(aux)
+                            player2 = 4
+                        }
+                        else if(player2 == 4){
+                            fly_points_p42.append(aux)
+                            player2 = 1
+                        }
                         enco2=true
                     }
                     i2+=1
@@ -300,12 +449,47 @@ class FlyPathController: NSObject{
             }
         }
         
-        /*NSLog("-----------------------------------------------------")
+        NSLog("-----------------------------------------------------")
         for i3 in 0..<fly_points.count{
             NSLog(String(fly_points[i3].latitude))
             NSLog(String(fly_points[i3].longitude))
         }
+        NSLog("-----------------------------------------------------")
+        
+        /*NSLog("-----------------------------------------------------")
+        for i3 in 0..<fly_points_p1.count{
+            NSLog(String(fly_points_p1[i3].latitude))
+            NSLog(String(fly_points_p1[i3].longitude))
+        }
+        NSLog("-----------------------------------------------------")
+        
+        NSLog("-----------------------------------------------------")
+        for i3 in 0..<fly_points_p2.count{
+            NSLog(String(fly_points_p2[i3].latitude))
+            NSLog(String(fly_points_p2[i3].longitude))
+        }
         NSLog("-----------------------------------------------------")*/
+        
+        NSLog("-----------------------------------------------------")
+        for i4 in 0..<fly_points_p11.count{
+            NSLog(String(fly_points_p11[i4].latitude))
+            NSLog(String(fly_points_p11[i4].longitude))
+        }
+        NSLog("-----------------------------------------------------")
+        
+        NSLog("-----------------------------------------------------")
+        for i5 in 0..<fly_points_p21.count{
+            NSLog(String(fly_points_p21[i5].latitude))
+            NSLog(String(fly_points_p21[i5].longitude))
+        }
+        NSLog("-----------------------------------------------------")
+        
+        NSLog("-----------------------------------------------------")
+        for i6 in 0..<fly_points_p31.count{
+            NSLog(String(fly_points_p31[i6].latitude))
+            NSLog(String(fly_points_p31[i6].longitude))
+        }
+        NSLog("-----------------------------------------------------")
     }
     
     // Si devuelve 1 esta al Oeste

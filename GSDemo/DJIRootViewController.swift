@@ -250,6 +250,86 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 mapView.addOverlay(line)
             }
         }
+        
+        /*for i1 in 0..<pathController!.fly_points_p1.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points_p1[i1]
+            ano.title = String(i1)
+            mapView.addAnnotation(ano)
+            
+            if(i1 < pathController!.fly_points_p1.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points_p1[i1], pathController!.fly_points_p1[i1+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }
+        
+        for i2 in 0..<pathController!.fly_points_p2.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points_p2[i2]
+            ano.title = String(i2)
+            mapView.addAnnotation(ano)
+            
+            if(i2 < pathController!.fly_points_p2.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points_p2[i2], pathController!.fly_points_p2[i2+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }
+        
+        for i3 in 0..<pathController!.fly_points_p11.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points_p11[i3]
+            ano.title = String(i3)
+            mapView.addAnnotation(ano)
+            
+            if(i3 < pathController!.fly_points_p1.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points_p11[i3], pathController!.fly_points_p11[i3+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }
+        
+        for i4 in 0..<pathController!.fly_points_p21.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points_p21[i4]
+            ano.title = String(i4)
+            mapView.addAnnotation(ano)
+            
+            if(i4 < pathController!.fly_points_p21.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points_p21[i4], pathController!.fly_points_p21[i4+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }
+        
+        for i5 in 0..<pathController!.fly_points_p31.count{
+            
+            // Creamos Annotation
+            let ano: MKPointAnnotation = MKPointAnnotation()
+            ano.coordinate = pathController!.fly_points_p31[i5]
+            ano.title = String(i5)
+            mapView.addAnnotation(ano)
+            
+            if(i5 < pathController!.fly_points_p31.count-1){
+                // Creamos lineas
+                let lines: [CLLocationCoordinate2D] = [pathController!.fly_points_p31[i5], pathController!.fly_points_p31[i5+1]]
+                let line = MKPolyline.init(coordinates: lines, count: 2)
+                mapView.addOverlay(line)
+            }
+        }*/
     }
     
     func cancelBtnAction(inButtonVC BtnVC: ConfigViewController?) {

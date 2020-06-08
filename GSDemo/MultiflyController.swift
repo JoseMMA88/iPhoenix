@@ -13,7 +13,7 @@ class MultiflyController: NSObject {
         super.init()
     }
     
-    func postMultiFly(pathController:FlyPathController!, mapController:DJIMapControler!){
+    func postMultiFly(pathController:FlyPathController!, mapController:DJIMapControler!, player: String)-> String{
            let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
                 
            var request = URLRequest(url:myUrl!)
@@ -55,6 +55,7 @@ class MultiflyController: NSObject {
            }
            task.resume()
            
+        return password
        }
     
     func selectMultiFly(password: String){

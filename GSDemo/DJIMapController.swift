@@ -162,6 +162,8 @@ class DJIMapControler: NSObject {
         else{
             mapView?.removeOverlays(mapView!.overlays)
             pathController?.fly_points.removeAll()
+            pathController?.fly_points_p1.removeAll()
+            pathController?.fly_points_p2.removeAll()
         }
     }
     
