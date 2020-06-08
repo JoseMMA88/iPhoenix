@@ -348,36 +348,94 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         let MFS = (waypointConfigVC!.maxFlightSpeedTextField.text! as NSString).floatValue
         let heading = waypointConfigVC!.headingSegmentedControl.selectedSegmentIndex
         let AAF = waypointConfigVC!.actionSegmentedControl.selectedSegmentIndex
-        if(waypointMission != nil){
-            for i in 0..<waypointMission!.waypointCount{
-                let waypoint = waypointMission?.waypoint(at: i)
-                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
-            }
         
-            waypointMission?.maxFlightSpeed = MFS //MARK: VELOCIDAD MAXIMA
-            waypointMission?.autoFlightSpeed = AFS //MARK: VELOCIDAD AUTOMATICA
-            waypointMission?.headingMode = DJIWaypointMissionHeadingMode(rawValue: DJIWaypointMissionHeadingMode.RawValue(waypointConfigVC!.headingSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionHeadingMode //MARK: HEADING AUTO
-            waypointMission?.finishedAction = DJIWaypointMissionFinishedAction(rawValue: DJIWaypointMissionFinishedAction.RawValue(waypointConfigVC!.actionSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionFinishedAction //MARK: ACCION AL FINAL
+        if(waypointMission != nil){
             
         var token1 = ""
         var token2 = ""
         var token3 = ""
         
         if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 1){
+            if(waypointMission != nil){
+                waypointMission!.removeAllWaypoints()
+            }
+            
+            let wayPoints = pathController!.fly_points_p1
+            
+            for i in 0..<wayPoints.count{
+                let location = wayPoints[i]
+                let coordinate = location
+                if CLLocationCoordinate2DIsValid(coordinate){
+                    let waypoint = DJIWaypoint(coordinate: location)
+                    waypointMission!.add(waypoint)
+                }
+            }
+            
+            for i in 0..<waypointMission!.waypointCount{
+                let waypoint = waypointMission?.waypoint(at: i)
+                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
+            }
+            
             token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)")
         }
         else if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 2){
+            if(waypointMission != nil){
+                waypointMission!.removeAllWaypoints()
+            }
+            
+            let wayPoints = pathController!.fly_points_p11
+            
+            for i in 0..<wayPoints.count{
+                let location = wayPoints[i]
+                let coordinate = location
+                if CLLocationCoordinate2DIsValid(coordinate){
+                    let waypoint = DJIWaypoint(coordinate: location)
+                    waypointMission!.add(waypoint)
+                }
+            }
+            
+            for i in 0..<waypointMission!.waypointCount{
+                let waypoint = waypointMission?.waypoint(at: i)
+                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
+            }
+            
             token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)\n\n TOKEN 3: \(token2)")
         }
         else if(self.waypointConfigVC!.dronesNumSegmentedControl.selectedSegmentIndex == 3){
+            if(waypointMission != nil){
+                waypointMission!.removeAllWaypoints()
+            }
+            
+            let wayPoints = pathController!.fly_points_p12
+            
+            for i in 0..<wayPoints.count{
+                let location = wayPoints[i]
+                let coordinate = location
+                if CLLocationCoordinate2DIsValid(coordinate){
+                    let waypoint = DJIWaypoint(coordinate: location)
+                    waypointMission!.add(waypoint)
+                }
+            }
+            
+            for i in 0..<waypointMission!.waypointCount{
+                let waypoint = waypointMission?.waypoint(at: i)
+                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
+            }
+            
             token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             token3 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(4)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)\n\n TOKEN 3: \(token2)\n\n TOKEN 4: \(token3)")
         }
+            
+            waypointMission?.maxFlightSpeed = MFS //MARK: VELOCIDAD MAXIMA
+            waypointMission?.autoFlightSpeed = AFS //MARK: VELOCIDAD AUTOMATICA
+            waypointMission?.headingMode = DJIWaypointMissionHeadingMode(rawValue: DJIWaypointMissionHeadingMode.RawValue(waypointConfigVC!.headingSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionHeadingMode //MARK: HEADING AUTO
+            waypointMission?.finishedAction = DJIWaypointMissionFinishedAction(rawValue: DJIWaypointMissionFinishedAction.RawValue(waypointConfigVC!.actionSegmentedControl.selectedSegmentIndex))! as DJIWaypointMissionFinishedAction //MARK: ACCION AL FINAL
+            
             
             missionOperator()?.load(waypointMission!)
         
