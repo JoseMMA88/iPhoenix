@@ -21,7 +21,6 @@ class MultiflyController: NSObject {
            request.httpMethod = "POST"// Metodo post
            
            let password = randomString(length: 5)
-           let player = "2"
            let fun = "INSERT"
            var prueba = ""
            for i in 0..<pathController!.fly_points.count{
@@ -36,8 +35,14 @@ class MultiflyController: NSObject {
                let long = mapController!.editPoints[n].coordinate.longitude
                polygon = polygon + "@\(lat):\(long)"
            }
+        
+            print(Alt)
+            print(AFS)
+            print(MFS)
+            print(AAF)
+            print(heading)
            
-           let postString = "password=\(password)&polygon=\(polygon)&player=\(player)&fun=\(fun)&Alt=\(Alt)&AFS=\(AFS)&AMS=\(MFS)&AAF=\(AAF)&heading=\(heading)";
+           let postString = "password=\(password)&polygon=\(polygon)&player=\(player)&fun=\(fun)&Alt=\(Alt)&AFS=\(AFS)&MFS=\(MFS)&AAF=\(AAF)&heading=\(heading)";
            
            //Concatenar variables
            request.httpBody = postString.data(using: String.Encoding.utf8);
@@ -95,6 +100,20 @@ class MultiflyController: NSObject {
                            
                            let playerNameValue = parseJSON["player"] as? String
                            print("Player: \(String(playerNameValue!))")
+                        
+                           let AFSNameValue = parseJSON["AFS"] as? String
+                           print("AFS: \(String(AFSNameValue!))")
+                           
+                           let MFSNameValue = parseJSON["MFS"] as? String
+                           print("MFS: \(String(MFSNameValue!))")
+                        
+                           let AAFNameValue = parseJSON["AAF"] as? String
+                           print("AAF: \(String(AAFNameValue!))")
+                        
+                           let headingNameValue = parseJSON["heading"] as? String
+                           print("Heading: \(String(headingNameValue!))")
+                        
+                        
                        }
                    }
                }

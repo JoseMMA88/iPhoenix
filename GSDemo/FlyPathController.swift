@@ -470,7 +470,7 @@ class FlyPathController: NSObject{
         }
         NSLog("-----------------------------------------------------")*/
         
-        NSLog("-----------------------------------------------------")
+        /*NSLog("-----------------------------------------------------")
         for i4 in 0..<fly_points_p11.count{
             NSLog(String(fly_points_p11[i4].latitude))
             NSLog(String(fly_points_p11[i4].longitude))
@@ -489,7 +489,7 @@ class FlyPathController: NSObject{
             NSLog(String(fly_points_p31[i6].latitude))
             NSLog(String(fly_points_p31[i6].longitude))
         }
-        NSLog("-----------------------------------------------------")
+        NSLog("-----------------------------------------------------")*/
     }
     
     // Si devuelve 1 esta al Oeste

@@ -129,7 +129,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             isEditingPoints = false
             multiController = MultiflyController.init()
             //finishBtnActions()
-            multiController!.selectMultiFly(password: "qFONp")
+            //multiController!.selectMultiFly(password: "prueb")
             button?.setTitle("Add", for: .normal)
         } else {
             isEditingPoints = true
