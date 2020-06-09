@@ -22,6 +22,7 @@ import UIKit
     func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func debugBtn(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
     func addBtnAction(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?)
+    func tokenBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?)
 }
 
 
@@ -36,6 +37,8 @@ class ButtonControllerViewController: UIViewController {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var debugButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var tokenButton: UIButton!
+    
     
     //MARK: Vars
     var mode: ViewMode?
@@ -58,6 +61,7 @@ class ButtonControllerViewController: UIViewController {
         configButton.isHidden = (mode == ViewMode._ViewMode)
         debugButton.isHidden = (mode == ViewMode._ViewMode)
         deleteButton.isHidden = (mode == ViewMode._ViewMode)
+        tokenButton.isHidden = (mode == ViewMode._ViewMode)
         addButton.isHidden = (mode == ViewMode._ViewMode)
     }
     
@@ -115,5 +119,15 @@ class ButtonControllerViewController: UIViewController {
             delegate!.addBtnAction(addButton, inGSButtonVC: self)
         }
     }
+
+    @IBAction func tokenBtnAction(_ sender: Any) {
+        if delegate!.responds(to: #selector(delegate!.tokenBtnAction(inGSButtonVC:))) {
+            delegate!.tokenBtnAction(inGSButtonVC: self)
+        }
+    }
+    
+    
+    
+    
 
 }

@@ -11,7 +11,7 @@ import MapKit
 import UIKit
 import CoreLocation
 
-class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate, StartViewControllerDelegate{
+class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate, StartViewControllerDelegate, InsertTokenViewControllerDelegate{
     
 
     
@@ -34,6 +34,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     var ButtonVC: ButtonControllerViewController?
     var waypointConfigVC: ConfigViewController?
+    var insertTokenVC: TokenViewController?
     var StartVC: StartViewController?
     
     var locationManager: CLLocationManager?
@@ -225,6 +226,20 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 }
             }
         }
+    }
+    
+    func tokenBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
+        insertTokenVC!.view.alpha = 1
+    }
+    
+    func cancel2BtnAction(inButtonVC BtnVC: TokenViewController?) {
+        UIView.animate(withDuration: 0.25, animations: {
+            self.insertTokenVC!.view.alpha = 0
+        })
+    }
+    
+    func requestBtnAction(inButtonVC BtnVC: TokenViewController?) {
+        
     }
     
     func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
@@ -539,10 +554,13 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         self.hsLabel.text       = "0.0 M/S"
         self.altitudeLabel.text = "0 M"
         
+        // ------------------------- BUTTONVC -------------------------------------------------------------
         ButtonVC = ButtonControllerViewController.init(nibName: "ButtonControllerViewController", bundle: Bundle.main)
         ButtonVC?.view.frame = CGRect(x: 0, y: CGFloat(Int(topBarView.frame.origin.y + topBarView.frame.size.height)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
         ButtonVC!.delegate = self
         view.addSubview(ButtonVC!.view)
+        
+        // --------------------------------STARTVC-------------------------------------------------------------
         
         StartVC = StartViewController.init(nibName: "StartViewController", bundle: Bundle.main)
         StartVC!.view.alpha = 0
@@ -554,9 +572,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         StartVC!.delegate = self
         view.addSubview(StartVC!.view)
         
+        // --------------------------------CONFIGVC-------------------------------------------------------------
         waypointConfigVC = ConfigViewController.init(nibName: "ConfigViewController", bundle: Bundle.main)
         waypointConfigVC!.view.alpha = 0
-        
         waypointConfigVC!.view.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
         
         let configVCOriginX: CGFloat = (view.frame.width - waypointConfigVC!.view.frame.width) / 2
@@ -564,12 +582,28 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         waypointConfigVC!.view.frame = CGRect(x: configVCOriginX, y: configVCOriginY, width: waypointConfigVC!.view.frame.width, height: waypointConfigVC!.view.frame.height)
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            waypointConfigVC?.view.center = view.center
-        }
-        
         waypointConfigVC!.delegate = self
         view.addSubview(waypointConfigVC!.view)
+        
+        // --------------------------------TOKENVC-------------------------------------------------------------
+        insertTokenVC = TokenViewController.init(nibName: "TokenViewController", bundle: Bundle.main)
+        insertTokenVC!.view.alpha = 0
+        insertTokenVC!.view.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
+        
+        let insertTokenOriginX: CGFloat = (view.frame.width - insertTokenVC!.view.frame.width) / 2
+        let insertTokenOriginY: CGFloat = topBarView.frame.height + topBarView.frame.minY + 8
+        
+        insertTokenVC!.view.frame = CGRect(x: insertTokenOriginX, y: insertTokenOriginY, width: insertTokenVC!.view.frame.width, height: insertTokenVC!.view.frame.height)
+        
+        insertTokenVC!.delegate = self
+        view.addSubview(insertTokenVC!.view)
+        
+        
+        //----------------------------------- iPAD view-----------------------------------------------
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            waypointConfigVC!.view.center = view.center
+            insertTokenVC!.view.center = view.center
+        }
 
     }
     
