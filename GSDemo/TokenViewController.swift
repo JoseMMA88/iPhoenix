@@ -10,7 +10,7 @@ import UIKit
 
 @objc protocol InsertTokenViewControllerDelegate: NSObjectProtocol {
     func cancel2BtnAction(inButtonVC BtnVC: TokenViewController?)
-    func requestBtnAction(inButtonVC BtnVC: TokenViewController?)
+    func requestBtnAction(textField: UITextField? ,inButtonVC BtnVC: TokenViewController?)
 }
 
 class TokenViewController: UIViewController, UITextFieldDelegate {
@@ -19,6 +19,7 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var requestBtn: UIButton!
     @IBOutlet weak var tokenTextField: UITextField!
     @IBOutlet weak var cancel2Btn: UIButton!
+
     
     //MARK: Vars
     weak var delegate: InsertTokenViewControllerDelegate?
@@ -36,8 +37,8 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func requestBtnAction(_ sender: Any) {
-        if delegate!.responds(to: #selector(delegate!.requestBtnAction(inButtonVC:))){
-            delegate!.requestBtnAction(inButtonVC: self)
+        if delegate!.responds(to: #selector(delegate!.requestBtnAction(textField:inButtonVC:))){
+            delegate!.requestBtnAction(textField: tokenTextField, inButtonVC: self)
         }
     }
     

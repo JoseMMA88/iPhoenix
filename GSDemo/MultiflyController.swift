@@ -8,10 +8,19 @@
 
 import Foundation
 class MultiflyController: NSObject {
+
+    var passwordNameValue: String = ""
+    var playerNameValue: String = ""
+    var polygonNameValue: String = ""
+    var AFSNameValue: String = ""
+    var MFSNameValue: String = ""
+    var AAFNameValue: String = ""
+    var headingNameValue: String = ""
     
     override init(){
         super.init()
     }
+    
     
     func postMultiFly(pathController:FlyPathController!, mapController:DJIMapControler!, player: String, Alt: String, AFS: String, MFS: String, AAF: String, heading: String)-> String{
            let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
@@ -63,67 +72,85 @@ class MultiflyController: NSObject {
         return password
        }
     
-    func selectMultiFly(password: String){
+    func selectMultiFly(password: String, Djiroot: DJIRootViewController?){
+
+        
         let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
+    
+        var request = URLRequest(url:myUrl!)
                 
-           var request = URLRequest(url:myUrl!)
-                
-           request.httpMethod = "POST"// Metodo post
+        request.httpMethod = "POST"// Metodo post
 
-           let fun = "SELECT"
-           let postString = "password=\(password)&fun=\(fun)";
+        let fun = "SELECT"
+        let postString = "password=\(password)&fun=\(fun)";
            
-           //Concatenar variables
-           request.httpBody = postString.data(using: String.Encoding.utf8);
-           
-           //Peticion
-           let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-           //Error en la peticion
-           if error != nil{
-               print("error=\(String(describing: error))")
-               return
-           }
+        //Concatenar variables
+        request.httpBody = postString.data(using: String.Encoding.utf8);
+        
+        //Peticion
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            //Error en la peticion
+            if error != nil{
+                print("error=\(String(describing: error))")
+                return
+            }
+            
+            print("response = \(String(describing: response))")
+            //Pasamos a NSdictionary object
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                        
+                if let parseJSON = json {
+                    DispatchQueue.main.sync {
+                        
+                        self.passwordNameValue = parseJSON["password"] as! String
+                        print("Password: \(String(self.passwordNameValue))")
 
+                        self.polygonNameValue = parseJSON["polygon"] as! String
+                        print("Polygon: \(String(self.polygonNameValue))")
 
-               print("response = \(String(describing: response))")
-               //Pasamos a NSdictionary object
-               do {
-                   let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
                         
-                   if let parseJSON = json {
-                       DispatchQueue.main.sync {
-                           let passwordNameValue = parseJSON["password"] as? String
-                           print("Password: \(String(passwordNameValue!))")
-                           
-                           let polygonNameValue = parseJSON["polygon"] as? String
-                           print("Polygon: \(String(polygonNameValue!))")
-                           
-                           let playerNameValue = parseJSON["player"] as? String
-                           print("Player: \(String(playerNameValue!))")
+                        self.playerNameValue = parseJSON["player"] as! String
+                        print("Player: \(String(self.playerNameValue))")
                         
-                           let AFSNameValue = parseJSON["AFS"] as? String
-                           print("AFS: \(String(AFSNameValue!))")
-                           
-                           let MFSNameValue = parseJSON["MFS"] as? String
-                           print("MFS: \(String(MFSNameValue!))")
+                        self.AFSNameValue = parseJSON["AFS"] as! String
+                        print("AFS: \(String(self.AFSNameValue))")
+
                         
-                           let AAFNameValue = parseJSON["AAF"] as? String
-                           print("AAF: \(String(AAFNameValue!))")
+                        self.MFSNameValue = parseJSON["MFS"] as! String
+                        print("MFS: \(String(self.MFSNameValue))")
+
                         
-                           let headingNameValue = parseJSON["heading"] as? String
-                           print("Heading: \(String(headingNameValue!))")
+                        self.AAFNameValue = parseJSON["AAF"] as! String
+                        print("AAF: \(String(self.AAFNameValue))")
+                            
+                        self.headingNameValue = parseJSON["heading"] as! String
+                        print("Heading: \(String(self.headingNameValue))")
                         
-                        
-                       }
-                   }
-               }
-               catch {
-                   print("JSON Error: \(error.localizedDescription)")
-               }
-           }
-           task.resume()
+                        Djiroot!.closeWindowCool()
+                    }
+                }
+            }
+            catch {
+                print("JSON Error: \(error.localizedDescription)")
+            }
+        }
+        task.resume()
         
     }
+    
+    func getData(a: Int, insertTokenVC: TokenViewController?)-> Bool{
+        var resp=false
+        if(a == 1){
+            print(polygonNameValue)
+            insertTokenVC?.view.alpha = 0
+            resp = true
+        }
+        
+        return resp
+    }
+    
     
     func deleteMultifly(password: String){
         let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
@@ -157,4 +184,5 @@ class MultiflyController: NSObject {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map{ _ in letters.randomElement()! })
     }
+    
 }

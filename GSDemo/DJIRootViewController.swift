@@ -25,6 +25,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     @IBOutlet weak var hsLabel: UILabel!
     @IBOutlet weak var vsLabel: UILabel!
     @IBOutlet weak var altitudeLabel: UILabel!
+   
     
     //MARK: Vars
     var pathController: FlyPathController?
@@ -54,6 +55,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         self.initData()
         
         pathController = FlyPathController()
+        multiController = MultiflyController.init()
         mapController!.updatePolygon(with: mapView, and: pathController)
         mapView.mapType = .satellite
         
@@ -128,7 +130,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func addBtnAction(_ button: UIButton?, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         if isEditingPoints {
             isEditingPoints = false
-            multiController = MultiflyController.init()
             //finishBtnActions()
             //multiController!.selectMultiFly(password: "prueb")
             button?.setTitle("Add", for: .normal)
@@ -238,8 +239,27 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         })
     }
     
-    func requestBtnAction(inButtonVC BtnVC: TokenViewController?) {
+    func requestBtnAction(textField: UITextField?,inButtonVC BtnVC: TokenViewController?) {
+
+        multiController!.selectMultiFly(password: (textField?.text)! as String, Djiroot: self)
+
+        /*if (multiController!.polygonNameValue != ""){
+            showAlertViewWithTittle(title: "Succesful!", WithMessage: "You recieved the data")
+            UIView.animate(withDuration: 0.25, animations: {
+                self.insertTokenVC?.view.alpha = 0
+            })
+        }
+        else {
+            showAlertViewWithTittle(title: "ERROR!", WithMessage: "The data could not be received")
+        }*/
         
+    }
+    
+    func closeWindowCool(){
+        showAlertViewWithTittle(title: "Succesful!", WithMessage: "You recieved the data")
+        UIView.animate(withDuration: 0.25, animations: {
+            self.insertTokenVC?.view.alpha = 0
+        })
     }
     
     func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
@@ -604,6 +624,9 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             waypointConfigVC!.view.center = view.center
             insertTokenVC!.view.center = view.center
         }
+        
+        //------------------------------- Activity Spinner -------------------------------------------
+
 
     }
     
