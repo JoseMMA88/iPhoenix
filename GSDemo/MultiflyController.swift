@@ -103,32 +103,36 @@ class MultiflyController: NSObject {
                         
                 if let parseJSON = json {
                     DispatchQueue.main.sync {
-                        
-                        self.passwordNameValue = parseJSON["password"] as! String
-                        print("Password: \(String(self.passwordNameValue))")
+                        if(parseJSON["password"] as? String ?? "" != ""){
+                            self.passwordNameValue = parseJSON["password"] as! String
+                            print("Password: \(String(self.passwordNameValue))")
 
-                        self.polygonNameValue = parseJSON["polygon"] as! String
-                        print("Polygon: \(String(self.polygonNameValue))")
-
-                        
-                        self.playerNameValue = parseJSON["player"] as! String
-                        print("Player: \(String(self.playerNameValue))")
-                        
-                        self.AFSNameValue = parseJSON["AFS"] as! String
-                        print("AFS: \(String(self.AFSNameValue))")
+                            self.polygonNameValue = parseJSON["polygon"] as! String
+                            print("Polygon: \(String(self.polygonNameValue))")
 
                         
-                        self.MFSNameValue = parseJSON["MFS"] as! String
-                        print("MFS: \(String(self.MFSNameValue))")
+                            self.playerNameValue = parseJSON["player"] as! String
+                            print("Player: \(String(self.playerNameValue))")
+                        
+                            self.AFSNameValue = parseJSON["AFS"] as! String
+                            print("AFS: \(String(self.AFSNameValue))")
 
                         
-                        self.AAFNameValue = parseJSON["AAF"] as! String
-                        print("AAF: \(String(self.AAFNameValue))")
+                            self.MFSNameValue = parseJSON["MFS"] as! String
+                            print("MFS: \(String(self.MFSNameValue))")
+
+                        
+                            self.AAFNameValue = parseJSON["AAF"] as! String
+                            print("AAF: \(String(self.AAFNameValue))")
                             
-                        self.headingNameValue = parseJSON["heading"] as! String
-                        print("Heading: \(String(self.headingNameValue))")
+                            self.headingNameValue = parseJSON["heading"] as! String
+                            print("Heading: \(String(self.headingNameValue))")
                         
-                        Djiroot!.closeWindowCool()
+                            Djiroot!.closeWindowCool()
+                        }
+                        else{
+                            Djiroot!.showAlertViewWithTittle(title: "TOKEN ERROR!", WithMessage: "The data could not be received")
+                        }
                     }
                 }
             }
