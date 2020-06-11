@@ -240,18 +240,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func requestBtnAction(textField: UITextField?,inButtonVC BtnVC: TokenViewController?) {
-
         multiController!.selectMultiFly(password: (textField?.text)! as String, Djiroot: self)
-
-        /*if (multiController!.polygonNameValue != ""){
-            showAlertViewWithTittle(title: "Succesful!", WithMessage: "You recieved the data")
-            UIView.animate(withDuration: 0.25, animations: {
-                self.insertTokenVC?.view.alpha = 0
-            })
-        }
-        else {
-            showAlertViewWithTittle(title: "ERROR!", WithMessage: "The data could not be received")
-        }*/
         
     }
     
@@ -800,82 +789,17 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         return DJISDKManager.missionControl()?.waypointMissionOperator()
     }
     
-    /*func finishBtnActions() {
-        
-        let wayPoints = pathController!.fly_points
-        
-        if(wayPoints.count < 2){
-            showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
-        }
-        else{
-            if(self.waypointMission != nil){
-                self.waypointMission?.removeAllWaypoints()
-            }
-            else{
-                self.waypointMission = DJIMutableWaypointMission()
-            }
-        
-            for i in 0..<wayPoints.count{
-                let location = wayPoints[i]
-                let coordinate = location
-                if CLLocationCoordinate2DIsValid(coordinate){
-                        let waypoint = DJIWaypoint(coordinate: location)
-                        waypointMission!.add(waypoint)
-                }
-            }
-        
-        
-            if(waypointMission != nil){
-                for i in 0..<waypointMission!.waypointCount{
-                    let waypoint = waypointMission?.waypoint(at: i)
-                    waypoint?.altitude = 20  //MARK: ALTITUD DE WAYPOINT
-                }
-        
-                waypointMission?.maxFlightSpeed = 10 //MARK: VELOCIDAD MAXIMA
-                waypointMission?.autoFlightSpeed = 10 //MARK: VELOCIDAD AUTOMATICA
-                waypointMission?.headingMode = DJIWaypointMissionHeadingMode.auto //MARK: HEADING AUTO
-                waypointMission?.finishedAction = DJIWaypointMissionFinishedAction.goHome //MARK: ACCION AL FINAL
-        
-                missionOperator()?.load(waypointMission!)
-        
-                missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
-                    if(error != nil){
-                        if let descripcion = error?.localizedDescription {
-                            self.showAlertViewWithTittle(title: "MISION EXECUTION FAILED", WithMessage: descripcion)
-                        }
-                    }
-                    else{
-                        self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
-                    }
-                })
-        
-                missionOperator()?.uploadMission(completion: { error in
-                    if(error != nil){
-                        self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
-                    }
-                    else{
-                        self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
-                    }
-                })
-        
-            
-            }
-            
-            
-        }
-    }*/
     
     
     //MARK: MULTIFLY METHODS
     
     func closeWindowCool(){
-        showAlertViewWithTittle(title: "Succesful!", WithMessage: "You recieved the data")
         UIView.animate(withDuration: 0.25, animations: {
             self.insertTokenVC?.view.alpha = 0
         })
     }
     
-    func loadData(polygonNameValue: String, playerNameValue: String, AFSNameValue: String, MFSNameValue: String, AAFNameValue: String, headingNameValue: String){
+    func loadData(polygonNameValue: String, playerNameValue: String, AltNameValue: String, AFSNameValue: String, MFSNameValue: String, AAFNameValue: String, headingNameValue: String){
         
         if(mapController!.editPoints.count > 0){
             mapController!.editPoints.removeAll()
@@ -885,8 +809,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         for i in 1..<arr_aux.count{
             let aux2 = arr_aux[i].components(separatedBy: ":")
-            print(aux2[0])
-            print(aux2[1])
             let lat = Double(aux2[0])
             let long = Double(aux2[1])
             let location: CLLocation = CLLocation(latitude: lat!, longitude: long!)
@@ -900,6 +822,74 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         mapController!.updatePolygon(with: mapView!, and: pathController!)
         
+        if(self.waypointMission != nil){
+            self.waypointMission?.removeAllWaypoints()
+        }
+        else{
+            self.waypointMission = DJIMutableWaypointMission()
+        }
+        var wayPoints: [CLLocationCoordinate2D] = []
+        
+        if(playerNameValue == "2"){
+            wayPoints = pathController!.fly_points_p2
+        }
+        else if(playerNameValue == "3"){
+            wayPoints = pathController!.fly_points_p31
+        }
+        else if(playerNameValue == "4"){
+            wayPoints = pathController!.fly_points_p42
+        }
+        
+        for i in 0..<wayPoints.count{
+             let location = wayPoints[i]
+             let coordinate = location
+             if CLLocationCoordinate2DIsValid(coordinate){
+                 let waypoint = DJIWaypoint(coordinate: location)
+                 waypointMission!.add(waypoint)
+             }
+         }
+        
+        for i in 0..<waypointMission!.waypointCount{
+            let waypoint = waypointMission?.waypoint(at: i)
+            waypoint!.altitude = Float(AltNameValue)!  //MARK: ALTITUD DE WAYPOINT
+        }
+        
+        waypointMission!.maxFlightSpeed = Float(MFSNameValue)! //MARK: VELOCIDAD MAXIMA
+        waypointMission!.autoFlightSpeed = Float(AFSNameValue)! //MARK: VELOCIDAD AUTOMATICA
+        waypointMission!.headingMode = DJIWaypointMissionHeadingMode(rawValue: DJIWaypointMissionHeadingMode.RawValue(headingNameValue)!)! as DJIWaypointMissionHeadingMode //MARK: HEADING AUTO
+        waypointMission!.finishedAction = DJIWaypointMissionFinishedAction(rawValue: DJIWaypointMissionFinishedAction.RawValue(AAFNameValue)!)! as DJIWaypointMissionFinishedAction //MARK: ACCION AL FINAL
+        
+        missionOperator()?.load(waypointMission!)
+        
+        missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
+            if(error != nil){
+                DispatchQueue.main.async {
+                if let descripcion = error?.localizedDescription {
+                    self.showAlertViewWithTittle(title: "MISION EXECUTION FAILED", WithMessage: descripcion)
+                }
+                }
+            }
+            else{
+                DispatchQueue.main.async {
+                    self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
+                }
+            }
+        })
+        
+        missionOperator()?.uploadMission(completion: { error in
+            if(error != nil){
+                DispatchQueue.main.async {
+                    self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
+                }
+            }
+            else{
+                DispatchQueue.main.async {
+                self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
+                self.StartVC!.view.alpha = 1
+                }
+                //self.isConfigured = true
+            }
+        })
     }
    
     

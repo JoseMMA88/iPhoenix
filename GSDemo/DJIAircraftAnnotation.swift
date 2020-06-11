@@ -28,9 +28,6 @@ class DJIAircraftAnnotation: NSObject, MKAnnotation{
     func setCoordinate(_ newCoordinate: CLLocationCoordinate2D){
         self.coordinate = newCoordinate
         
-        /*NSLog(String(self.coordinate.latitude))
-        NSLog("\n")*/
-        
     }
     
     //update heading of aircraft

@@ -341,7 +341,6 @@ class DJIMapControler: NSObject {
                 
                 if(dis < CLLocationDistance(kradio)){
                     distancia = false
-                    //NSLog(String(dis))
                 }
 
             }

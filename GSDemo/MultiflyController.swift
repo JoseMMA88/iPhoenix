@@ -12,6 +12,7 @@ class MultiflyController: NSObject {
     var passwordNameValue: String = ""
     var playerNameValue: String = ""
     var polygonNameValue: String = ""
+    var AltNameValue: String = ""
     var AFSNameValue: String = ""
     var MFSNameValue: String = ""
     var AAFNameValue: String = ""
@@ -45,11 +46,6 @@ class MultiflyController: NSObject {
                polygon = polygon + "@\(lat):\(long)"
            }
         
-            print(Alt)
-            print(AFS)
-            print(MFS)
-            print(AAF)
-            print(heading)
            
            let postString = "password=\(password)&polygon=\(polygon)&player=\(player)&fun=\(fun)&Alt=\(Alt)&AFS=\(AFS)&MFS=\(MFS)&AAF=\(AAF)&heading=\(heading)";
            
@@ -112,6 +108,9 @@ class MultiflyController: NSObject {
                         
                             self.playerNameValue = parseJSON["player"] as! String
                             print("Player: \(String(self.playerNameValue))")
+                            
+                            self.AltNameValue = parseJSON["Alt"] as! String
+                            print("Alt: \(String(self.AltNameValue))")
                         
                             self.AFSNameValue = parseJSON["AFS"] as! String
                             print("AFS: \(String(self.AFSNameValue))")
@@ -126,7 +125,7 @@ class MultiflyController: NSObject {
                             print("Heading: \(String(self.headingNameValue))")
                         
                             Djiroot!.closeWindowCool()
-                            Djiroot!.loadData(polygonNameValue: self.polygonNameValue, playerNameValue: self.playerNameValue, AFSNameValue: self.AFSNameValue, MFSNameValue: self.MFSNameValue, AAFNameValue: self.AAFNameValue, headingNameValue: self.headingNameValue)
+                            Djiroot!.loadData(polygonNameValue: self.polygonNameValue, playerNameValue: self.playerNameValue, AltNameValue: self.AltNameValue, AFSNameValue: self.AFSNameValue, MFSNameValue: self.MFSNameValue, AAFNameValue: self.AAFNameValue, headingNameValue: self.headingNameValue)
                         }
                         else{
                             Djiroot!.showAlertViewWithTittle(title: "TOKEN ERROR!", WithMessage: "The data could not be received")
@@ -145,7 +144,6 @@ class MultiflyController: NSObject {
     func getData(a: Int, insertTokenVC: TokenViewController?)-> Bool{
         var resp=false
         if(a == 1){
-            print(polygonNameValue)
             insertTokenVC?.view.alpha = 0
             resp = true
         }
