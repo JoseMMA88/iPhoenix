@@ -347,6 +347,7 @@ class DJIMapControler: NSObject {
             }
             
             let mapPoint = MKMapPoint(point)
+
             let cgpoint = polygonView!.point(for: mapPoint)
             
             if(distancia == true && polygonView!.path.contains(cgpoint)){
@@ -358,6 +359,7 @@ class DJIMapControler: NSObject {
                 pathController!.path_coord.append(point)
                 distancia = false
             }
+
         }
 
     }

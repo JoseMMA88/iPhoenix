@@ -255,13 +255,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
     }
     
-    func closeWindowCool(){
-        showAlertViewWithTittle(title: "Succesful!", WithMessage: "You recieved the data")
-        UIView.animate(withDuration: 0.25, animations: {
-            self.insertTokenVC?.view.alpha = 0
-        })
-    }
-    
     func switchto(to mode: ViewMode, inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         if(mode == ViewMode._EditMode){
             focusMap()
@@ -872,6 +865,42 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }*/
     
+    
+    //MARK: MULTIFLY METHODS
+    
+    func closeWindowCool(){
+        showAlertViewWithTittle(title: "Succesful!", WithMessage: "You recieved the data")
+        UIView.animate(withDuration: 0.25, animations: {
+            self.insertTokenVC?.view.alpha = 0
+        })
+    }
+    
+    func loadData(polygonNameValue: String, playerNameValue: String, AFSNameValue: String, MFSNameValue: String, AAFNameValue: String, headingNameValue: String){
+        
+        if(mapController!.editPoints.count > 0){
+            mapController!.editPoints.removeAll()
+        }
+        
+        let arr_aux = polygonNameValue.components(separatedBy: "@")
+        
+        for i in 1..<arr_aux.count{
+            let aux2 = arr_aux[i].components(separatedBy: ":")
+            print(aux2[0])
+            print(aux2[1])
+            let lat = Double(aux2[0])
+            let long = Double(aux2[1])
+            let location: CLLocation = CLLocation(latitude: lat!, longitude: long!)
+            let annotation: MKPointAnnotation = MKPointAnnotation()
+            
+            annotation.coordinate = location.coordinate
+            mapView?.addAnnotation(annotation)
+            
+            mapController!.editPoints.append(annotation)
+        }
+        
+        mapController!.updatePolygon(with: mapView!, and: pathController!)
+        
+    }
    
     
 }

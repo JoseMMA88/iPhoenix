@@ -109,19 +109,16 @@ class MultiflyController: NSObject {
 
                             self.polygonNameValue = parseJSON["polygon"] as! String
                             print("Polygon: \(String(self.polygonNameValue))")
-
                         
                             self.playerNameValue = parseJSON["player"] as! String
                             print("Player: \(String(self.playerNameValue))")
                         
                             self.AFSNameValue = parseJSON["AFS"] as! String
                             print("AFS: \(String(self.AFSNameValue))")
-
                         
                             self.MFSNameValue = parseJSON["MFS"] as! String
                             print("MFS: \(String(self.MFSNameValue))")
 
-                        
                             self.AAFNameValue = parseJSON["AAF"] as! String
                             print("AAF: \(String(self.AAFNameValue))")
                             
@@ -129,6 +126,7 @@ class MultiflyController: NSObject {
                             print("Heading: \(String(self.headingNameValue))")
                         
                             Djiroot!.closeWindowCool()
+                            Djiroot!.loadData(polygonNameValue: self.polygonNameValue, playerNameValue: self.playerNameValue, AFSNameValue: self.AFSNameValue, MFSNameValue: self.MFSNameValue, AAFNameValue: self.AAFNameValue, headingNameValue: self.headingNameValue)
                         }
                         else{
                             Djiroot!.showAlertViewWithTittle(title: "TOKEN ERROR!", WithMessage: "The data could not be received")
