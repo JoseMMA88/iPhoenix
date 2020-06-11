@@ -125,7 +125,7 @@ class MultiflyController: NSObject {
                             print("Heading: \(String(self.headingNameValue))")
                         
                             Djiroot!.closeWindowCool()
-                            Djiroot!.loadData(polygonNameValue: self.polygonNameValue, playerNameValue: self.playerNameValue, AltNameValue: self.AltNameValue, AFSNameValue: self.AFSNameValue, MFSNameValue: self.MFSNameValue, AAFNameValue: self.AAFNameValue, headingNameValue: self.headingNameValue)
+                            Djiroot!.loadData(passwordNameValue: self.passwordNameValue, polygonNameValue: self.polygonNameValue, playerNameValue: self.playerNameValue, AltNameValue: self.AltNameValue, AFSNameValue: self.AFSNameValue, MFSNameValue: self.MFSNameValue, AAFNameValue: self.AAFNameValue, headingNameValue: self.headingNameValue)
                         }
                         else{
                             Djiroot!.showAlertViewWithTittle(title: "TOKEN ERROR!", WithMessage: "The data could not be received")
@@ -157,9 +157,9 @@ class MultiflyController: NSObject {
                 
            var request = URLRequest(url:myUrl!)
                 
-           request.httpMethod = "DELETE"// Metodo post
+           request.httpMethod = "POST"// Metodo post
 
-           let fun = "SELECT"
+           let fun = "DELETE"
            let postString = "password=\(password)&fun=\(fun)";
            
            //Concatenar variables

@@ -799,7 +799,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         })
     }
     
-    func loadData(polygonNameValue: String, playerNameValue: String, AltNameValue: String, AFSNameValue: String, MFSNameValue: String, AAFNameValue: String, headingNameValue: String){
+    func loadData(passwordNameValue: String, polygonNameValue: String, playerNameValue: String, AltNameValue: String, AFSNameValue: String, MFSNameValue: String, AAFNameValue: String, headingNameValue: String){
         
         if(mapController!.editPoints.count > 0){
             mapController!.editPoints.removeAll()
@@ -878,18 +878,17 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         missionOperator()?.uploadMission(completion: { error in
             if(error != nil){
-                DispatchQueue.main.async {
-                    self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
-                }
+                self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
             }
             else{
-                DispatchQueue.main.async {
                 self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
                 self.StartVC!.view.alpha = 1
-                }
+                self.multiController?.deleteMultifly(password: passwordNameValue)
                 //self.isConfigured = true
             }
         })
+        
+        
     }
    
     
