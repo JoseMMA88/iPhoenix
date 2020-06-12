@@ -863,16 +863,12 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         missionOperator()?.addListener(toFinished: self, with: DispatchQueue.main, andBlock: { error in
             if(error != nil){
-                DispatchQueue.main.async {
                 if let descripcion = error?.localizedDescription {
                     self.showAlertViewWithTittle(title: "MISION EXECUTION FAILED", WithMessage: descripcion)
                 }
-                }
             }
             else{
-                DispatchQueue.main.async {
-                    self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
-                }
+                self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
             }
         })
         
