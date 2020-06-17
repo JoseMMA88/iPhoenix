@@ -31,6 +31,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var pathController: FlyPathController?
     var mapController: DJIMapControler?
     var multiController: MultiflyController?
+    var flightControler: DJIFlightController?
     var isEditingPoints: Bool = false
     
     var ButtonVC: ButtonControllerViewController?
@@ -58,6 +59,11 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         multiController = MultiflyController.init()
         mapController!.updatePolygon(with: mapView, and: pathController)
         mapView.mapType = .satellite
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(self.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
         
     }
     
@@ -105,17 +111,25 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func productConnected(_ product: DJIBaseProduct?) {
-    
         if (product != nil){
-            self.showAlertViewWithTittle(title: "Dron connected!", WithMessage: "")
             //NSLog("Producto conectado \n")
-            let flightControler = DemoUtility.fetchFlightController()
+            //let flightControler = DemoUtility.fetchFlightController()
+            if(flightControler == nil){
+            if(product is DJIAircraft){
+                flightControler = (product as! DJIAircraft).flightController
+                //return controler?.flightController
+            }
+            }
             if(flightControler != nil){
+                self.showAlertViewWithTittle(title: "Dron connected!", WithMessage: "")
                 flightControler!.delegate = self
+            }
+            else{
+                self.showAlertViewWithTittle(title: "Error connecting product", WithMessage: "")
             }
         }
         else{
-            self.showAlertViewWithTittle(title: "Dron disconnected", WithMessage: "")
+            self.showAlertViewWithTittle(title: "Product not recognised", WithMessage: "")
             //NSLog("Producto desconectado \n")
         }
     }
@@ -753,7 +767,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     //MARK: DJIFlightControllerDelegate
     func flightController(_ fc: DJIFlightController,didUpdate state: DJIFlightControllerState){
-        NSLog("FLIGHT CONTROLLER")
         droneLocation = state.aircraftLocation?.coordinate
         
         modeLabel.text = state.flightModeString
@@ -886,6 +899,11 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         
         
     }
+    
+    
+    @objc func dismissKeyboard() {
+           view.endEditing(true)
+       }
    
     
 }

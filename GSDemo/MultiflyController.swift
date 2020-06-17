@@ -6,8 +6,8 @@
 //  Copyright © 2020 Jose Manuel Malagón Alba. All rights reserved.
 //
 
-import Foundation
-class MultiflyController: NSObject {
+import UIKit
+class MultiflyController: UIViewController {
 
     var passwordNameValue: String = ""
     var playerNameValue: String = ""
@@ -18,8 +18,13 @@ class MultiflyController: NSObject {
     var AAFNameValue: String = ""
     var headingNameValue: String = ""
     
-    override init(){
-        super.init()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(self.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
     }
     
     
@@ -184,5 +189,10 @@ class MultiflyController: NSObject {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map{ _ in letters.randomElement()! })
     }
+    
+    @objc func dismissKeyboard() {
+           view.endEditing(true)
+       }
+       
     
 }

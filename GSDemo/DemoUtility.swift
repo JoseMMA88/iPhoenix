@@ -22,13 +22,15 @@ func ShowMessage(_ tittle: NSString?,_ message: NSString?,_ target: Any?, _ canc
 
 class DemoUtility: NSObject {
     class func fetchFlightController()-> DJIFlightController? {
-        if (DJISDKManager.product() == nil) {
+        var controler: DJIAircraft? = nil
+        /*if (DJISDKManager.product() == nil) {
             NSLog("EL PRODUCTO ES NIL \n")
-            return nil
-        }
+            controler
+        }*/
         if(DJISDKManager.product() is DJIAircraft){
-            return (DJISDKManager.product() as! DJIAircraft).flightController
+            controler = DJISDKManager.product() as? DJIAircraft
+            //return controler?.flightController
         }
-        return nil
+        return controler?.flightController
     }
 }
