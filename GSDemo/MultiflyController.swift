@@ -17,6 +17,7 @@ class MultiflyController: UIViewController {
     var MFSNameValue: String = ""
     var AAFNameValue: String = ""
     var headingNameValue: String = ""
+    let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,20 +30,13 @@ class MultiflyController: UIViewController {
     
     
     func postMultiFly(pathController:FlyPathController!, mapController:DJIMapControler!, player: String, Alt: String, AFS: String, MFS: String, AAF: String, heading: String)-> String{
-           let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
                 
            var request = URLRequest(url:myUrl!)
                 
-           request.httpMethod = "POST"// Metodo post
+           request.httpMethod = "POST"
            
            let password = randomString(length: 5)
            let fun = "INSERT"
-           var prueba = ""
-           for i in 0..<pathController!.fly_points.count{
-               let lat = pathController!.fly_points[i].latitude
-               let long = pathController!.fly_points[i].longitude
-               prueba = prueba + "@\(lat):\(long)"
-           }
            
            var polygon = ""
            for n in 0..<mapController!.editPoints.count{
@@ -52,10 +46,10 @@ class MultiflyController: UIViewController {
            }
         
            
-           let postString = "password=\(password)&polygon=\(polygon)&player=\(player)&fun=\(fun)&Alt=\(Alt)&AFS=\(AFS)&MFS=\(MFS)&AAF=\(AAF)&heading=\(heading)";
+           let postString = "password=\(password)&polygon=\(polygon)&player=\(player)&fun=\(fun)&Alt=\(Alt)&AFS=\(AFS)&MFS=\(MFS)&AAF=\(AAF)&heading=\(heading)"
            
            //Concatenar variables
-           request.httpBody = postString.data(using: String.Encoding.utf8);
+           request.httpBody = postString.data(using: String.Encoding.utf8)
            
            //Peticion
            let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
@@ -74,9 +68,6 @@ class MultiflyController: UIViewController {
        }
     
     func selectMultiFly(password: String, Djiroot: DJIRootViewController?){
-
-        
-        let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
     
         var request = URLRequest(url:myUrl!)
                 
@@ -158,7 +149,6 @@ class MultiflyController: UIViewController {
     
     
     func deleteMultifly(password: String){
-        let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
                 
            var request = URLRequest(url:myUrl!)
                 
