@@ -55,7 +55,7 @@
 		C44EEF1924694DC50083194C /* StartViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StartViewController.xib; sourceTree = "<group>"; };
 		C46AD18724642A950014F26C /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		C46AD18824642A950014F26C /* ConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfigViewController.xib; sourceTree = "<group>"; };
-		C47BB55B23E481DF00D80BE6 /* GSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C47BB55B23E481DF00D80BE6 /* iPhoenix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPhoenix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C47BB56323E481DF00D80BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C47BB56523E481E000D80BE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		C47BB55C23E481DF00D80BE6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C47BB55B23E481DF00D80BE6 /* GSDemo.app */,
+				C47BB55B23E481DF00D80BE6 /* iPhoenix.app */,
 				C47BB56F23E481E000D80BE6 /* GSDemoTests.xctest */,
 				C47BB57A23E481E000D80BE6 /* GSDemoUITests.xctest */,
 			);
@@ -203,7 +203,7 @@
 			);
 			name = GSDemo;
 			productName = GSDemo;
-			productReference = C47BB55B23E481DF00D80BE6 /* GSDemo.app */;
+			productReference = C47BB55B23E481DF00D80BE6 /* iPhoenix.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C47BB56E23E481E000D80BE6 /* GSDemoTests */ = {
@@ -562,8 +562,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenix;
+				PRODUCT_NAME = iPhoenix;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -584,8 +584,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenix;
+				PRODUCT_NAME = iPhoenix;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
