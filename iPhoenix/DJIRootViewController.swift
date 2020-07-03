@@ -11,14 +11,13 @@ import MapKit
 import UIKit
 import CoreLocation
 
-class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate, StartViewControllerDelegate, InsertTokenViewControllerDelegate{
+class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, DJISDKManagerDelegate, DJIFlightControllerDelegate, DJICameraDelegate, ButtonViewControllerDelegate, ConfigViewControllerDelegate, StartViewControllerDelegate, InsertTokenViewControllerDelegate{
     
 
     
     //MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var tapGesture: UITapGestureRecognizer!
-    //@IBOutlet weak var editBtn: UIButton!
     @IBOutlet weak var topBarView: UIView!
     @IBOutlet weak var modeLabel: UILabel!
     @IBOutlet weak var gpsLabel: UILabel!
@@ -44,7 +43,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var droneLocation: CLLocationCoordinate2D!
     var waypointMission: DJIMutableWaypointMission?
     var startLocation: CGPoint?
-    //var isConfigured: Bool = false
     
     //MARK: View Controller functions
     
@@ -58,7 +56,11 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         pathController = FlyPathController()
         multiController = MultiflyController.init()
         mapController!.updatePolygon(with: mapView, and: pathController)
+        
+        //Mapview style
         mapView.mapType = .satellite
+        mapView.subviews[1].isHidden = true
+        mapView.subviews[2].isHidden = true
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(self.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -82,6 +84,10 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     override func viewWillDisappear(_ animated: Bool){
         //viewWillDisappear(animated)
         locationManager?.stopUpdatingLocation()
+        let camera = fetchCamera()
+        if camera != nil{
+            camera?.delegate = nil
+        }
     }
     
     func prefersStatusBarHidden()-> Bool{
@@ -103,7 +109,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             message = "Error registering app"
         }
         else{
-          //  NSLog("App registrada!\n")
             DJISDKManager.startConnectionToProduct()
         }
         
@@ -115,14 +120,18 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             //NSLog("Producto conectado \n")
             //let flightControler = DemoUtility.fetchFlightController()
             if(flightControler == nil){
-            if(product is DJIAircraft){
-                flightControler = (product as! DJIAircraft).flightController
+                if(product is DJIAircraft){
+                    flightControler = (product as! DJIAircraft).flightController
                 //return controler?.flightController
-            }
+                }
             }
             if(flightControler != nil){
                 self.showAlertViewWithTittle(title: "Dron connected!", WithMessage: "")
                 flightControler!.delegate = self
+                let camera = fetchCamera()
+                if(camera != nil){
+                    camera?.delegate = self
+                }
             }
             else{
                 self.showAlertViewWithTittle(title: "Error connecting product", WithMessage: "")
@@ -134,10 +143,68 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         }
     }
     
+    func productDisconnected() {
+        let camera = fetchCamera()
+        
+        if (camera != nil){
+            camera?.delegate = nil
+        }
+    }
+    
+    
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
         // vacio
     }
     
+    //MARK: Camera
+    
+    func fetchCamera() ->DJICamera? {
+        if (DJISDKManager.product() == nil){
+            return nil
+        }
+        // if drone
+        if DJISDKManager.product() is DJIAircraft{
+            return (DJISDKManager.product() as? DJIAircraft)?.camera
+        }
+        // if camera cool (Not used)
+        else if DJISDKManager.product() is DJIHandheld{
+            return (DJISDKManager.product() as? DJIHandheld)?.camera
+        }
+        return nil
+    }
+    
+    func camera(_ camera: DJICamera, didUpdate systemState: DJICameraSystemState) {
+        /*camera.setMode(DJICameraMode.recordVideo) { error in
+            self.showAlertViewWithTittle(title: "Set DJICameraModeRecordVideo Failed", WithMessage: error!.localizedDescription)
+        }*/
+    }
+    
+    func startRecording(){
+        let camera = fetchCamera()
+        camera!.setMode(DJICameraMode.recordVideo) { error in
+            if(error != nil){
+                self.showAlertViewWithTittle(title: "Set DJICameraModeRecordVideo Failed", WithMessage: error!.localizedDescription)
+            }
+        }
+        if camera != nil {
+            camera?.startRecordVideo(completion: { error in
+                if(error != nil){
+                    self.showAlertViewWithTittle(title: "Start Record Video Error", WithMessage: error!.localizedDescription)
+                }
+            })
+        }
+    }
+    
+    func stopRecording(){
+        let camera = fetchCamera()
+        if camera != nil {
+            camera?.stopRecordVideo(completion: { error in
+                if(error != nil){
+                    self.showAlertViewWithTittle(title: "Stop Record Video Error", WithMessage: error!.localizedDescription)
+                }
+            })
+        }
+    }
     
     //MARK:Buttons Functions
     
@@ -147,9 +214,29 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             //finishBtnActions()
             //multiController!.selectMultiFly(password: "prueb")
             button?.setTitle("Add", for: .normal)
+            let icon7: UIImage
+            if #available(iOS 13.0, *) {
+                let smallconfig = UIImage.SymbolConfiguration.init(scale: .small)
+                icon7 = UIImage.init(systemName: "skew", withConfiguration: smallconfig)!
+            } else {
+                icon7 = UIImage.init(named: "add-icon.png")!
+            }
+            button?.setImage(icon7, for: .normal)
+            button?.imageView?.contentMode = .scaleAspectFit
+            button?.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: -20, bottom: 0, right: 0)
         } else {
             isEditingPoints = true
-            button?.setTitle("Finished", for: .normal)
+            button?.setTitle("Finish", for: .normal)
+            let icon4: UIImage
+            if #available(iOS 13.0, *) {
+                let smallconfig = UIImage.SymbolConfiguration.init(scale: .small)
+                icon4 = UIImage.init(systemName: "checkmark.rectangle.fill", withConfiguration: smallconfig)!
+            } else {
+                icon4 = UIImage.init(named: "finish-icon.png")!
+            }
+            button?.setImage(icon4, for: .normal)
+            button?.imageView?.contentMode = .scaleAspectFit
+            button?.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: -10, bottom: 0, right: 0)
         }
     }
     
@@ -169,6 +256,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             }
             else{
                 self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
+                // Camera starts recording
+                self.startRecording()
             }
         })
     }
@@ -180,6 +269,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             }
             else{
                 self.showAlertViewWithTittle(title: "Stop Mission", WithMessage: "")
+                // Camera stops recording
+                self.stopRecording()
             }
         })
     }
@@ -223,7 +314,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
         }
         else{
-            waypointConfigVC!.view.alpha = 1.0
+            waypointConfigVC!.view.alpha = 1
+            ButtonVC!.view.alpha = 0
             if(self.waypointMission != nil){
                 self.waypointMission?.removeAllWaypoints()
                 //isConfigured = false
@@ -245,11 +337,13 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     func tokenBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
         insertTokenVC!.view.alpha = 1
+        ButtonVC!.view.alpha = 0
     }
     
     func cancel2BtnAction(inButtonVC BtnVC: TokenViewController?) {
         UIView.animate(withDuration: 0.25, animations: {
             self.insertTokenVC!.view.alpha = 0
+            self.ButtonVC!.view.alpha = 1
         })
     }
     
@@ -366,12 +460,14 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func cancelBtnAction(inButtonVC BtnVC: ConfigViewController?) {
         UIView.animate(withDuration: 0.25, animations: {
             self.waypointConfigVC!.view.alpha = 0
+            self.ButtonVC!.view.alpha = 1
         })
     }
     
     func finishBtnAction(inButtonVC BtnVC: ConfigViewController?) {
         UIView.animate(withDuration: 0.25, animations: {
             self.waypointConfigVC?.view.alpha = 0
+            self.ButtonVC!.view.alpha = 1
         })
         
         let altitude = (waypointConfigVC!.altitudeTextField.text! as NSString).floatValue
@@ -478,6 +574,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 }
                 else{
                     self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
+                    // Camera stop recording
+                    self.stopRecording()
                 }
                 })
         
@@ -570,9 +668,15 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         self.hsLabel.text       = "0.0 M/S"
         self.altitudeLabel.text = "0 M"
         
-        // ------------------------- BUTTONVC -------------------------------------------------------------
+        //-------------------------------COLORS----------------------------------------------------------------
+        
+        /*topBarView = UIView.init()
+        topBarView.frame = CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: topBarView.frame.size.height)
+        topBarView.backgroundColor = UIColor.init(displayP3Red: 105/255.0, green: 132/255.0, blue: 201/255.0, alpha: 1)*/
+        
+        // ------------------------- BUTTONVC -----------------------------------------------------------------
         ButtonVC = ButtonControllerViewController.init(nibName: "ButtonControllerViewController", bundle: Bundle.main)
-        ButtonVC?.view.frame = CGRect(x: 0, y: CGFloat(Int(topBarView.frame.origin.y + topBarView.frame.size.height)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
+        ButtonVC?.view.frame = CGRect(x: -10, y: CGFloat(Int(topBarView.frame.origin.y + topBarView.frame.size.height + 20)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
         ButtonVC!.delegate = self
         view.addSubview(ButtonVC!.view)
         
@@ -581,10 +685,10 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         StartVC = StartViewController.init(nibName: "StartViewController", bundle: Bundle.main)
         StartVC!.view.alpha = 0
         
-        let startVCOriginX: CGFloat = (topBarView.frame.width - StartVC!.view.frame.width - 5)
-        let startVCOriginY: CGFloat = (view.frame.height - StartVC!.view.frame.height - 10)
+        let startVCOriginX: CGFloat = 0
+        let startVCOriginY: CGFloat = (view.frame.height - StartVC!.view.frame.height - 20)
         
-        StartVC!.view.frame = CGRect(x: startVCOriginX, y: startVCOriginY, width: StartVC!.view.frame.size.width, height: StartVC!.view.frame.size.height)
+        StartVC!.view.frame = CGRect(x: startVCOriginX, y: startVCOriginY, width: self.view.frame.size.width, height: StartVC!.view.frame.size.height)
         StartVC!.delegate = self
         view.addSubview(StartVC!.view)
         
@@ -594,7 +698,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         waypointConfigVC!.view.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
         
         let configVCOriginX: CGFloat = (view.frame.width - waypointConfigVC!.view.frame.width) / 2
-        let configVCOriginY: CGFloat = topBarView.frame.height + topBarView.frame.minY + 8
+        let configVCOriginY: CGFloat = (view.frame.height - waypointConfigVC!.view.frame.height) / 2
         
         waypointConfigVC!.view.frame = CGRect(x: configVCOriginX, y: configVCOriginY, width: waypointConfigVC!.view.frame.width, height: waypointConfigVC!.view.frame.height)
         
@@ -607,7 +711,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         insertTokenVC!.view.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
         
         let insertTokenOriginX: CGFloat = (view.frame.width - insertTokenVC!.view.frame.width) / 2
-        let insertTokenOriginY: CGFloat = topBarView.frame.height + topBarView.frame.minY + 8
+        let insertTokenOriginY: CGFloat =  topBarView.frame.height + topBarView.frame.minY + 50
         
         insertTokenVC!.view.frame = CGRect(x: insertTokenOriginX, y: insertTokenOriginY, width: insertTokenVC!.view.frame.width, height: insertTokenVC!.view.frame.height)
         
@@ -643,18 +747,18 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
            if overlay is MKPolygon {
              mapController!.polygonView = MKPolygonRenderer(overlay: overlay)
-             mapController!.polygonView!.strokeColor = .green
-             mapController!.polygonView!.lineWidth = 1.0
-             mapController!.polygonView!.fillColor = UIColor.green.withAlphaComponent(0.25)
+            mapController!.polygonView!.strokeColor = UIColor.init(displayP3Red: 63/255.0, green: 106/255.0, blue: 215/255.0, alpha: 0.95)
+             mapController!.polygonView!.lineWidth = 2.0
+             mapController!.polygonView!.fillColor = UIColor.init(displayP3Red: 63/255.0, green: 106/255.0, blue: 215/255.0, alpha: 0.5)
              return mapController!.polygonView!
            }
            else if overlay is MKCircle {
              mapController!.circleView = MKCircleRenderer(overlay: overlay)
-             mapController!.circleView!.strokeColor = .red
-             mapController!.circleView!.lineWidth = 2.0
-             mapController!.circleView!.fillColor = UIColor.red.withAlphaComponent(0.25)
+            mapController!.circleView!.strokeColor = UIColor.init(displayP3Red: 225/255.0, green: 225/255.0, blue: 225/255.0, alpha: 0.5)
+             mapController!.circleView!.lineWidth = 1.0
+            mapController!.circleView!.fillColor = UIColor.init(displayP3Red: 225/255.0, green: 225/255.0, blue: 225/255.0, alpha: 0.5)
              return mapController!.circleView!
-         }
+           }
            else if overlay is MKPolyline {
              pathController!.routeLineView = MKPolylineRenderer(overlay: overlay)
              pathController!.routeLineView!.strokeColor = UIColor.blue.withAlphaComponent(0.2)
@@ -668,13 +772,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation)-> MKAnnotationView? {
         
-        /*if annotation.isKind(of: MKPointAnnotation.self){
-            let pinView = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: "Pin_Annotation")
-            NSLog("Add new pin")
-            return pinView
-        }
-        else*/
-        
         if(annotation.isKind(of: DJIAircraftAnnotation.self)){
             let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
             (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
@@ -682,28 +779,32 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             return annoView
             
         }
+        var marker = MKMarkerAnnotationView()
         
         guard let annotation = annotation as? MKPointAnnotation else { return nil }
-        var view = mapView.dequeueReusableAnnotationView(withIdentifier: "marker")
         
-        
-        if (view == nil){
-            view = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: "marker")
-            view?.canShowCallout = false
-            view?.isDraggable = false
-            
-            // Sobreescribimos la logica de drag con la nuestra propia
-            let drag = UILongPressGestureRecognizer(target: self, action: #selector(handleDrag(gesture:)))
-            
-            drag.minimumPressDuration = 0 // instant bru
-            drag.allowableMovement = .greatestFiniteMagnitude
-            view?.addGestureRecognizer(drag)
+        if let dequedView = (mapView.dequeueReusableAnnotationView(withIdentifier: "marker") as? MKMarkerAnnotationView){
+            marker = dequedView
         }
         else{
-            view?.annotation = annotation
+            marker = MKMarkerAnnotationView.init(annotation: annotation, reuseIdentifier: "marker")
         }
+        marker.markerTintColor = UIColor.init(displayP3Red: 63/255.0, green: 106/255.0, blue: 215/255.0, alpha: 0.95)
+        marker.canShowCallout = false
+        marker.isDraggable = false
+        //view?.backgroundColor = UIColor.green
+            
+        // Sobreescribimos la logica de drag con la nuestra propia
+        let drag = UILongPressGestureRecognizer(target: self, action: #selector(handleDrag(gesture:)))
+            
+        drag.minimumPressDuration = 0 // instant bru
+        drag.allowableMovement = .greatestFiniteMagnitude
+        marker.addGestureRecognizer(drag)
+        /*else{
+            marker.annotation = annotation
+        }*/
         
-        return view
+        return marker
         
     }
     
@@ -809,6 +910,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func closeWindowCool(){
         UIView.animate(withDuration: 0.25, animations: {
             self.insertTokenVC?.view.alpha = 0
+            self.ButtonVC?.view.alpha = 1
         })
     }
     

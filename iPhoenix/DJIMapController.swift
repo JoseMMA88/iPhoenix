@@ -138,7 +138,7 @@ class DJIMapControler: NSObject {
             let centr = polygon!.coordinate
             
             // Creamos el circulo
-            center = MKCircle.init(center: centr, radius: 5)
+            center = MKCircle.init(center: centr, radius: 3)
             mapView!.addOverlay(center!)
             
             //Triangulamos
@@ -170,13 +170,13 @@ class DJIMapControler: NSObject {
     
     // Draw MKCircle
     func updateCircle(coord: CLLocationCoordinate2D, with mapView: MKMapView?){
-        let rad: CLLocationDistance = CLLocationDistance(kradio) //metros
+        //let rad: CLLocationDistance = CLLocationDistance(kradio) //metros
         if (circle != nil){
             mapView!.removeOverlay(circle!)
         }
         
         // Creamos el circulo
-        circle = MKCircle.init(center: coord, radius: rad)
+        circle = MKCircle.init(center: coord, radius: 8)
         
         //updatePeriPoints(cent: coord, rad: rad)
         mapView!.addOverlay(circle!)
@@ -350,7 +350,7 @@ class DJIMapControler: NSObject {
             let cgpoint = polygonView!.point(for: mapPoint)
             
             if(distancia == true && polygonView!.path.contains(cgpoint)){
-                let center2 = MKCircle.init(center: point, radius: 5)
+                let center2 = MKCircle.init(center: point, radius: 3)
                 mapView!.addOverlay(center2)
                 
                 // Añadimos los puntos medios al path

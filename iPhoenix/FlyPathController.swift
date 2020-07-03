@@ -112,7 +112,7 @@ class FlyPathController: NSObject{
                 let cgpoint = polygonView!.point(for: mapPoint)
             
                 if(distancia == true && polygonView!.path.contains(cgpoint)){
-                    let center2 = MKCircle.init(center: point, radius: 5)
+                    let center2 = MKCircle.init(center: point, radius: 3)
                     mapView!.addOverlay(center2)
                 
                     // Añadimos los puntos medios al path
