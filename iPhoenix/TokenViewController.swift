@@ -45,6 +45,7 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
     }
     
     func initStyle(){
+        
         view.backgroundColor = UIColor.init(named: "background-color")
         view.layer.cornerRadius = 8
         view.layer.borderWidth = 0.5
@@ -102,7 +103,7 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
         let overlay: UIView = UIView(frame: CGRect(x: 0, y: 0, width: screenSize.width , height: screenSize.height))
         overlay.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.1)
         view.sendSubviewToBack(overlay)*/
-      
+
     }
     
     func initUI(){

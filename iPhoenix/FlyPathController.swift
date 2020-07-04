@@ -449,12 +449,12 @@ class FlyPathController: NSObject{
             }
         }
         
-        NSLog("-----------------------------------------------------")
+        /*NSLog("-----------------------------------------------------")
         for i3 in 0..<fly_points.count{
             NSLog(String(fly_points[i3].latitude))
             NSLog(String(fly_points[i3].longitude))
         }
-        NSLog("-----------------------------------------------------")
+        NSLog("-----------------------------------------------------")*/
         
         /*NSLog("-----------------------------------------------------")
         for i3 in 0..<fly_points_p1.count{

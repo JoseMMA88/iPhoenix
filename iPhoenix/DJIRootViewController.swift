@@ -32,17 +32,22 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     var multiController: MultiflyController?
     var flightControler: DJIFlightController?
     var isEditingPoints: Bool = false
+    var isRecording: Bool = false
     
     var ButtonVC: ButtonControllerViewController?
     var waypointConfigVC: ConfigViewController?
     var insertTokenVC: TokenViewController?
     var StartVC: StartViewController?
+    var topBarVC: TopBarViewController?
     
     var locationManager: CLLocationManager?
     var userLocation: CLLocationCoordinate2D!
     var droneLocation: CLLocationCoordinate2D!
     var waypointMission: DJIMutableWaypointMission?
     var startLocation: CGPoint?
+    
+    var blurEffect: UIBlurEffect?
+    var blurEffectView: UIVisualEffectView?
     
     //MARK: View Controller functions
     
@@ -56,11 +61,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         pathController = FlyPathController()
         multiController = MultiflyController.init()
         mapController!.updatePolygon(with: mapView, and: pathController)
-        
-        //Mapview style
-        mapView.mapType = .satellite
-        mapView.subviews[1].isHidden = true
-        mapView.subviews[2].isHidden = true
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(self.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -132,6 +132,26 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 if(camera != nil){
                     camera?.delegate = self
                 }
+                
+                UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+                    self.topBarVC?.altitudeLabel.alpha = 1
+                    self.topBarVC?.altitudeText.alpha = 1
+                    
+                    self.topBarVC?.gpsLabel.alpha = 1
+                    self.topBarVC?.gpsText.alpha = 1
+                    
+                    self.topBarVC?.hsLabel.alpha = 1
+                    self.topBarVC?.hsText.alpha = 1
+                    
+                    self.topBarVC?.vsLabel.alpha = 1
+                    self.topBarVC?.vsText.alpha = 1
+                    
+                    self.topBarVC?.modeLabel.alpha = 1
+                    self.topBarVC?.modeText.alpha = 1
+                    
+                    self.topBarVC?.imageView.alpha = 0
+                }, completion: nil)
+                
             }
             else{
                 self.showAlertViewWithTittle(title: "Error connecting product", WithMessage: "")
@@ -149,6 +169,26 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         if (camera != nil){
             camera?.delegate = nil
         }
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            self.topBarVC?.altitudeLabel.alpha = 0
+            self.topBarVC?.altitudeText.alpha = 0
+            
+            self.topBarVC?.gpsLabel.alpha = 0
+            self.topBarVC?.gpsText.alpha = 0
+            
+            self.topBarVC?.hsLabel.alpha = 0
+            self.topBarVC?.hsText.alpha = 0
+            
+            self.topBarVC?.vsLabel.alpha = 0
+            self.topBarVC?.vsText.alpha = 0
+            
+            self.topBarVC?.modeLabel.alpha = 0
+            self.topBarVC?.modeText.alpha = 0
+            
+            self.topBarVC?.imageView.alpha = 1
+        })
+    
     }
     
     
@@ -257,7 +297,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             else{
                 self.showAlertViewWithTittle(title: "Mission Started!", WithMessage: "")
                 // Camera starts recording
-                self.startRecording()
+                //self.startRecording()
             }
         })
     }
@@ -314,8 +354,11 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             showAlertViewWithTittle(title: "No or not enought waypoints for mission", WithMessage: "")
         }
         else{
-            waypointConfigVC!.view.alpha = 1
-            ButtonVC!.view.alpha = 0
+            UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+                self.waypointConfigVC!.view.alpha = 1
+                self.view.insertSubview(self.blurEffectView!, at: 4)
+            }, completion: nil)
+            
             if(self.waypointMission != nil){
                 self.waypointMission?.removeAllWaypoints()
                 //isConfigured = false
@@ -336,13 +379,16 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     }
     
     func tokenBtnAction(inGSButtonVC GSBtnVC: ButtonControllerViewController?) {
-        insertTokenVC!.view.alpha = 1
-        ButtonVC!.view.alpha = 0
+        UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+            self.insertTokenVC!.view.alpha = 1
+            self.view.insertSubview(self.blurEffectView!, at: 4)
+        }, completion: nil)
     }
     
     func cancel2BtnAction(inButtonVC BtnVC: TokenViewController?) {
         UIView.animate(withDuration: 0.25, animations: {
             self.insertTokenVC!.view.alpha = 0
+            self.blurEffectView!.removeFromSuperview()
             self.ButtonVC!.view.alpha = 1
         })
     }
@@ -460,7 +506,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func cancelBtnAction(inButtonVC BtnVC: ConfigViewController?) {
         UIView.animate(withDuration: 0.25, animations: {
             self.waypointConfigVC!.view.alpha = 0
-            self.ButtonVC!.view.alpha = 1
+            self.blurEffectView!.removeFromSuperview()
+            //self.ButtonVC!.view.alpha = 1
         })
     }
     
@@ -498,11 +545,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 }
             }
             
-            for i in 0..<waypointMission!.waypointCount{
-                let waypoint = waypointMission?.waypoint(at: i)
-                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
-            }
-            
             token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)")
         }
@@ -521,11 +563,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                     waypointMission!.add(waypoint)
                 }
             }
-            
-            for i in 0..<waypointMission!.waypointCount{
-                let waypoint = waypointMission?.waypoint(at: i)
-                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
-            }
+
             
             token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
@@ -547,16 +585,16 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 }
             }
             
-            for i in 0..<waypointMission!.waypointCount{
-                let waypoint = waypointMission?.waypoint(at: i)
-                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
-            }
-            
             token1 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(2)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             token3 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(4)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
             self.showAlertViewWithTittle(title: "DRONES: ", WithMessage: "TOKEN 2: \(token1)\n\n TOKEN 3: \(token2)\n\n TOKEN 4: \(token3)")
         }
+            
+            for i in 0..<waypointMission!.waypointCount{
+                let waypoint = waypointMission?.waypoint(at: i)
+                waypoint?.altitude = altitude  //MARK: ALTITUD DE WAYPOINT
+            }
             
             waypointMission?.maxFlightSpeed = MFS //MARK: VELOCIDAD MAXIMA
             waypointMission?.autoFlightSpeed = AFS //MARK: VELOCIDAD AUTOMATICA
@@ -575,7 +613,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 else{
                     self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
                     // Camera stop recording
-                    self.stopRecording()
+                    //self.stopRecording()
+                    self.StartVC!.view.alpha = 0
                 }
                 })
         
@@ -601,6 +640,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                             token2 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(3)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
                             token3 = self.multiController!.postMultiFly(pathController: self.pathController!, mapController: self.mapController!,player: "\(4)", Alt: "\(altitude)", AFS: "\(AFS)", MFS: "\(MFS)", AAF: "\(AAF)", heading: "\(heading)" )
                         }*/
+                        self.blurEffectView!.removeFromSuperview()
                         self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
                         self.StartVC!.view.alpha = 1
                         //self.isConfigured = true
@@ -662,21 +702,43 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     // Initialize labels upmap
     func initUI(){
-        self.modeLabel.text     = "N/A"
-        self.gpsLabel.text      = "0"
-        self.vsLabel.text       = "0.0 M/S"
-        self.hsLabel.text       = "0.0 M/S"
-        self.altitudeLabel.text = "0 M"
         
-        //-------------------------------COLORS----------------------------------------------------------------
+
+        //---------------------------------BLUREFFECT -------------------------------
         
-        /*topBarView = UIView.init()
-        topBarView.frame = CGRect.init(x: 0, y: 0, width: self.view.frame.size.width, height: topBarView.frame.size.height)
-        topBarView.backgroundColor = UIColor.init(displayP3Red: 105/255.0, green: 132/255.0, blue: 201/255.0, alpha: 1)*/
+
+        if #available(iOS 13.0, *) {
+            blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        } else {
+            blurEffect = UIBlurEffect(style: .regular)
+        }
+        
+        blurEffectView = UIVisualEffectView(effect: blurEffect!)
+        blurEffectView!.frame = self.view.bounds
+        blurEffectView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        //-------------------------------TOPBARVC----------------------------------------------------------------
+        
+        topBarVC = TopBarViewController.init(nibName: "TopBarViewController", bundle: Bundle.main)
+        topBarVC?.view.frame = CGRect.init(x: -5, y: -2, width: self.view.frame.size.width + 10, height: topBarVC!.view.frame.size.height)
+        topBarVC!.view.alpha = 1
+        view.addSubview(topBarVC!.view)
+        
+        //-------------------------------MAPVIEW-----------------------------------------------------------
+        mapView.mapType = .satellite
+        //delete Maps logo
+        mapView.subviews[1].isHidden = true
+        mapView.subviews[2].isHidden = true
+        mapView.showsCompass = false
+        
+        let compassBtn = MKCompassButton.init(mapView: mapView)
+        compassBtn.frame.origin = CGPoint.init(x: (self.view.frame.maxX - compassBtn.frame.width) / 2, y: topBarVC!.view.frame.height + compassBtn.frame.height + 10)
+        compassBtn.compassVisibility = .adaptive
+        view.addSubview(compassBtn)
         
         // ------------------------- BUTTONVC -----------------------------------------------------------------
         ButtonVC = ButtonControllerViewController.init(nibName: "ButtonControllerViewController", bundle: Bundle.main)
-        ButtonVC?.view.frame = CGRect(x: -10, y: CGFloat(Int(topBarView.frame.origin.y + topBarView.frame.size.height + 20)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
+        ButtonVC?.view.frame = CGRect(x: -10, y: CGFloat(Int(topBarVC!.view.frame.origin.y + topBarVC!.view.frame.size.height + 80)), width: ButtonVC!.view.frame.size.width, height: ButtonVC!.view.frame.size.height)
         ButtonVC!.delegate = self
         view.addSubview(ButtonVC!.view)
         
@@ -710,8 +772,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         insertTokenVC!.view.alpha = 0
         insertTokenVC!.view.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
         
-        let insertTokenOriginX: CGFloat = (view.frame.width - insertTokenVC!.view.frame.width) / 2
-        let insertTokenOriginY: CGFloat =  topBarView.frame.height + topBarView.frame.minY + 50
+        let insertTokenOriginX: CGFloat = (self.view.frame.width - insertTokenVC!.view.frame.width) / 2
+        let insertTokenOriginY: CGFloat =  (self.view.frame.height - insertTokenVC!.view.frame.height - 80) / 2
         
         insertTokenVC!.view.frame = CGRect(x: insertTokenOriginX, y: insertTokenOriginY, width: insertTokenVC!.view.frame.width, height: insertTokenVC!.view.frame.height)
         
@@ -725,7 +787,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             insertTokenVC!.view.center = view.center
         }
         
-        //------------------------------- Activity Spinner -------------------------------------------
 
 
     }
@@ -761,8 +822,8 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
            }
            else if overlay is MKPolyline {
              pathController!.routeLineView = MKPolylineRenderer(overlay: overlay)
-             pathController!.routeLineView!.strokeColor = UIColor.blue.withAlphaComponent(0.2)
-             pathController!.routeLineView!.fillColor = UIColor.blue.withAlphaComponent(0.2)
+             pathController!.routeLineView!.strokeColor = UIColor.init(displayP3Red: 225/255.0, green: 225/255.0, blue: 225/255.0, alpha: 0.2)
+             pathController!.routeLineView!.fillColor = UIColor.init(displayP3Red: 225/255.0, green: 225/255.0, blue: 225/255.0, alpha: 0.2)
              pathController!.routeLineView!.lineWidth = 45
              return pathController!.routeLineView!
          }
@@ -775,7 +836,6 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         if(annotation.isKind(of: DJIAircraftAnnotation.self)){
             let annoView = DJIAircraftAnnotationView.init(annotation: annotation, reuseIdentifier: "Aircraft_Annotation")
             (annotation as? DJIAircraftAnnotation)?.annotationView = annoView
-            NSLog("LO DIBUJA????")
             return annoView
             
         }
@@ -870,11 +930,24 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func flightController(_ fc: DJIFlightController,didUpdate state: DJIFlightControllerState){
         droneLocation = state.aircraftLocation?.coordinate
         
-        modeLabel.text = state.flightModeString
-        gpsLabel.text = String.init(format: "%lu", state.satelliteCount)
-        vsLabel.text = String.init(format: "%0.1f M/S", state.velocityZ)
-        hsLabel.text = String.init(format: "%0.1f M/S", (sqrtf(state.velocityX*state.velocityX + state.velocityY*state.velocityY)))
-        altitudeLabel.text = String.init(format: "%0.1f M", state.altitude)
+        topBarVC!.modeLabel.text = state.flightModeString
+        topBarVC!.gpsLabel.text = String.init(format: "%lu", state.satelliteCount)
+        topBarVC!.vsLabel.text = String.init(format: "%0.1f M/S", state.velocityZ)
+        topBarVC!.hsLabel.text = String.init(format: "%0.1f M/S", (sqrtf(state.velocityX*state.velocityX + state.velocityY*state.velocityY)))
+        topBarVC!.altitudeLabel.text = String.init(format: "%0.1f M", state.altitude)
+        
+        
+        if(state.isFlying == true && isRecording == false){
+            startRecording()
+            print("GRABANDO")
+            isRecording = true
+        }
+        else if(state.isFlying == false && isRecording == true){
+            stopRecording()
+            print("NO ESTOY GRABANDO")
+            isRecording = false
+        }
+        
         
         if(droneLocation != nil){
             mapController?.updateAircraftLocation(location: droneLocation, withMapView: mapView)
@@ -910,6 +983,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     func closeWindowCool(){
         UIView.animate(withDuration: 0.25, animations: {
             self.insertTokenVC?.view.alpha = 0
+            self.blurEffectView!.removeFromSuperview()
             self.ButtonVC?.view.alpha = 1
         })
     }
@@ -984,6 +1058,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             }
             else{
                 self.showAlertViewWithTittle(title: "MISSION EXECUTION FINISHED", WithMessage: "")
+                self.StartVC!.view.alpha = 0
             }
         })
         
@@ -992,6 +1067,7 @@ class DJIRootViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 self.showAlertViewWithTittle(title: "UPLOAD MISSION FAILED", WithMessage: error!.localizedDescription)
             }
             else{
+                self.blurEffectView!.removeFromSuperview()
                 self.showAlertViewWithTittle(title: "UPLOAD MISSION FINISHED", WithMessage: "")
                 self.StartVC!.view.alpha = 1
                 self.multiController?.deleteMultifly(password: passwordNameValue)
