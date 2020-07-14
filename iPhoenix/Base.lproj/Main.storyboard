@@ -27,10 +27,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Fwa-61-M7v" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" id="TvX-dg-4ji"/>
-                            <constraint firstItem="Fwa-61-M7v" firstAttribute="top" secondItem="9Jd-ZX-Oro" secondAttribute="topMargin" constant="-44" id="tzy-H6-6bx"/>
-                            <constraint firstItem="Fwa-61-M7v" firstAttribute="centerY" secondItem="9Jd-ZX-Oro" secondAttribute="centerY" id="u4F-zy-W4N"/>
-                            <constraint firstItem="Fwa-61-M7v" firstAttribute="centerX" secondItem="9Jd-ZX-Oro" secondAttribute="centerX" id="wDP-tk-rRY"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="top" secondItem="9Jd-ZX-Oro" secondAttribute="topMargin" constant="-44" id="Ja4-Nf-wJe"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="centerX" secondItem="9Jd-ZX-Oro" secondAttribute="centerX" id="eBb-Ul-1SF"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="leading" secondItem="gZI-14-WoV" secondAttribute="leading" id="lsb-tz-yqm"/>
+                            <constraint firstItem="Fwa-61-M7v" firstAttribute="centerY" secondItem="9Jd-ZX-Oro" secondAttribute="centerY" id="oR3-ZD-Ywc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gZI-14-WoV"/>
                     </view>

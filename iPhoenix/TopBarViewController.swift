@@ -15,9 +15,6 @@ import UIKit
 
 class TopBarViewController: UIViewController {
     
-    //MARK: Vars
-    //weak var delegate: TopBarViewControllerDelegate?
-    
     //MARK: Outlets
     @IBOutlet weak var modeLabel: UILabel!
     @IBOutlet weak var gpsLabel: UILabel!
@@ -32,7 +29,7 @@ class TopBarViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     
     
-
+    //MARK: VARS
     override func viewDidLoad() {
         super.viewDidLoad()
         initStyle()
@@ -41,7 +38,7 @@ class TopBarViewController: UIViewController {
     }
     
     
-    func initStyle(){
+    private func initStyle(){
         view.backgroundColor = UIColor.init(named: "background-color")?.withAlphaComponent(0.78)
         //view.layer.cornerRadius = 8
         view.layer.borderWidth = 0.5
@@ -75,18 +72,12 @@ class TopBarViewController: UIViewController {
         modeText.alpha = 0
     }
     
-    func initUI(){
+    private func initUI(){
         modeLabel.text     = "N/A"
         gpsLabel.text      = "0"
         vsLabel.text       = "0.0 M/S"
         hsLabel.text       = "0.0 M/S"
         altitudeLabel.text = "0 M"
     }
-    
-    /*func updatePar(mode: UILabel?, gps: UILabel?, hs: UILabel?, vs: UILabel?, altitudeLabel: UILabel?){
-        if delegate!.responds(to: #selector(delegate!.updatePar(mode:gps:hs:vs:altitudeLabel:))) {
-            delegate!.updatePar(mode: modeLabel, gps: gpsLabel, hs: hsLabel, vs: vsLabel, altitudeLabel: altitudeLabel)
-        }
-    }*/
 
 }

@@ -26,6 +26,8 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
     //MARK: Vars
     weak var delegate: InsertTokenViewControllerDelegate?
     
+    
+    //MARK: FUNCS
     override func viewDidLoad() {
         super.viewDidLoad()
         initStyle()
@@ -44,7 +46,7 @@ class TokenViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func initStyle(){
+    private func initStyle(){
         
         view.backgroundColor = UIColor.init(named: "background-color")
         view.layer.cornerRadius = 8

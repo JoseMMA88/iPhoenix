@@ -7,18 +7,22 @@
 //
 
 import UIKit
-class MultiflyController: UIViewController {
 
-    var passwordNameValue: String = ""
-    var playerNameValue: String = ""
-    var polygonNameValue: String = ""
-    var AltNameValue: String = ""
-    var AFSNameValue: String = ""
-    var MFSNameValue: String = ""
-    var AAFNameValue: String = ""
-    var headingNameValue: String = ""
-    let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
+class MultiflyController: UIViewController {
+    //MARK: VARS
+    private let myUrl = URL(string: "https://almasalvajeagencia.com/multifly.php");
+
+    private var passwordNameValue: String = ""
+    private var playerNameValue: String = ""
+    private var polygonNameValue: String = ""
+    private var AltNameValue: String = ""
+    private var AFSNameValue: String = ""
+    private var MFSNameValue: String = ""
+    private var AAFNameValue: String = ""
+    private var headingNameValue: String = ""
     
+    
+    //MARK: FUNCS
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -65,7 +69,7 @@ class MultiflyController: UIViewController {
            task.resume()
            
         return password
-       }
+    }
     
     func selectMultiFly(password: String, Djiroot: DJIRootViewController?){
     
@@ -119,7 +123,6 @@ class MultiflyController: UIViewController {
                             
                             self.headingNameValue = parseJSON["heading"] as! String
                             print("Heading: \(String(self.headingNameValue))")
-                        
                             Djiroot!.closeWindowCool()
                             Djiroot!.loadData(passwordNameValue: self.passwordNameValue, polygonNameValue: self.polygonNameValue, playerNameValue: self.playerNameValue, AltNameValue: self.AltNameValue, AFSNameValue: self.AFSNameValue, MFSNameValue: self.MFSNameValue, AAFNameValue: self.AAFNameValue, headingNameValue: self.headingNameValue)
                         }
@@ -136,17 +139,6 @@ class MultiflyController: UIViewController {
         task.resume()
         
     }
-    
-    func getData(a: Int, insertTokenVC: TokenViewController?)-> Bool{
-        var resp=false
-        if(a == 1){
-            insertTokenVC?.view.alpha = 0
-            resp = true
-        }
-        
-        return resp
-    }
-    
     
     func deleteMultifly(password: String){
                 
@@ -175,12 +167,12 @@ class MultiflyController: UIViewController {
         
     }
        
-    func randomString(length: Int) -> String {
+    private func randomString(length: Int) -> String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map{ _ in letters.randomElement()! })
     }
     
-    @objc func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
            view.endEditing(true)
        }
        

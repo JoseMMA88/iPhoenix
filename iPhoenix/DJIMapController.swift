@@ -6,7 +6,7 @@
 //  Copyright © 2020 Jose Manuel Malagón Alba. All rights reserved.
 //
 
-import UIKit
+//import UIKit
 import MapKit
 
 class DJIMapControler: NSObject {
@@ -38,13 +38,13 @@ class DJIMapControler: NSObject {
     
     //MARK: Functions
     
-    // Init a DJIMapController instance and create editPoints array
+    // Inicializa DJIMapController instance y crea editPoints array
     override init() {
         super.init()
         //editPoints = [CLLocationCoordinate2D]()
     }
     
-    // Ad waypoints in Map
+    // Anyade puntos al MapView
     func addPoint(_ point: CGPoint, with mapView: MKMapView?, and pathController: FlyPathController?){
         let coodinate: CLLocationCoordinate2D = ((mapView?.convert(point, toCoordinateFrom: mapView) ?? nil)!)
         let location: CLLocation = CLLocation(latitude: coodinate.latitude, longitude: coodinate.longitude)
@@ -59,7 +59,7 @@ class DJIMapControler: NSObject {
     }
     
     
-    // Clean all waypoints in Map
+    // Limpia todos lo puntos en el MapView
     func cleanAllPointsWithMapView(with mapView: MKMapView?, and pathController: FlyPathController){
         mapView!.removeOverlays(mapView!.overlays)
         arr_circle_auxs2.removeAll()
@@ -81,7 +81,7 @@ class DJIMapControler: NSObject {
     }
     
     
-    // Update Aircraft´s location in Map View
+    // Updatea Aircraftlocation en el MapView
     func updateAircraftLocation(location: CLLocationCoordinate2D, withMapView mapView: MKMapView?){
         //let locatione = location as? CLLocation
         
@@ -353,7 +353,7 @@ class DJIMapControler: NSObject {
                 let center2 = MKCircle.init(center: point, radius: 3)
                 mapView!.addOverlay(center2)
                 
-                // Añadimos los puntos medios al path
+                // Anyadimos los puntos medios al path
                 arr_circle_auxs2.append(center2)
                 pathController!.path_coord.append(point)
                 distancia = false

@@ -23,7 +23,8 @@ class StartViewController: UIViewController {
     @IBOutlet weak var stopBtn: UIButton!
     @IBOutlet weak var startBtn: UIButton!
     
-
+    
+    //MARK: FUNCS
     override func viewDidLoad() {
         super.viewDidLoad()
         initStyle()
@@ -49,7 +50,7 @@ class StartViewController: UIViewController {
          }
     }
     
-    func initStyle(){
+    private func initStyle(){
         /*view.backgroundColor = UIColor.init(named: "background-color")
         view.layer.cornerRadius = 8
         view.layer.borderWidth = 0.5

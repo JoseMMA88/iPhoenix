@@ -37,6 +37,9 @@ class ConfigViewController: UIViewController {
     //MARK: Vars
     weak var delegate: ConfigViewControllerDelegate?
 
+    
+    
+    //MARK: FUNCS
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initStyle()
@@ -62,7 +65,7 @@ class ConfigViewController: UIViewController {
         }
     }
     
-    func initStyle(){
+    private func initStyle(){
         view.backgroundColor = UIColor.init(named: "background-color")
         view.layer.cornerRadius = 8
         view.layer.borderWidth = 0.5
@@ -108,9 +111,6 @@ class ConfigViewController: UIViewController {
         finishButton.layer.cornerRadius = 8
         finishButton.backgroundColor = UIColor.init(named: "background-color")
         finishButton.setTitleColor(UIColor.init(named: "text-color"), for: .normal)
-        /*finishButton.layer.shadowColor = UIColor.init(displayP3Red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1).cgColor
-        finishButton.layer.shadowOpacity = 0.8
-        finishButton.layer.shadowOffset = CGSize.init(width: 1, height: 1)*/
         finishButton.layer.borderWidth = 0.5
         finishButton.layer.borderColor = UIColor.init(displayP3Red: 148/255.0, green: 148/255.0, blue: 146/255.0, alpha: 1).cgColor
         
@@ -129,7 +129,7 @@ class ConfigViewController: UIViewController {
     }
     
     //MARK: Custom Methods
-    func initUI(){
+    private func initUI(){
         altitudeTextField.keyboardType = UIKeyboardType.numberPad
         autoFlightSpeedTextField.keyboardType = UIKeyboardType.numberPad
         maxFlightSpeedTextField.keyboardType = UIKeyboardType.numberPad
@@ -141,7 +141,7 @@ class ConfigViewController: UIViewController {
         dronesNumSegmentedControl.selectedSegmentIndex = 0
     }
     
-    @objc func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     

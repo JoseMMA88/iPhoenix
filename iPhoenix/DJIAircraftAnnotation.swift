@@ -11,8 +11,6 @@ import MapKit
 
 class DJIAircraftAnnotation: NSObject, MKAnnotation{
 
-    
-    
     //MARK: Vars
     dynamic var coordinate: CLLocationCoordinate2D
     var annotationView: DJIAircraftAnnotationView?
@@ -24,13 +22,13 @@ class DJIAircraftAnnotation: NSObject, MKAnnotation{
 
     }
     
-    //set new coordinate
+    //Setea coordinate
     func setCoordinate(_ newCoordinate: CLLocationCoordinate2D){
         self.coordinate = newCoordinate
         
     }
     
-    //update heading of aircraft
+    //Update heading aircraft
     func updateHeading(heading: Float){
         if (self.annotationView != nil){
             self.annotationView?.updateHeading(heading)

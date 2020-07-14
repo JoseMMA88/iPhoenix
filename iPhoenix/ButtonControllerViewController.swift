@@ -44,6 +44,9 @@ class ButtonControllerViewController: UIViewController {
     var mode: ViewMode?
     weak var delegate: ButtonViewControllerDelegate?
     
+    
+    
+    //MARK: FUNCS
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initStyle()
@@ -51,7 +54,7 @@ class ButtonControllerViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    func initStyle(){
+    private func initStyle(){
         // EDIT BUTTON
         let icon: UIImage
         if #available(iOS 13.0, *) {
@@ -235,7 +238,7 @@ class ButtonControllerViewController: UIViewController {
         tokenButton.layer.borderColor = UIColor.init(displayP3Red: 148/255.0, green: 148/255.0, blue: 146/255.0, alpha: 1).cgColor
     }
 
-    func setMode(mode: ViewMode){
+    private func setMode(mode: ViewMode){
         self.mode = mode
 
         editButton.isHidden = (mode == ViewMode._EditMode)

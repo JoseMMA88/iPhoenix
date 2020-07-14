@@ -15,7 +15,7 @@ class DJIAircraftAnnotationView: MKAnnotationView{
     
     //MARK: Custom Functions
     
-    //Changes de Aricraft rotation
+    //Cambia la rotacion del dron
     func updateHeading(_ heading: Float){
         self.transform = CGAffineTransform.identity
         self.transform = CGAffineTransform(rotationAngle: CGFloat(heading))
@@ -23,12 +23,10 @@ class DJIAircraftAnnotationView: MKAnnotationView{
     }
     
     
-    //Initializes MKAnnotationView object and variables
+    //Inicializa MKAnnotationView
     override init(annotation: MKAnnotation?, reuseIdentifier: String?){
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        /*self.isEnabled = false
-        self.isDraggable = false*/
-        
+
         self.image = UIImage.init(named: "aircraft.png")
         
         

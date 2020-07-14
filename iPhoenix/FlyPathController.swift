@@ -13,7 +13,6 @@ import MapKit
 class FlyPathController: NSObject{
     
     //MARK:VARs
-    var mapView: MKMapView?
     var polygon: MKPolygon?
     var polygonView: MKPolygonRenderer?
     var circle: MKCircle?
@@ -21,18 +20,15 @@ class FlyPathController: NSObject{
     var circleView: MKCircleRenderer?
     var center: MKCircle?
     
-    
-    //var points: [MKAnnotation] = [] // Aristas del poligono
-    var startLocation: CGPoint?
-    var droneLocation: CLLocationCoordinate2D!
-    var d: Double = 0.00015
+    private var droneLocation: CLLocationCoordinate2D!
+    private var d: Double = 0.00015
     
     // Calcular area
-    var kEarthRadius = 6378137.0 //Radio en el ecuador de la tierra
+    private var kEarthRadius = 6378137.0 //Radio en el ecuador de la tierra
     
     // Puntos del perimetro del circulo
-    var peripoints: [CLLocationCoordinate2D] = []
-    var arr_circle_auxs: [MKCircle] = []
+    private var peripoints: [CLLocationCoordinate2D] = []
+    private var arr_circle_auxs: [MKCircle] = []
     
     // Path
     var fly_points: [CLLocationCoordinate2D] = []
@@ -45,28 +41,30 @@ class FlyPathController: NSObject{
     var fly_points_p22: [CLLocationCoordinate2D] = []
     var fly_points_p32: [CLLocationCoordinate2D] = []
     var fly_points_p42: [CLLocationCoordinate2D] = []
-    var triangles: [MKPolygon] = []
-    var triangles2: [MKPolygon] = []
-    var triangles3: [MKPolygon] = []
-    var triangles4: [MKPolygon] = []
-    var triangles5: [MKPolygon] = []
+    private var triangles: [MKPolygon] = []
+    private var triangles2: [MKPolygon] = []
+    private var triangles3: [MKPolygon] = []
+    private var triangles4: [MKPolygon] = []
+    private var triangles5: [MKPolygon] = []
     var path_coord: [CLLocationCoordinate2D] = []
-    var arr_circle_auxs2: [MKCircle] = []
+    private var arr_circle_auxs2: [MKCircle] = []
     
     // Debug visual
     var routeLineView: MKPolylineRenderer?
     var annotations: [MKAnnotation] = []
     
     //Variables dron
-    var kradio: Int = 15
+    private var kradio: Int = 15
     
-    // Init a FlyPathController instance
+    
+    //MARK: FUNCS
+    // Inicia FlyPathController
     override init() {
         super.init()
     }
     
    
-    // Find the closest waypoint to DronLocation
+    // Busca el punto mas cercano a DronLocation
     func findStartWaypoint(points: [MKAnnotation]?) -> CLLocationCoordinate2D?{
         if(points!.count>0){
             var aux = points![0]
@@ -86,44 +84,6 @@ class FlyPathController: NSObject{
             return nil
         }
     }
-    
-    
-    // Añade una coordenada a la array de coordenas path_coords
-    func addPointoPath(point: CLLocationCoordinate2D){
-        var distancia = true
-        
-        if(path_coord.count == 0){
-            path_coord.append(point)
-        }
-        else{
-            let p2 = MKMapPoint(point)
-            for i in 0..<path_coord.count{
-                let p1 = MKMapPoint(path_coord[i])
-                let dis = p2.distance(to: p1)
-                
-                if(dis < CLLocationDistance(kradio)){
-                    distancia = false
-                }
-
-            }
-            
-            if(polygonView != nil){
-                let mapPoint = MKMapPoint(point)
-                let cgpoint = polygonView!.point(for: mapPoint)
-            
-                if(distancia == true && polygonView!.path.contains(cgpoint)){
-                    let center2 = MKCircle.init(center: point, radius: 3)
-                    mapView!.addOverlay(center2)
-                
-                    // Añadimos los puntos medios al path
-                    arr_circle_auxs2.append(center2)
-                    path_coord.append(point)
-                    distancia = false
-                }
-            }
-        }
-    }
-    
     
     // Ordena la array path_coords dependiendo de cual sea el punto de inicio
     func createFlightPath(with editPoints: [MKAnnotation]){
@@ -449,53 +409,12 @@ class FlyPathController: NSObject{
             }
         }
         
-        /*NSLog("-----------------------------------------------------")
-        for i3 in 0..<fly_points.count{
-            NSLog(String(fly_points[i3].latitude))
-            NSLog(String(fly_points[i3].longitude))
-        }
-        NSLog("-----------------------------------------------------")*/
-        
-        /*NSLog("-----------------------------------------------------")
-        for i3 in 0..<fly_points_p1.count{
-            NSLog(String(fly_points_p1[i3].latitude))
-            NSLog(String(fly_points_p1[i3].longitude))
-        }
-        NSLog("-----------------------------------------------------")
-        
-        NSLog("-----------------------------------------------------")
-        for i3 in 0..<fly_points_p2.count{
-            NSLog(String(fly_points_p2[i3].latitude))
-            NSLog(String(fly_points_p2[i3].longitude))
-        }
-        NSLog("-----------------------------------------------------")*/
-        
-        /*NSLog("-----------------------------------------------------")
-        for i4 in 0..<fly_points_p11.count{
-            NSLog(String(fly_points_p11[i4].latitude))
-            NSLog(String(fly_points_p11[i4].longitude))
-        }
-        NSLog("-----------------------------------------------------")
-        
-        NSLog("-----------------------------------------------------")
-        for i5 in 0..<fly_points_p21.count{
-            NSLog(String(fly_points_p21[i5].latitude))
-            NSLog(String(fly_points_p21[i5].longitude))
-        }
-        NSLog("-----------------------------------------------------")
-        
-        NSLog("-----------------------------------------------------")
-        for i6 in 0..<fly_points_p31.count{
-            NSLog(String(fly_points_p31[i6].latitude))
-            NSLog(String(fly_points_p31[i6].longitude))
-        }
-        NSLog("-----------------------------------------------------")*/
     }
     
     // Si devuelve 1 esta al Oeste
     // Si devuelve 2 esta al Este
     // Si devuelve 0 esta en la misma Longitud
-    func pointsLongPosition(coord_guia: CLLocationCoordinate2D, coord2: CLLocationCoordinate2D) -> Int{
+    private func pointsLongPosition(coord_guia: CLLocationCoordinate2D, coord2: CLLocationCoordinate2D) -> Int{
         if(coord_guia.longitude < coord2.longitude){
             return 2
         }
@@ -509,7 +428,7 @@ class FlyPathController: NSObject{
     // Si devuelve 1 esta al Norte
     // Si devuelve 2 esta al Sur
     // Si devuelve 0 esta en la misma Latitud
-    func pointsLatPosition(coord_guia: CLLocationCoordinate2D, coord2: CLLocationCoordinate2D) -> Int{
+    private func pointsLatPosition(coord_guia: CLLocationCoordinate2D, coord2: CLLocationCoordinate2D) -> Int{
         if(coord_guia.latitude < coord2.latitude){
             return 1
         }
