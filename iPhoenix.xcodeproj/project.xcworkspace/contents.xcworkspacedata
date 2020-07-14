@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:GSDemo.xcodeproj">
+      location = "self:/Users/josemanuel/Documents/iPhoenix/iPhoenix.xcodeproj">
    </FileRef>
 </Workspace>

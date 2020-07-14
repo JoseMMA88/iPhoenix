@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C1C4B0B063F2C4A77C719DBD /* Pods_GSDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */; };
 		C411567B245344BB0011F583 /* FlyPathController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411567A245344BB0011F583 /* FlyPathController.swift */; };
 		C429550423E82C8600A7988B /* DJIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429550323E82C8600A7988B /* DJIRootViewController.swift */; };
 		C429F43A23E9629D006950A8 /* DJIMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429F43923E9629D006950A8 /* DJIMapController.swift */; };
@@ -40,27 +39,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.release.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.release.xcconfig"; sourceTree = "<group>"; };
-		94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E4A960387BB6EE363B3681E /* Pods-iPhoenix.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPhoenix.release.xcconfig"; path = "Target Support Files/Pods-iPhoenix/Pods-iPhoenix.release.xcconfig"; sourceTree = "<group>"; };
+		40FF7832F78F71A231CC22A6 /* Pods-iPhoenix.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPhoenix.debug.xcconfig"; path = "Target Support Files/Pods-iPhoenix/Pods-iPhoenix.debug.xcconfig"; sourceTree = "<group>"; };
 		C411567A245344BB0011F583 /* FlyPathController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyPathController.swift; sourceTree = "<group>"; };
 		C429550323E82C8600A7988B /* DJIRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIRootViewController.swift; sourceTree = "<group>"; };
 		C429F43923E9629D006950A8 /* DJIMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIMapController.swift; sourceTree = "<group>"; };
-		C47BB55B23E481DF00D80BE6 /* GSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C47BB55B23E481DF00D80BE6 /* iPhoenix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPhoenix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C47BB56323E481DF00D80BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C47BB56523E481E000D80BE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C47BB56823E481E000D80BE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		C47BB56A23E481E000D80BE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C47BB56F23E481E000D80BE6 /* GSDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GSDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C47BB56A23E481E000D80BE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = iPhoenix/Info.plist; sourceTree = SOURCE_ROOT; };
+		C47BB56F23E481E000D80BE6 /* iPhoenixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iPhoenixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47BB57323E481E000D80BE6 /* GSDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSDemoTests.swift; sourceTree = "<group>"; };
 		C47BB57523E481E000D80BE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C47BB57A23E481E000D80BE6 /* GSDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GSDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C47BB57A23E481E000D80BE6 /* iPhoenixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iPhoenixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47BB57E23E481E000D80BE6 /* GSDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSDemoUITests.swift; sourceTree = "<group>"; };
 		C47BB58023E481E000D80BE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4D3EC4C23F15CB50041D025 /* DJIAircraftAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotationView.swift; sourceTree = "<group>"; };
 		C4D3EC5023F1647E0041D025 /* DJIAircraftAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJIAircraftAnnotation.swift; sourceTree = "<group>"; };
 		C4D3EC5223F17FC00041D025 /* DemoUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUtility.swift; sourceTree = "<group>"; };
-		D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GSDemo.debug.xcconfig"; path = "Target Support Files/Pods-GSDemo/Pods-GSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +66,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1C4B0B063F2C4A77C719DBD /* Pods_GSDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +89,6 @@
 		0E1E60391C19617D00B2B666 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				94F26B1615D7673F4E0BA0E4 /* Pods_GSDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -100,8 +96,8 @@
 		7F7D769C32EC01D8893B06C5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */,
-				48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */,
+				40FF7832F78F71A231CC22A6 /* Pods-iPhoenix.debug.xcconfig */,
+				2E4A960387BB6EE363B3681E /* Pods-iPhoenix.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -109,9 +105,9 @@
 		C47BB55223E481DF00D80BE6 = {
 			isa = PBXGroup;
 			children = (
-				C47BB55D23E481DF00D80BE6 /* GSDemo */,
-				C47BB57223E481E000D80BE6 /* GSDemoTests */,
-				C47BB57D23E481E000D80BE6 /* GSDemoUITests */,
+				C47BB55D23E481DF00D80BE6 /* iPhoenix */,
+				C47BB57223E481E000D80BE6 /* iPhoenixTests */,
+				C47BB57D23E481E000D80BE6 /* iPhoenixUITests */,
 				C47BB55C23E481DF00D80BE6 /* Products */,
 				7F7D769C32EC01D8893B06C5 /* Pods */,
 				0E1E60391C19617D00B2B666 /* Frameworks */,
@@ -121,14 +117,14 @@
 		C47BB55C23E481DF00D80BE6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C47BB55B23E481DF00D80BE6 /* GSDemo.app */,
-				C47BB56F23E481E000D80BE6 /* GSDemoTests.xctest */,
-				C47BB57A23E481E000D80BE6 /* GSDemoUITests.xctest */,
+				C47BB55B23E481DF00D80BE6 /* iPhoenix.app */,
+				C47BB56F23E481E000D80BE6 /* iPhoenixTests.xctest */,
+				C47BB57A23E481E000D80BE6 /* iPhoenixUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C47BB55D23E481DF00D80BE6 /* GSDemo */ = {
+		C47BB55D23E481DF00D80BE6 /* iPhoenix */ = {
 			isa = PBXGroup;
 			children = (
 				C47BB55E23E481DF00D80BE6 /* AppDelegate.swift */,
@@ -143,33 +139,33 @@
 				C47BB56723E481E000D80BE6 /* LaunchScreen.storyboard */,
 				C47BB56A23E481E000D80BE6 /* Info.plist */,
 			);
-			path = GSDemo;
+			path = iPhoenix;
 			sourceTree = "<group>";
 		};
-		C47BB57223E481E000D80BE6 /* GSDemoTests */ = {
+		C47BB57223E481E000D80BE6 /* iPhoenixTests */ = {
 			isa = PBXGroup;
 			children = (
 				C47BB57323E481E000D80BE6 /* GSDemoTests.swift */,
 				C47BB57523E481E000D80BE6 /* Info.plist */,
 			);
-			path = GSDemoTests;
+			path = iPhoenixTests;
 			sourceTree = "<group>";
 		};
-		C47BB57D23E481E000D80BE6 /* GSDemoUITests */ = {
+		C47BB57D23E481E000D80BE6 /* iPhoenixUITests */ = {
 			isa = PBXGroup;
 			children = (
 				C47BB57E23E481E000D80BE6 /* GSDemoUITests.swift */,
 				C47BB58023E481E000D80BE6 /* Info.plist */,
 			);
-			path = GSDemoUITests;
+			path = iPhoenixUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C47BB55A23E481DF00D80BE6 /* GSDemo */ = {
+		C47BB55A23E481DF00D80BE6 /* iPhoenix */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C47BB58323E481E000D80BE6 /* Build configuration list for PBXNativeTarget "GSDemo" */;
+			buildConfigurationList = C47BB58323E481E000D80BE6 /* Build configuration list for PBXNativeTarget "iPhoenix" */;
 			buildPhases = (
 				E5D4069353DECD02D6E3DFA2 /* [CP] Check Pods Manifest.lock */,
 				C47BB55723E481DF00D80BE6 /* Sources */,
@@ -181,14 +177,14 @@
 			);
 			dependencies = (
 			);
-			name = GSDemo;
+			name = iPhoenix;
 			productName = GSDemo;
-			productReference = C47BB55B23E481DF00D80BE6 /* GSDemo.app */;
+			productReference = C47BB55B23E481DF00D80BE6 /* iPhoenix.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C47BB56E23E481E000D80BE6 /* GSDemoTests */ = {
+		C47BB56E23E481E000D80BE6 /* iPhoenixTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C47BB58623E481E000D80BE6 /* Build configuration list for PBXNativeTarget "GSDemoTests" */;
+			buildConfigurationList = C47BB58623E481E000D80BE6 /* Build configuration list for PBXNativeTarget "iPhoenixTests" */;
 			buildPhases = (
 				C47BB56B23E481E000D80BE6 /* Sources */,
 				C47BB56C23E481E000D80BE6 /* Frameworks */,
@@ -199,14 +195,14 @@
 			dependencies = (
 				C47BB57123E481E000D80BE6 /* PBXTargetDependency */,
 			);
-			name = GSDemoTests;
+			name = iPhoenixTests;
 			productName = GSDemoTests;
-			productReference = C47BB56F23E481E000D80BE6 /* GSDemoTests.xctest */;
+			productReference = C47BB56F23E481E000D80BE6 /* iPhoenixTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		C47BB57923E481E000D80BE6 /* GSDemoUITests */ = {
+		C47BB57923E481E000D80BE6 /* iPhoenixUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C47BB58923E481E000D80BE6 /* Build configuration list for PBXNativeTarget "GSDemoUITests" */;
+			buildConfigurationList = C47BB58923E481E000D80BE6 /* Build configuration list for PBXNativeTarget "iPhoenixUITests" */;
 			buildPhases = (
 				C47BB57623E481E000D80BE6 /* Sources */,
 				C47BB57723E481E000D80BE6 /* Frameworks */,
@@ -217,9 +213,9 @@
 			dependencies = (
 				C47BB57C23E481E000D80BE6 /* PBXTargetDependency */,
 			);
-			name = GSDemoUITests;
+			name = iPhoenixUITests;
 			productName = GSDemoUITests;
-			productReference = C47BB57A23E481E000D80BE6 /* GSDemoUITests.xctest */;
+			productReference = C47BB57A23E481E000D80BE6 /* iPhoenixUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -248,7 +244,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C47BB55623E481DF00D80BE6 /* Build configuration list for PBXProject "GSDemo" */;
+			buildConfigurationList = C47BB55623E481DF00D80BE6 /* Build configuration list for PBXProject "iPhoenix" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -261,9 +257,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C47BB55A23E481DF00D80BE6 /* GSDemo */,
-				C47BB56E23E481E000D80BE6 /* GSDemoTests */,
-				C47BB57923E481E000D80BE6 /* GSDemoUITests */,
+				C47BB55A23E481DF00D80BE6 /* iPhoenix */,
+				C47BB56E23E481E000D80BE6 /* iPhoenixTests */,
+				C47BB57923E481E000D80BE6 /* iPhoenixUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -302,15 +298,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-iPhoenix/Pods-iPhoenix-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-iPhoenix/Pods-iPhoenix-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GSDemo/Pods-GSDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iPhoenix/Pods-iPhoenix-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E5D4069353DECD02D6E3DFA2 /* [CP] Check Pods Manifest.lock */ = {
@@ -328,7 +324,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GSDemo-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-iPhoenix-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -373,12 +369,12 @@
 /* Begin PBXTargetDependency section */
 		C47BB57123E481E000D80BE6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C47BB55A23E481DF00D80BE6 /* GSDemo */;
+			target = C47BB55A23E481DF00D80BE6 /* iPhoenix */;
 			targetProxy = C47BB57023E481E000D80BE6 /* PBXContainerItemProxy */;
 		};
 		C47BB57C23E481E000D80BE6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C47BB55A23E481DF00D80BE6 /* GSDemo */;
+			target = C47BB55A23E481DF00D80BE6 /* iPhoenix */;
 			targetProxy = C47BB57B23E481E000D80BE6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -521,21 +517,21 @@
 		};
 		C47BB58423E481E000D80BE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1DC40048657D70F36D881B5 /* Pods-GSDemo.debug.xcconfig */;
+			baseConfigurationReference = 40FF7832F78F71A231CC22A6 /* Pods-iPhoenix.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
 				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
-				INFOPLIST_FILE = GSDemo/Info.plist;
+				INFOPLIST_FILE = iPhoenix/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenix;
+				PRODUCT_NAME = iPhoenix;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -543,21 +539,21 @@
 		};
 		C47BB58523E481E000D80BE6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 48C10C965A5617D659C0A0BE /* Pods-GSDemo.release.xcconfig */;
+			baseConfigurationReference = 2E4A960387BB6EE363B3681E /* Pods-iPhoenix.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
 				HEADER_SEARCH_PATHS = "\"$(PODS_ROOT)/Headers/Public\"";
-				INFOPLIST_FILE = GSDemo/Info.plist;
+				INFOPLIST_FILE = iPhoenix/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenix;
+				PRODUCT_NAME = iPhoenix;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -570,17 +566,17 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
-				INFOPLIST_FILE = GSDemoTests/Info.plist;
+				INFOPLIST_FILE = iPhoenixTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoTests;
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GSDemo.app/GSDemo";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iPhoenix.app/iPhoenix";
 			};
 			name = Debug;
 		};
@@ -591,17 +587,17 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
-				INFOPLIST_FILE = GSDemoTests/Info.plist;
+				INFOPLIST_FILE = iPhoenixTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoTests;
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GSDemo.app/GSDemo";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iPhoenix.app/iPhoenix";
 			};
 			name = Release;
 		};
@@ -611,17 +607,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
-				INFOPLIST_FILE = GSDemoUITests/Info.plist;
+				INFOPLIST_FILE = iPhoenixUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenixUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = GSDemo;
+				TEST_TARGET_NAME = iPhoenix;
 			};
 			name = Debug;
 		};
@@ -631,24 +627,24 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LW9DHQ8252;
-				INFOPLIST_FILE = GSDemoUITests/Info.plist;
+				INFOPLIST_FILE = iPhoenixUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = beta.com.GSDemoUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = beta.com.iPhoenixUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = GSDemo;
+				TEST_TARGET_NAME = iPhoenix;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C47BB55623E481DF00D80BE6 /* Build configuration list for PBXProject "GSDemo" */ = {
+		C47BB55623E481DF00D80BE6 /* Build configuration list for PBXProject "iPhoenix" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C47BB58123E481E000D80BE6 /* Debug */,
@@ -657,7 +653,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C47BB58323E481E000D80BE6 /* Build configuration list for PBXNativeTarget "GSDemo" */ = {
+		C47BB58323E481E000D80BE6 /* Build configuration list for PBXNativeTarget "iPhoenix" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C47BB58423E481E000D80BE6 /* Debug */,
@@ -666,7 +662,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C47BB58623E481E000D80BE6 /* Build configuration list for PBXNativeTarget "GSDemoTests" */ = {
+		C47BB58623E481E000D80BE6 /* Build configuration list for PBXNativeTarget "iPhoenixTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C47BB58723E481E000D80BE6 /* Debug */,
@@ -675,7 +671,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C47BB58923E481E000D80BE6 /* Build configuration list for PBXNativeTarget "GSDemoUITests" */ = {
+		C47BB58923E481E000D80BE6 /* Build configuration list for PBXNativeTarget "iPhoenixUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C47BB58A23E481E000D80BE6 /* Debug */,
